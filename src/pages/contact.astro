@@ -1,0 +1,165 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import RoloSprite from '../components/RoloSprite.astro';
+---
+<Layout title="Contact — Rolo" description="Get in touch about Rolo." pageId="contact">
+  <Header slot="header" />
+
+  <section class="stub-hero">
+    <div class="shell stub-hero__inner">
+      <div class="stub-hero__copy">
+        <p class="eyebrow">say hello</p>
+        <h1 class="stub-hero__title">drop a line.<br/><span class="t-sage">rolo will reply.</span></h1>
+        <p class="lede">
+          Have a question, a bug report, a feature wish, or just want to send Rolo
+          a postcard? There are a few ways to reach us.
+        </p>
+      </div>
+      <div class="stub-hero__rolo">
+        <RoloSprite size={200} />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="contact-grid">
+        <article class="contact-card panel">
+          <p class="contact-card__label">email</p>
+          <h2 class="contact-card__value">
+            <a href="mailto:hello@rolo.dev">hello@rolo.dev</a>
+          </h2>
+          <p class="contact-card__hint">general questions, press, partnerships.</p>
+        </article>
+
+        <article class="contact-card panel">
+          <p class="contact-card__label">bugs &amp; features</p>
+          <h2 class="contact-card__value">
+            <a href="https://github.com/larawashington/Desktop-Pet/issues" target="_blank" rel="noopener">github issues &rarr;</a>
+          </h2>
+          <p class="contact-card__hint">the fastest way to make Rolo&rsquo;s life better.</p>
+        </article>
+
+        <article class="contact-card panel">
+          <p class="contact-card__label">social</p>
+          <h2 class="contact-card__value">
+            <a href="#" aria-disabled="true">@rolo (coming soon)</a>
+          </h2>
+          <p class="contact-card__hint">devlogs, peeks, occasional pixel art.</p>
+        </article>
+
+        <article class="contact-card panel contact-card--note">
+          <p class="contact-card__label">a note from rolo</p>
+          <p class="contact-card__value contact-card__value--small">
+            &ldquo;i don&rsquo;t check email myself &mdash; i&rsquo;m busy walking. but lara reads them all.&rdquo;
+          </p>
+        </article>
+      </div>
+
+      <p class="stub-note">
+        <span class="hero__pill">placeholder</span>
+        A proper contact form will live here closer to launch.
+      </p>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Layout>
+
+<style>
+  .stub-hero {
+    padding: clamp(2rem, 6vw, 4rem) 0 clamp(1rem, 3vw, 2rem);
+  }
+  .stub-hero__inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 2rem;
+  }
+  .stub-hero__title {
+    font-family: 'Silkscreen', monospace;
+    font-size: clamp(2.4rem, 5vw, 4.2rem);
+    line-height: 1;
+    color: var(--navy);
+    margin-bottom: 1rem;
+  }
+  .t-sage { color: var(--sage-deep); }
+  @media (max-width: 720px) {
+    .stub-hero__inner { grid-template-columns: 1fr; }
+    .stub-hero__rolo { justify-self: end; }
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .contact-card {
+    padding: 1.75rem 1.5rem;
+    background: var(--bg-tint);
+    transition: transform 200ms var(--ease-soft), box-shadow 200ms var(--ease-soft);
+  }
+  .contact-card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: var(--shadow-pixel-hover);
+  }
+  .contact-card__label {
+    font-family: 'VT323', monospace;
+    font-size: 1.1rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--sage-deep);
+    margin-bottom: 0.5rem;
+  }
+  .contact-card__value {
+    font-family: 'Silkscreen', monospace;
+    font-size: 1.4rem;
+    color: var(--navy);
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+    word-break: break-word;
+  }
+  .contact-card__value--small {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.1rem;
+    line-height: 1.55;
+    color: var(--text);
+  }
+  .contact-card__value a {
+    color: var(--navy);
+    text-decoration: none;
+    border-bottom: 2px solid var(--rolo);
+    transition: color 160ms var(--ease-soft);
+  }
+  .contact-card__value a:hover { color: var(--rolo-deep); }
+  .contact-card__value a[aria-disabled="true"] {
+    color: var(--navy-soft);
+    border-bottom-color: var(--surface-2);
+    pointer-events: none;
+  }
+  .contact-card__hint {
+    color: var(--text-soft);
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+  .contact-card--note { background: var(--surface); }
+
+  .stub-note {
+    margin-top: 3rem;
+    padding: 1rem 1.25rem;
+    background: var(--surface);
+    border: 2px dashed var(--navy-soft);
+    color: var(--navy-soft);
+    font-family: 'VT323', monospace;
+    font-size: 1.15rem;
+    letter-spacing: 0.04em;
+    display: flex;
+    gap: 0.85rem;
+    align-items: center;
+    max-width: 56rem;
+  }
+</style>

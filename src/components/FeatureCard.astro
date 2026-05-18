@@ -1,0 +1,124 @@
+---
+interface Props {
+  title: string;
+  body: string;
+  icon: 'walk' | 'mouse' | 'eat' | 'sleep';
+  delay?: number;
+}
+const { title, body, icon, delay = 0 } = Astro.props;
+---
+<article class="feature" style={`animation-delay:${delay}ms`}>
+  <div class="feature__icon" aria-hidden="true">
+    {icon === 'walk' && (
+      <svg viewBox="0 0 16 16" width="48" height="48" shape-rendering="crispEdges">
+        <rect x="6" y="1" width="4" height="1" fill="#000"/>
+        <rect x="5" y="2" width="2" height="2" fill="#F06449"/>
+        <rect x="7" y="2" width="2" height="2" fill="#E28954"/>
+        <rect x="4" y="2" width="1" height="2" fill="#000"/>
+        <rect x="9" y="2" width="1" height="2" fill="#000"/>
+        <rect x="3" y="4" width="1" height="4" fill="#000"/>
+        <rect x="4" y="4" width="6" height="4" fill="#F06449"/>
+        <rect x="5" y="5" width="1" height="1" fill="#DFF8EB"/>
+        <rect x="8" y="5" width="1" height="1" fill="#DFF8EB"/>
+        <rect x="10" y="4" width="1" height="4" fill="#000"/>
+        <rect x="4" y="8" width="2" height="2" fill="#F06449"/>
+        <rect x="8" y="8" width="2" height="2" fill="#F06449"/>
+        <rect x="3" y="9" width="1" height="3" fill="#000"/>
+        <rect x="6" y="10" width="2" height="2" fill="#F06449"/>
+        <rect x="10" y="9" width="1" height="3" fill="#000"/>
+        <rect x="3" y="12" width="3" height="1" fill="#000"/>
+        <rect x="8" y="12" width="3" height="1" fill="#000"/>
+      </svg>
+    )}
+    {icon === 'mouse' && (
+      <svg viewBox="0 0 16 16" width="48" height="48" shape-rendering="crispEdges">
+        <rect x="3" y="2" width="2" height="2" fill="#000"/>
+        <rect x="3" y="4" width="3" height="2" fill="#000"/>
+        <rect x="3" y="6" width="4" height="2" fill="#000"/>
+        <rect x="3" y="8" width="5" height="2" fill="#000"/>
+        <rect x="3" y="10" width="2" height="1" fill="#000"/>
+        <rect x="5" y="10" width="2" height="1" fill="#000"/>
+        <rect x="6" y="11" width="2" height="1" fill="#000"/>
+        <rect x="7" y="12" width="2" height="1" fill="#000"/>
+        <rect x="10" y="6" width="2" height="2" fill="#6B8E6F"/>
+        <rect x="10" y="9" width="2" height="2" fill="#6B8E6F"/>
+        <rect x="13" y="9" width="2" height="2" fill="#6B8E6F"/>
+        <rect x="11" y="12" width="2" height="2" fill="#6B8E6F"/>
+      </svg>
+    )}
+    {icon === 'eat' && (
+      <svg viewBox="0 0 16 16" width="48" height="48" shape-rendering="crispEdges">
+        <rect x="3" y="4" width="6" height="1" fill="#000"/>
+        <rect x="2" y="5" width="1" height="6" fill="#000"/>
+        <rect x="9" y="5" width="1" height="6" fill="#000"/>
+        <rect x="3" y="5" width="6" height="6" fill="#F5EFE0"/>
+        <rect x="4" y="7" width="4" height="1" fill="#6B8E6F"/>
+        <rect x="4" y="9" width="3" height="1" fill="#6B8E6F"/>
+        <rect x="3" y="11" width="7" height="1" fill="#000"/>
+        <rect x="11" y="3" width="2" height="2" fill="#F06449"/>
+        <rect x="12" y="5" width="2" height="2" fill="#F06449"/>
+        <rect x="11" y="7" width="2" height="2" fill="#F06449"/>
+        <rect x="12" y="9" width="2" height="2" fill="#F06449"/>
+        <rect x="11" y="11" width="2" height="2" fill="#F06449"/>
+      </svg>
+    )}
+    {icon === 'sleep' && (
+      <svg viewBox="0 0 16 16" width="48" height="48" shape-rendering="crispEdges">
+        <rect x="5" y="3" width="6" height="1" fill="#000"/>
+        <rect x="4" y="4" width="1" height="6" fill="#000"/>
+        <rect x="11" y="4" width="1" height="6" fill="#000"/>
+        <rect x="5" y="4" width="6" height="6" fill="#F06449"/>
+        <rect x="6" y="6" width="1" height="1" fill="#3D6084"/>
+        <rect x="9" y="6" width="1" height="1" fill="#3D6084"/>
+        <rect x="6" y="8" width="4" height="1" fill="#3D6084"/>
+        <rect x="5" y="10" width="6" height="1" fill="#000"/>
+        <rect x="12" y="2" width="2" height="2" fill="#C9A961"/>
+        <rect x="13" y="1" width="1" height="1" fill="#C9A961"/>
+        <rect x="11" y="0" width="2" height="2" fill="#C9A961"/>
+      </svg>
+    )}
+  </div>
+  <h3 class="feature__title">{title}</h3>
+  <p class="feature__body">{body}</p>
+</article>
+
+<style>
+  .feature {
+    background: var(--bg-tint);
+    border: 2px solid var(--navy);
+    border-radius: 2px;
+    box-shadow: var(--shadow-pixel);
+    padding: 1.75rem 1.5rem 1.5rem;
+    display: grid;
+    gap: 0.85rem;
+    transition: transform 220ms var(--ease-soft), box-shadow 220ms var(--ease-soft);
+    opacity: 0;
+    animation: fade-up 700ms var(--ease-soft) forwards;
+  }
+  .feature:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: var(--shadow-pixel-hover);
+  }
+  .feature__icon {
+    display: inline-flex;
+    width: 64px; height: 64px;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface);
+    border: 2px solid var(--navy);
+    border-radius: 2px;
+    box-shadow: 3px 3px 0 var(--navy);
+  }
+  .feature__title {
+    font-family: 'Silkscreen', monospace;
+    font-size: 1.15rem;
+    color: var(--navy);
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+  }
+  .feature__body {
+    color: var(--text-soft);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+</style>

@@ -1,0 +1,164 @@
+---
+const base = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : import.meta.env.BASE_URL + '/';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="shell">
+    <hr class="pixel-rule" />
+    <div class="site-footer__grid">
+      <div class="site-footer__brand">
+        <p class="footer-logo">rolo<span>.dev</span></p>
+        <p class="footer-tag">
+          a tiny pixel companion for your desktop.<br />
+          made with care, fed on files.
+        </p>
+      </div>
+
+      <div class="site-footer__cols">
+        <section>
+          <h4>about</h4>
+          <ul>
+            <li><a href={`${base}faq`}>frequently asked</a></li>
+            <li><a href={`${base}contact`}>contact</a></li>
+            <li><a href="https://github.com/larawashington/Desktop-Pet" target="_blank" rel="noopener">source on github &rarr;</a></li>
+          </ul>
+        </section>
+        <section>
+          <h4>follow along</h4>
+          <ul>
+            <li><a href="#" aria-disabled="true">devlog (soon)</a></li>
+            <li><a href="#" aria-disabled="true">bluesky (soon)</a></li>
+            <li><a href="#" aria-disabled="true">mastodon (soon)</a></li>
+          </ul>
+        </section>
+        <section>
+          <h4>colophon</h4>
+          <ul class="meta-list">
+            <li>built with astro</li>
+            <li>type: silkscreen &middot; vt323 &middot; fraunces</li>
+            <li>rolo is 64&times;64 pixels tall</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <div class="site-footer__bottom">
+      <small>&copy; {year} rolo.dev &middot; all the pixels reserved.</small>
+      <small class="footer-easter">
+        rolo says: <span class="easter-bubble">it&rsquo;s nice here.</span>
+      </small>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    position: relative;
+    z-index: 2;
+    background: var(--surface);
+    border-top: 4px solid var(--navy);
+    padding: 3.5rem 0 2rem;
+    margin-top: 5rem;
+  }
+  .site-footer .pixel-rule {
+    margin-bottom: 2.5rem;
+    opacity: 0.45;
+  }
+  .site-footer__grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 3rem;
+    align-items: start;
+  }
+  @media (max-width: 720px) {
+    .site-footer__grid { grid-template-columns: 1fr; gap: 2rem; }
+  }
+
+  .footer-logo {
+    font-family: 'Silkscreen', monospace;
+    font-size: 1.8rem;
+    color: var(--navy);
+    letter-spacing: 0.04em;
+    margin-bottom: 0.5rem;
+  }
+  .footer-logo span { color: var(--sage-deep); }
+  .footer-tag {
+    font-family: var(--body);
+    font-style: italic;
+    color: var(--text-soft);
+    max-width: 28ch;
+    line-height: 1.55;
+  }
+
+  .site-footer__cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+  @media (max-width: 720px) {
+    .site-footer__cols { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 460px) {
+    .site-footer__cols { grid-template-columns: 1fr; }
+  }
+
+  .site-footer h4 {
+    font-family: 'VT323', monospace;
+    font-size: 1.35rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--sage-deep);
+    margin-bottom: 0.85rem;
+  }
+  .site-footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.35rem;
+  }
+  .site-footer a {
+    color: var(--navy);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 160ms var(--ease-soft), color 160ms var(--ease-soft);
+  }
+  .site-footer a:hover {
+    color: var(--rolo-deep);
+    border-bottom-color: var(--rolo);
+  }
+  .site-footer a[aria-disabled="true"] {
+    color: var(--navy-soft);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .meta-list { color: var(--text-soft); font-style: italic; }
+
+  .site-footer__bottom {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 2px dashed var(--surface-2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    font-family: 'VT323', monospace;
+    font-size: 1.1rem;
+    color: var(--navy-soft);
+    letter-spacing: 0.04em;
+  }
+  @media (max-width: 540px) {
+    .site-footer__bottom { flex-direction: column; align-items: flex-start; }
+  }
+
+  .easter-bubble {
+    color: var(--navy);
+    background: var(--bg-tint);
+    border: 2px solid var(--navy);
+    padding: 0.1rem 0.5rem 0.2rem;
+    box-shadow: 2px 2px 0 var(--navy);
+    margin-left: 0.35rem;
+  }
+</style>

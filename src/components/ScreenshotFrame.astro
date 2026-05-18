@@ -1,0 +1,119 @@
+---
+/**
+ * ScreenshotFrame — placeholder window-chrome card for product screenshots.
+ * Once real Rolo screenshots/GIFs exist, drop them into the slot.
+ */
+interface Props {
+  caption: string;
+  variant?: 'desktop' | 'closeup';
+  delay?: number;
+}
+const { caption, variant = 'desktop', delay = 0 } = Astro.props;
+---
+<figure class="frame" style={`animation-delay:${delay}ms`}>
+  <div class="frame__chrome">
+    <span class="frame__dot frame__dot--r"></span>
+    <span class="frame__dot frame__dot--y"></span>
+    <span class="frame__dot frame__dot--g"></span>
+    <span class="frame__title">{variant === 'desktop' ? 'your desktop' : 'closeup'}</span>
+  </div>
+  <div class={`frame__body frame__body--${variant}`}>
+    <slot>
+      {variant === 'desktop' ? (
+        <div class="placeholder">
+          <span class="placeholder__hint">screenshot coming soon</span>
+        </div>
+      ) : (
+        <div class="placeholder placeholder--closeup">
+          <span class="placeholder__hint">closeup coming soon</span>
+        </div>
+      )}
+    </slot>
+  </div>
+  <figcaption class="frame__caption">{caption}</figcaption>
+</figure>
+
+<style>
+  .frame {
+    background: var(--bg-tint);
+    border: 2px solid var(--navy);
+    border-radius: 2px;
+    box-shadow: var(--shadow-pixel);
+    overflow: hidden;
+    opacity: 0;
+    animation: fade-up 700ms var(--ease-soft) forwards;
+    transition: transform 220ms var(--ease-soft), box-shadow 220ms var(--ease-soft);
+  }
+  .frame:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-pixel-hover);
+  }
+  .frame__chrome {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.85rem;
+    background: var(--surface);
+    border-bottom: 2px solid var(--navy);
+  }
+  .frame__dot {
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    border: 1px solid var(--navy);
+    display: inline-block;
+  }
+  .frame__dot--r { background: var(--rolo); }
+  .frame__dot--y { background: var(--honey); }
+  .frame__dot--g { background: var(--sage); }
+  .frame__title {
+    font-family: 'VT323', monospace;
+    font-size: 1rem;
+    color: var(--navy-soft);
+    letter-spacing: 0.06em;
+    margin-left: 0.35rem;
+  }
+
+  .frame__body {
+    aspect-ratio: 16 / 10;
+    position: relative;
+    background:
+      radial-gradient(circle at 20% 30%, #B5C8B0 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, #DFD2A8 0%, transparent 45%),
+      linear-gradient(180deg, #F2EBD7 0%, #E8DFC8 100%);
+  }
+  .frame__body--closeup {
+    aspect-ratio: 4 / 3;
+    background:
+      repeating-linear-gradient(
+        45deg,
+        rgba(44, 62, 80, 0.04) 0 6px,
+        transparent 6px 12px
+      ),
+      linear-gradient(180deg, #F2EBD7 0%, #E8DFC8 100%);
+  }
+
+  .placeholder {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
+  .placeholder__hint {
+    font-family: 'VT323', monospace;
+    font-size: 1.2rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--navy-soft);
+    padding: 0.4rem 0.85rem;
+    border: 2px dashed var(--navy-soft);
+    background: rgba(250, 246, 236, 0.6);
+  }
+  .frame__caption {
+    padding: 0.85rem 1rem 1rem;
+    font-family: 'VT323', monospace;
+    font-size: 1.15rem;
+    color: var(--navy);
+    letter-spacing: 0.04em;
+    border-top: 2px dashed var(--surface-2);
+  }
+</style>
