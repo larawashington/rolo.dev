@@ -1,54 +1,49 @@
 ---
-const base = import.meta.env.BASE_URL.endsWith('/')
-  ? import.meta.env.BASE_URL
-  : import.meta.env.BASE_URL + '/';
+import { LINKS } from '../lib/links';
 const year = new Date().getFullYear();
 ---
 <footer class="site-footer">
   <div class="shell">
-    <hr class="pixel-rule" />
+    <hr class="pixel-rule footer__rule" />
+
     <div class="site-footer__grid">
       <div class="site-footer__brand">
-        <p class="footer-logo">rolo<span>.dev</span></p>
+        <p class="footer-logo">PROJECT ROLO</p>
         <p class="footer-tag">
-          a tiny pixel companion for your desktop.<br />
-          made with care, fed on files.
+          A free, open-source desktop companion.<br />
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </p>
       </div>
 
-      <div class="site-footer__cols">
-        <section>
-          <h4>about</h4>
-          <ul>
-            <li><a href={`${base}faq`}>frequently asked</a></li>
-            <li><a href={`${base}contact`}>contact</a></li>
-            <li><a href="https://github.com/larawashington/Desktop-Pet" target="_blank" rel="noopener">source on github &rarr;</a></li>
-          </ul>
-        </section>
-        <section>
-          <h4>follow along</h4>
-          <ul>
-            <li><a href="#" aria-disabled="true">devlog (soon)</a></li>
-            <li><a href="#" aria-disabled="true">bluesky (soon)</a></li>
-            <li><a href="#" aria-disabled="true">mastodon (soon)</a></li>
-          </ul>
-        </section>
-        <section>
-          <h4>colophon</h4>
-          <ul class="meta-list">
-            <li>built with astro</li>
-            <li>type: silkscreen &middot; vt323 &middot; fraunces</li>
-            <li>rolo is 64&times;64 pixels tall</li>
-          </ul>
-        </section>
+      <div class="site-footer__social" aria-label="Find us elsewhere">
+        <p class="footer-heading">Find us</p>
+        <ul>
+          <li>
+            <a href={LINKS.github} target="_blank" rel="noopener">
+              GitHub
+              <span class="footer-arrow" aria-hidden="true">&rarr;</span>
+            </a>
+          </li>
+          <li>
+            <a href={LINKS.linkedin} target="_blank" rel="noopener">
+              LinkedIn
+              <span class="footer-arrow" aria-hidden="true">&rarr;</span>
+            </a>
+          </li>
+          <li>
+            {/* PLACEHOLDER: email — swap when real address is provided */}
+            <a href={LINKS.email}>
+              Email
+              <span class="footer-arrow" aria-hidden="true">&rarr;</span>
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
 
     <div class="site-footer__bottom">
-      <small>&copy; {year} rolo.dev &middot; all the pixels reserved.</small>
-      <small class="footer-easter">
-        rolo says: <span class="easter-bubble">it&rsquo;s nice here.</span>
-      </small>
+      <small>&copy; {year} Project Rolo. Open source with love.</small>
+      <small class="footer-meta">Lorem ipsum &middot; dolor sit amet</small>
     </div>
   </div>
 </footer>
@@ -57,19 +52,16 @@ const year = new Date().getFullYear();
   .site-footer {
     position: relative;
     z-index: 2;
-    background: var(--surface);
-    border-top: 4px solid var(--navy);
-    padding: 3.5rem 0 2rem;
-    margin-top: 5rem;
+    background: var(--bg);
+    padding: 3rem 0 2rem;
+    margin-top: 4rem;
   }
-  .site-footer .pixel-rule {
-    margin-bottom: 2.5rem;
-    opacity: 0.45;
-  }
+  .footer__rule { opacity: 0.6; margin-bottom: 2.5rem; }
+
   .site-footer__grid {
     display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 3rem;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: clamp(2rem, 6vw, 4rem);
     align-items: start;
   }
   @media (max-width: 720px) {
@@ -77,88 +69,71 @@ const year = new Date().getFullYear();
   }
 
   .footer-logo {
-    font-family: 'Silkscreen', monospace;
-    font-size: 1.8rem;
-    color: var(--navy);
+    font-family: var(--display);
+    font-size: 0.85rem;
+    color: var(--ink);
     letter-spacing: 0.04em;
-    margin-bottom: 0.5rem;
-  }
-  .footer-logo span { color: var(--sage-deep); }
-  .footer-tag {
-    font-family: var(--body);
-    font-style: italic;
-    color: var(--text-soft);
-    max-width: 28ch;
-    line-height: 1.55;
-  }
-
-  .site-footer__cols {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-  }
-  @media (max-width: 720px) {
-    .site-footer__cols { grid-template-columns: 1fr 1fr; }
-  }
-  @media (max-width: 460px) {
-    .site-footer__cols { grid-template-columns: 1fr; }
-  }
-
-  .site-footer h4 {
-    font-family: 'VT323', monospace;
-    font-size: 1.35rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--sage-deep);
     margin-bottom: 0.85rem;
   }
-  .site-footer ul {
+  .footer-tag {
+    font-family: var(--body);
+    color: var(--ink-soft);
+    line-height: 1.55;
+    max-width: 38ch;
+  }
+
+  .footer-heading {
+    font-family: var(--display);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 1rem;
+  }
+  .site-footer__social ul {
     list-style: none;
     padding: 0;
     margin: 0;
     display: grid;
-    gap: 0.35rem;
+    gap: 0.6rem;
   }
-  .site-footer a {
-    color: var(--navy);
+  .site-footer__social a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--ink);
     text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: border-color 160ms var(--ease-soft), color 160ms var(--ease-soft);
+    border-bottom: 2px solid transparent;
+    padding-bottom: 2px;
+    font-weight: 600;
+    transition: color 160ms var(--ease-soft),
+                border-color 160ms var(--ease-soft),
+                transform 140ms var(--ease-soft);
   }
-  .site-footer a:hover {
+  .site-footer__social a:hover {
     color: var(--rolo-deep);
     border-bottom-color: var(--rolo);
+    transform: translateX(2px);
   }
-  .site-footer a[aria-disabled="true"] {
-    color: var(--navy-soft);
-    cursor: not-allowed;
-    pointer-events: none;
+  .footer-arrow {
+    font-family: var(--display);
+    font-size: 0.75rem;
+    color: var(--rolo);
   }
-  .meta-list { color: var(--text-soft); font-style: italic; }
 
   .site-footer__bottom {
-    margin-top: 3rem;
-    padding-top: 1.5rem;
-    border-top: 2px dashed var(--surface-2);
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px dashed var(--rule);
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
-    font-family: 'VT323', monospace;
-    font-size: 1.1rem;
-    color: var(--navy-soft);
-    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    font-size: 0.85rem;
   }
   @media (max-width: 540px) {
     .site-footer__bottom { flex-direction: column; align-items: flex-start; }
   }
-
-  .easter-bubble {
-    color: var(--navy);
-    background: var(--bg-tint);
-    border: 2px solid var(--navy);
-    padding: 0.1rem 0.5rem 0.2rem;
-    box-shadow: 2px 2px 0 var(--navy);
-    margin-left: 0.35rem;
-  }
+  .footer-meta { font-style: italic; }
 </style>

@@ -1,48 +1,41 @@
 /* =========================================================================
    rolo.dev — global styles
-   Refined cottage workshop. Pixel-retro, but with editorial restraint.
+   Warm paper. Chunky 2px ink borders. Hard offset shadows. Pixel + sans.
+   The aesthetic is a hand-printed risograph zine, not a tech product page.
    ========================================================================= */
 
 :root {
-  /* Palette — Cottage Cream + Sage + Navy */
-  --bg:        #F5EFE0;  /* cream paper */
-  --bg-tint:   #FAF6EC;  /* lighter cream for layered surfaces */
-  --surface:   #E8DFC8;  /* warm linen */
-  --surface-2: #DDD2B6;  /* deeper linen for hover/depth */
-  --sage:      #6B8E6F;  /* dusty sage — primary brand */
-  --sage-deep: #4F6F53;  /* sage hover/active */
-  --sage-soft: #B5C8B0;  /* sage tint for decoration */
-  --navy:      #2C3E50;  /* slate navy — outlines, headings */
-  --navy-soft: #5A6B7A;  /* navy at lower emphasis */
-  --text:      #2A2520;  /* deep cocoa — body */
-  --text-soft: #6B5F52;  /* muted body */
-  --honey:     #C9A961;  /* honey gold accent */
-  --honey-deep:#A88A45;
-  --rolo:      #F06449;  /* Rolo's warm orange — focal only */
-  --rolo-deep: #CF3E22;
-  --rolo-soft: #F8C6B8;
+  /* Established palette — carried over from the reference (how-rolo-thinks.html) */
+  --bg:       #f4e4c1;   /* warm paper */
+  --paper:    #fff7e6;   /* lighter card paper */
+  --ink:      #2a1810;   /* deep brown, primary text + borders */
+  --ink-soft: #73553c;   /* secondary text */
+  --rolo:     #e8654a;   /* Rolo's orange — accent / CTA */
+  --rolo-deep:#c84a30;   /* pressed-state orange */
+  --sun:      #e8b04a;   /* warm yellow */
+  --moon:     #6b8fa8;   /* cool blue, sleep/night */
+  --rule:     #d6c19a;   /* divider */
+
+  /* Semantic checklist */
+  --ok:    #4f7a45;
+  --no:    #b3361f;
 
   /* Tokens */
-  --outline: 2px solid var(--navy);
-  --outline-thick: 4px solid var(--navy);
-  --radius: 2px;                       /* pixel-sharp, never round */
-  --shadow-pixel: 4px 4px 0 var(--navy);
-  --shadow-pixel-sm: 3px 3px 0 var(--navy);
-  --shadow-pixel-hover: 6px 6px 0 var(--navy);
-  --shadow-soft: 0 12px 32px -16px rgba(44, 62, 80, 0.25);
+  --outline:        2px solid var(--ink);
+  --outline-thick:  4px solid var(--ink);
+  --shadow-pixel:        8px 8px 0 var(--ink);   /* signature offset shadow */
+  --shadow-pixel-sm:     4px 4px 0 var(--ink);
+  --shadow-pixel-press:  2px 2px 0 var(--ink);
+  --shadow-soft: 0 24px 48px -24px rgba(42, 24, 16, 0.18);
 
-  /* Type scale */
-  --display: 'Silkscreen', 'VT323', ui-monospace, monospace;
-  --pixel:   'VT323', ui-monospace, monospace;
-  --body:    'Fraunces', 'Cormorant Garamond', Georgia, serif;
-  --ui:      'Fraunces', Georgia, serif;
+  /* Type */
+  --display: 'Press Start 2P', 'Silkscreen', ui-monospace, monospace;
+  --body:    'Encode Sans', 'Inter', system-ui, sans-serif;
+  --ui:      'Encode Sans', system-ui, sans-serif;
 
-  /* Motion */
-  --ease-pixel: steps(6, end);
-  --ease-soft:  cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-/* ------- Reset ------------------------------------------------------------ */
 *,
 *::before,
 *::after {
@@ -58,224 +51,224 @@ html {
 
 body {
   background: var(--bg);
-  color: var(--text);
+  color: var(--ink);
   font-family: var(--body);
-  font-size: clamp(16px, 1.05vw + 0.6rem, 19px);
+  font-size: clamp(16px, 0.4vw + 0.85rem, 18px);
   line-height: 1.6;
   font-weight: 400;
-  font-feature-settings: "ss01", "ss02";
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
+  /* Faint pixel-grid texture — keeps the canvas from feeling flat */
+  background-image: radial-gradient(circle at 1px 1px, rgba(42, 24, 16, 0.06) 1px, transparent 0);
+  background-size: 4px 4px;
 }
 
-/* Cream paper texture — barely-there pixel grain to give the page a hand-pressed feel.
-   Generated with a tiny SVG noise pattern. Sits behind everything at very low opacity. */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.16  0 0 0 0 0.14  0 0 0 0 0.12  0 0 0 0.08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  background-size: 160px 160px;
-  pointer-events: none;
-  opacity: 0.6;
-  z-index: 0;
-  mix-blend-mode: multiply;
-}
+img, svg { display: block; max-width: 100%; height: auto; }
 
-img, svg {
-  display: block;
-  max-width: 100%;
-  height: auto;
+img.pixel,
+.pixel img {
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }
 
 a {
-  color: var(--sage-deep);
+  color: var(--ink);
   text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-  transition: color 160ms var(--ease-soft);
+  text-underline-offset: 4px;
+  text-decoration-color: var(--rolo);
+  transition: color 160ms var(--ease-soft), text-decoration-color 160ms var(--ease-soft);
 }
-a:hover { color: var(--rolo-deep); }
+a:hover {
+  color: var(--rolo-deep);
+  text-decoration-color: var(--rolo-deep);
+}
 
 button { font: inherit; cursor: pointer; }
 
 ::selection {
   background: var(--rolo);
-  color: var(--bg);
+  color: var(--paper);
 }
 
-/* ------- Typography ------------------------------------------------------- */
-h1, h2, h3, h4 {
-  font-family: var(--display);
-  color: var(--navy);
-  letter-spacing: 0.01em;
-  line-height: 1;
-  font-weight: 400;
+:focus-visible {
+  outline: 3px solid var(--rolo);
+  outline-offset: 3px;
 }
 
-.eyebrow {
-  font-family: var(--pixel);
-  font-size: clamp(18px, 1.4vw + 0.4rem, 22px);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--sage-deep);
-  margin-bottom: 1rem;
-}
-
-.lede {
-  font-family: var(--body);
-  font-size: clamp(18px, 1.2vw + 0.7rem, 22px);
-  line-height: 1.55;
-  color: var(--text-soft);
-  font-style: italic;
-  font-weight: 400;
-  max-width: 52ch;
-}
-
-/* ------- Layout shells ---------------------------------------------------- */
+/* ------- Layout shell ----------------------------------------------------- */
 .shell {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1180px;
   margin-inline: auto;
   padding-inline: clamp(1.25rem, 4vw, 3rem);
   position: relative;
   z-index: 1;
 }
 
-section {
-  position: relative;
-  z-index: 1;
+section, main { position: relative; z-index: 1; }
+
+/* ------- Typography ------------------------------------------------------- */
+h1, h2, h3, h4 {
+  font-family: var(--body);
+  color: var(--ink);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
 }
 
-main {
-  position: relative;
-  z-index: 1;
+/* Pixel headings (Press Start 2P) — used at restrained sizes only */
+.pixel-h {
+  font-family: var(--display);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.15;
+  color: var(--ink);
+  /* Press Start 2P is *very* dense; counter that with explicit smaller sizes */
+}
+.pixel-h--xl { font-size: clamp(1.75rem, 4.2vw, 3.4rem); line-height: 1.18; }
+.pixel-h--lg { font-size: clamp(1.25rem, 2.6vw, 1.9rem); line-height: 1.25; }
+.pixel-h--md { font-size: clamp(1rem,   1.6vw, 1.25rem); line-height: 1.3;  }
+.pixel-h--sm { font-size: 0.7rem; letter-spacing: 0.12em; }
+
+.eyebrow {
+  font-family: var(--display);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 8px; height: 8px;
+  background: var(--rolo);
+  box-shadow: 12px 0 0 var(--sun), 24px 0 0 var(--moon);
+  margin-right: 28px;
+}
+
+.lede {
+  font-family: var(--body);
+  font-size: clamp(1.05rem, 0.6vw + 0.85rem, 1.25rem);
+  line-height: 1.6;
+  color: var(--ink);
+  max-width: 56ch;
 }
 
 /* ------- Buttons ---------------------------------------------------------- */
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
+  justify-content: center;
+  gap: 0.6rem;
   padding: 0.95rem 1.5rem;
-  font-family: var(--pixel);
-  font-size: 1.25rem;
-  letter-spacing: 0.06em;
-  color: var(--navy);
-  background: var(--bg-tint);
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  background: var(--paper);
   border: var(--outline);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-pixel);
+  border-radius: 0;
+  box-shadow: var(--shadow-pixel-sm);
   text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1;
   transition:
-    transform 140ms var(--ease-soft),
-    box-shadow 140ms var(--ease-soft),
+    transform 120ms var(--ease-soft),
+    box-shadow 120ms var(--ease-soft),
     background 160ms var(--ease-soft),
     color 160ms var(--ease-soft);
-  cursor: pointer;
   position: relative;
-  user-select: none;
 }
 
+/* Press-down on hover: shadow grows; on active: shadow collapses 4px */
 .btn:hover,
 .btn:focus-visible {
   transform: translate(-2px, -2px);
-  box-shadow: var(--shadow-pixel-hover);
-  background: var(--rolo);
-  color: var(--bg);
+  box-shadow: 6px 6px 0 var(--ink);
   outline: none;
 }
-
 .btn:active {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--navy);
+  transform: translate(4px, 4px);
+  box-shadow: var(--shadow-pixel-press);
 }
 
 .btn--primary {
-  background: var(--sage);
-  color: var(--bg);
+  background: var(--rolo);
+  color: var(--paper);
 }
 .btn--primary:hover,
 .btn--primary:focus-visible {
-  background: var(--rolo);
-  color: var(--bg);
+  background: var(--rolo-deep);
+  color: var(--paper);
 }
 
 .btn--ghost {
   background: transparent;
-  box-shadow: var(--shadow-pixel-sm);
+}
+.btn--ghost:hover,
+.btn--ghost:focus-visible {
+  background: var(--paper);
 }
 
-.btn .platform-icon {
-  width: 18px;
-  height: 18px;
+.btn--lg {
+  padding: 1.1rem 1.85rem;
+  font-size: 1rem;
 }
 
-.btn .btn-meta {
-  font-family: var(--body);
-  font-style: italic;
-  font-size: 0.7em;
-  opacity: 0.7;
-  margin-left: 0.4rem;
-  letter-spacing: 0;
-}
-
-/* ------- Panels & cards --------------------------------------------------- */
+/* ------- Cards & panels --------------------------------------------------- */
 .panel {
-  background: var(--bg-tint);
+  background: var(--paper);
   border: var(--outline);
   box-shadow: var(--shadow-pixel);
-  border-radius: var(--radius);
+  padding: clamp(1.25rem, 3vw, 2rem);
 }
 
-/* ------- Section dividers — pixel wave bottom edge ------------------------ */
-.divider-wave {
-  display: block;
-  width: 100%;
-  height: 24px;
-  color: var(--surface);
+/* ------- Rules ------------------------------------------------------------ */
+.pixel-rule {
+  height: 4px;
+  background-image: linear-gradient(to right, var(--ink) 0 8px, transparent 8px 16px);
+  background-size: 16px 4px;
+  border: none;
+  margin: 0;
+}
+.rule-dotted {
+  height: 1px;
+  border: none;
+  border-top: 1px dashed var(--rule);
+  margin: 0;
+}
+
+/* ------- Section rhythm --------------------------------------------------- */
+.section {
+  padding: clamp(4rem, 8vw, 7rem) 0;
 }
 
 /* ------- Animations ------------------------------------------------------- */
-@keyframes rolo-bob {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-6px); }
-}
-
-@keyframes bubble-wobble {
-  0%, 100% { transform: rotate(-1.2deg) translateY(0); }
-  50%      { transform: rotate(-0.4deg) translateY(-3px); }
-}
-
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
-@keyframes blink {
-  0%, 92%, 100% { opacity: 1; }
-  94%, 98%      { opacity: 0; }
-}
-
-@keyframes cloud-drift {
-  from { transform: translateX(0); }
-  to   { transform: translateX(40px); }
-}
-
 .fade-up {
   opacity: 0;
-  animation: fade-up 700ms var(--ease-soft) forwards;
+  animation: fade-up 720ms var(--ease-soft) forwards;
 }
 .fade-up.d1 { animation-delay: 80ms; }
 .fade-up.d2 { animation-delay: 200ms; }
 .fade-up.d3 { animation-delay: 340ms; }
-.fade-up.d4 { animation-delay: 460ms; }
-.fade-up.d5 { animation-delay: 580ms; }
+.fade-up.d4 { animation-delay: 480ms; }
 
-/* Respect reduced motion */
+@keyframes rolo-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -287,23 +280,10 @@ main {
   }
 }
 
-/* ------- Utility ---------------------------------------------------------- */
 .sr-only {
   position: absolute;
   width: 1px; height: 1px;
   padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0, 0, 0, 0);
   white-space: nowrap; border: 0;
-}
-
-.pixel-rule {
-  height: 4px;
-  background-image: linear-gradient(
-    to right,
-    var(--navy) 0 8px,
-    transparent 8px 16px
-  );
-  background-size: 16px 4px;
-  border: none;
-  margin: 0;
 }

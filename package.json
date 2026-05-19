@@ -9,9 +9,16 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "deploy": "astro build && wrangler pages deploy ./dist --project-name=rolo-dev --commit-dirty=true",
+    "deploy:preview": "astro build && wrangler pages deploy ./dist --project-name=rolo-dev --branch=preview --commit-dirty=true",
+    "cf:login": "wrangler login",
+    "cf:whoami": "wrangler whoami"
   },
   "dependencies": {
-    "astro": "^5.0.0"
+    "astro": "^6.3.4"
+  },
+  "devDependencies": {
+    "wrangler": "^4.92.0"
   }
 }

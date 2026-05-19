@@ -2,233 +2,337 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import RoloSprite from '../components/RoloSprite.astro';
-import SpeechBubble from '../components/SpeechBubble.astro';
-import FeatureCard from '../components/FeatureCard.astro';
-import ScreenshotFrame from '../components/ScreenshotFrame.astro';
+import WindowFrame from '../components/WindowFrame.astro';
+import { LINKS } from '../lib/links';
 
-// MVP — these download URLs are placeholders. Wire to GitHub Releases assets when ready.
-const downloads = [
-  { os: 'macOS',   ext: '.dmg',      href: '#',  size: '~6 MB' },
-  { os: 'Windows', ext: '.msi',      href: '#',  size: '~7 MB' },
-  { os: 'Linux',   ext: '.AppImage', href: '#',  size: '~8 MB' },
+const base = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : import.meta.env.BASE_URL + '/';
+
+// Section 3 — carousel slides (exact copy from wireframe)
+const slides = [
+  {
+    id: 'roaming',
+    title: 'roaming.app',
+    label: 'Roaming',
+    src: `${base}gifs/rolo_walk_right.gif`,
+    copy: 'Rolo walks across your screen and sees what you see. He will occasionally comment on your work and cheer you on.',
+    alt: 'Rolo walking to the right across a small window',
+    kind: 'gif' as const,
+  },
+  {
+    id: 'eating',
+    title: 'eating.app',
+    label: 'Eating',
+    src: `${base}gifs/rolo_eat.gif`,
+    copy: 'Rolo is happiest when you’re happy, and second happiest when he gets to eat! Drag and drop files onto Rolo to feed him (eaten files go to Trash).',
+    alt: 'Rolo munching on something',
+    kind: 'gif' as const,
+  },
+  {
+    id: 'chatting',
+    title: 'chatting.app',
+    label: 'Chatting',
+    src: `${base}gifs/rolo_waiting.gif`,
+    copy: 'Rolo loves to chat. Take a break and chat with Rolo about anything you like. As he learns more about you, he will remember important details you share for the future. Ask him about the weather!',
+    alt: 'Rolo waiting patiently, ready for a chat',
+    kind: 'gif' as const,
+  },
+  {
+    id: 'sleeping',
+    title: 'sleeping.app',
+    label: 'Sleeping',
+    /* No rolo_sleep.gif available — using static sprite per handoff */
+    src: `${base}sprites/rolo-sleep.png`,
+    copy: 'Rolo takes naps and dreams. Like us humans, this is when he processes and transfers information into his memory.',
+    alt: 'Rolo curled up, asleep',
+    kind: 'png' as const,
+  },
 ];
 
-const features = [
-  { icon: 'walk',  title: 'he walks',           body: 'Rolo wanders across your desktop on his own little legs. He picks paths, dawdles at corners, and never asks where you’re going.' },
-  { icon: 'mouse', title: 'he notices you',     body: 'Move your cursor near him and he looks up. Hover too long and he gets curious. He’s shy, but he warms up.' },
-  { icon: 'eat',   title: 'he eats files',      body: 'Drag a file onto Rolo and he’ll happily munch it down. He has opinions about leftovers, and a soft spot for screenshots.' },
-  { icon: 'sleep', title: 'he rests too',       body: 'When you’re away, Rolo curls up and drifts off. He doesn’t pester, doesn’t notify, doesn’t want your attention — just your company.' },
-] as const;
+// Section 2 — checklist items (exact copy from wireframe; first two = check, third = cross)
+const checklist = [
+  {
+    kind: 'ok' as const,
+    text: 'Rolo lives on your screen and keeps you company throughout everyday tasks. He acts as a positive counterbalance to our internal dialogues and anxieties.',
+  },
+  {
+    kind: 'ok' as const,
+    text: 'Rolo’s primary concern is your wellbeing and will do his best to bring out your best self. His secondary concern may be food-related. More on this later…',
+  },
+  {
+    kind: 'no' as const,
+    text: 'Rolo is NOT an AI assistant or tool. Do not confuse him with one (he will take offense). He will decline any requests that contradict his character and purpose of bringing joy and whimsy to your screen.',
+  },
+];
 ---
 <Layout
-  title="Rolo — your cosy desktop companion"
-  description="A tiny pixel-art creature who lives on your desktop. He walks, he watches, he eats files. Free download for macOS, Windows, and Linux."
+  title="Project Rolo — a free, open-source desktop companion"
+  description="Meet Rolo. A free, open-source desktop companion here to make your day a little brighter."
   pageId="home"
 >
   <Header slot="header" />
 
-  {/* ===== HERO ============================================================ */}
+  {/* ===== SECTION 1 — HERO ============================================== */}
   <section class="hero">
-    <div class="shell hero__grid">
+    <div class="shell hero__shell">
+
       <div class="hero__copy">
-        <p class="eyebrow fade-up">a tiny pixel companion &middot; v0.1 soon</p>
-        <h1 class="hero__title fade-up d1">
-          <span>meet</span>
-          <span class="hero__title-rolo">rolo.</span>
+        <p class="eyebrow fade-up">a small companion &nbsp;//&nbsp; ch.00</p>
+
+        <h1 class="pixel-h pixel-h--xl hero__title fade-up d1">
+          Meet<br/><span class="hero__title-accent">Rolo.</span>
         </h1>
-        <p class="lede fade-up d2">
-          He walks across your screen on tiny feet, peeks when you move the mouse,
-          and eats the files you drag onto him. He doesn&rsquo;t notify, doesn&rsquo;t
-          interrupt, doesn&rsquo;t ask for anything &mdash; he just keeps you company while
-          you work.
+
+        <p class="lede hero__lede fade-up d2">
+          A free, open-source desktop companion here to make your day
+          a little brighter.
         </p>
 
-        <div class="hero__cta fade-up d3" role="group" aria-label="Download Rolo">
-          {downloads.map((d, i) => (
-            <a class={`btn ${i === 0 ? 'btn--primary' : ''}`} href={d.href} data-platform={d.os}>
-              <svg class="platform-icon" viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true">
-                {d.os === 'macOS' && (
-                  <g fill="currentColor">
-                    <rect x="6" y="1" width="2" height="1"/>
-                    <rect x="5" y="2" width="2" height="2"/>
-                    <rect x="4" y="3" width="6" height="1"/>
-                    <rect x="3" y="4" width="9" height="6"/>
-                    <rect x="4" y="10" width="2" height="2"/>
-                    <rect x="9" y="10" width="2" height="2"/>
-                    <rect x="3" y="12" width="3" height="1"/>
-                    <rect x="9" y="12" width="3" height="1"/>
+        <div class="hero__cta fade-up d3" role="group" aria-label="Get Rolo">
+          {/* PLACEHOLDER: downloadMac — see src/lib/links.ts */}
+          <a class="btn btn--primary btn--lg" href={LINKS.downloadMac}>
+            Download Rolo
+            <span class="hero__cta-meta">(mac)</span>
+          </a>
+          {/* PLACEHOLDER: repo */}
+          <a class="btn btn--ghost btn--lg" href={LINKS.repo} target="_blank" rel="noopener">
+            Explore the repo &rarr;
+          </a>
+        </div>
+      </div>
+
+      <div class="hero__stage fade-up d2">
+        <img
+          class="hero__rolo pixel"
+          src={`${base}gifs/Rolo_idle.gif`}
+          alt="Rolo, idle — a small pixel-art creature in a pointed red hood"
+          width="520"
+          height="520"
+        />
+        <div class="hero__ground" aria-hidden="true"></div>
+        <p class="hero__floor-caption" aria-hidden="true">64 &times; 64 &middot; hand-drawn</p>
+      </div>
+
+    </div>
+  </section>
+
+  {/* ===== SECTION 2 — WHAT DOES ROLO DO? ================================ */}
+  <section class="section section--what">
+    <div class="shell">
+      <header class="what__head">
+        <p class="eyebrow fade-up">what he does &nbsp;//&nbsp; ch.01</p>
+        <h2 class="pixel-h pixel-h--lg what__title fade-up d1">
+          What does Rolo do?
+        </h2>
+      </header>
+
+      <ul class="checklist">
+        {checklist.map((item, i) => (
+          <li class:list={['check', `check--${item.kind}`, 'fade-up']} style={`animation-delay:${(i + 1) * 110}ms`}>
+            <span class="check__mark" aria-hidden="true">
+              {item.kind === 'ok' ? (
+                /* Pixel-style check — built from absolutely-positioned blocks
+                   so it reads as hand-pixelled, not as a vector tick. */
+                <svg viewBox="0 0 14 14" width="28" height="28" aria-hidden="true">
+                  <g fill="currentColor" shape-rendering="crispEdges">
+                    <rect x="1" y="6" width="2" height="2"/>
+                    <rect x="3" y="8" width="2" height="2"/>
+                    <rect x="5" y="10" width="2" height="2"/>
+                    <rect x="7" y="8" width="2" height="2"/>
+                    <rect x="9" y="6" width="2" height="2"/>
+                    <rect x="11" y="4" width="2" height="2"/>
                   </g>
-                )}
-                {d.os === 'Windows' && (
-                  <g fill="currentColor">
-                    <rect x="2" y="3" width="5" height="5"/>
-                    <rect x="8" y="3" width="5" height="5"/>
-                    <rect x="2" y="9" width="5" height="5"/>
-                    <rect x="8" y="9" width="5" height="5"/>
+                </svg>
+              ) : (
+                <svg viewBox="0 0 14 14" width="28" height="28" aria-hidden="true">
+                  <g fill="currentColor" shape-rendering="crispEdges">
+                    <rect x="1" y="1" width="2" height="2"/>
+                    <rect x="3" y="3" width="2" height="2"/>
+                    <rect x="5" y="5" width="2" height="2"/>
+                    <rect x="7" y="3" width="2" height="2"/>
+                    <rect x="9" y="1" width="2" height="2"/>
+                    <rect x="7" y="7" width="2" height="2"/>
+                    <rect x="5" y="9" width="2" height="2"/>
+                    <rect x="3" y="11" width="2" height="2"/>
+                    <rect x="9" y="9" width="2" height="2"/>
+                    <rect x="11" y="11" width="2" height="2"/>
                   </g>
-                )}
-                {d.os === 'Linux' && (
-                  <g fill="currentColor">
-                    <rect x="6" y="2" width="4" height="2"/>
-                    <rect x="5" y="4" width="6" height="6"/>
-                    <rect x="6" y="5" width="1" height="2"/>
-                    <rect x="9" y="5" width="1" height="2"/>
-                    <rect x="4" y="10" width="8" height="2"/>
-                    <rect x="3" y="12" width="3" height="2"/>
-                    <rect x="10" y="12" width="3" height="2"/>
-                  </g>
-                )}
-              </svg>
-              <span>
-                {d.os === 'macOS' ? 'download for mac' : d.os === 'Windows' ? 'download for windows' : 'download for linux'}
-                <span class="btn-meta">{d.ext} &middot; {d.size}</span>
-              </span>
-            </a>
+                </svg>
+              )}
+            </span>
+            <p class="check__text">{item.text}</p>
+          </li>
+        ))}
+      </ul>
+
+      <div class="what__cta">
+        {/* PLACEHOLDER: downloadMac */}
+        <a class="btn btn--primary btn--lg" href={LINKS.downloadMac}>
+          Invite Rolo to your desktop
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== SECTION 3 — A DAY IN THE LIFE (CAROUSEL) ====================== */}
+  <section class="section section--day" id="day">
+    <div class="shell">
+      <header class="day__head">
+        <p class="eyebrow fade-up">a day in his life &nbsp;//&nbsp; ch.02</p>
+        <h2 class="pixel-h pixel-h--lg day__title fade-up d1">
+          A day in the life of Rolo
+        </h2>
+      </header>
+
+      <div
+        class="carousel"
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Rolo's daily activities"
+        tabindex="0"
+        data-carousel
+        data-count={slides.length}
+      >
+        <button
+          class="carousel__arrow carousel__arrow--prev"
+          type="button"
+          aria-label="previous"
+          data-prev
+        >
+          <svg viewBox="0 0 12 12" width="22" height="22" aria-hidden="true">
+            <g fill="currentColor" shape-rendering="crispEdges">
+              <rect x="7" y="2" width="2" height="2"/>
+              <rect x="5" y="4" width="2" height="2"/>
+              <rect x="3" y="6" width="2" height="2" style="display:none"/>
+              <rect x="3" y="5" width="2" height="2"/>
+              <rect x="5" y="6" width="2" height="2"/>
+              <rect x="7" y="8" width="2" height="2"/>
+            </g>
+          </svg>
+        </button>
+
+        <div class="carousel__track" data-track>
+          {slides.map((s, i) => (
+            <article
+              class="carousel__slide"
+              data-slide
+              data-index={i}
+              aria-label={`Slide ${i + 1} of ${slides.length}: ${s.label}`}
+            >
+              <WindowFrame title={s.title}>
+                <div class="slide-stage">
+                  <img
+                    class="slide-stage__img pixel"
+                    src={s.src}
+                    alt={s.alt}
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                  />
+                </div>
+              </WindowFrame>
+
+              <div class="slide-caption">
+                <p class="slide-caption__label">{s.label}</p>
+                <p class="slide-caption__copy">{s.copy}</p>
+              </div>
+            </article>
           ))}
         </div>
 
-        <p class="hero__fineprint fade-up d4">
-          <span class="hero__pill">free &amp; open source</span>
-          <span class="hero__sep">&middot;</span>
-          <span>no account &middot; no telemetry &middot; lives entirely on your machine</span>
-        </p>
+        <button
+          class="carousel__arrow carousel__arrow--next"
+          type="button"
+          aria-label="next"
+          data-next
+        >
+          <svg viewBox="0 0 12 12" width="22" height="22" aria-hidden="true">
+            <g fill="currentColor" shape-rendering="crispEdges">
+              <rect x="3" y="2" width="2" height="2"/>
+              <rect x="5" y="4" width="2" height="2"/>
+              <rect x="7" y="5" width="2" height="2"/>
+              <rect x="5" y="6" width="2" height="2"/>
+              <rect x="3" y="8" width="2" height="2"/>
+            </g>
+          </svg>
+        </button>
       </div>
 
-      {/* ---- Rolo + bubble cluster (anchored bottom-right of hero) ------- */}
-      <div class="hero__creature" aria-hidden="false">
-        <div class="hero__bubble fade-up d4">
-          <SpeechBubble text="hi" tail="bottom-left" />
-        </div>
-        <div class="hero__rolo fade-up d3">
-          <RoloSprite size={360} />
-        </div>
-      </div>
-
-      {/* ---- Decorative pixel cloud motifs in negative space -------------- */}
-      <div class="hero__decor" aria-hidden="true">
-        <svg class="cloud cloud--a" viewBox="0 0 32 12" width="160" height="60" shape-rendering="crispEdges">
-          <rect x="6" y="2" width="14" height="2" fill="#B5C8B0"/>
-          <rect x="4" y="4" width="22" height="4" fill="#B5C8B0"/>
-          <rect x="6" y="8" width="20" height="2" fill="#B5C8B0"/>
-          <rect x="8" y="10" width="6" height="1" fill="#B5C8B0"/>
-          <rect x="18" y="10" width="6" height="1" fill="#B5C8B0"/>
-        </svg>
-        <svg class="cloud cloud--b" viewBox="0 0 32 12" width="120" height="44" shape-rendering="crispEdges">
-          <rect x="6" y="2" width="14" height="2" fill="#DDD2B6"/>
-          <rect x="4" y="4" width="22" height="4" fill="#DDD2B6"/>
-          <rect x="6" y="8" width="20" height="2" fill="#DDD2B6"/>
-        </svg>
-        <svg class="star star--a" viewBox="0 0 10 10" width="22" height="22" shape-rendering="crispEdges">
-          <rect x="4" y="0" width="2" height="2" fill="#C9A961"/>
-          <rect x="0" y="4" width="2" height="2" fill="#C9A961"/>
-          <rect x="4" y="4" width="2" height="2" fill="#C9A961"/>
-          <rect x="8" y="4" width="2" height="2" fill="#C9A961"/>
-          <rect x="4" y="8" width="2" height="2" fill="#C9A961"/>
-        </svg>
-        <svg class="star star--b" viewBox="0 0 10 10" width="14" height="14" shape-rendering="crispEdges">
-          <rect x="4" y="0" width="2" height="2" fill="#6B8E6F"/>
-          <rect x="0" y="4" width="2" height="2" fill="#6B8E6F"/>
-          <rect x="4" y="4" width="2" height="2" fill="#6B8E6F"/>
-          <rect x="8" y="4" width="2" height="2" fill="#6B8E6F"/>
-          <rect x="4" y="8" width="2" height="2" fill="#6B8E6F"/>
-        </svg>
-      </div>
-    </div>
-
-    {/* Pixel ground line — separates hero from the page below */}
-    <svg class="hero__ground" viewBox="0 0 64 4" preserveAspectRatio="none" shape-rendering="crispEdges" aria-hidden="true">
-      <rect x="0"  y="0" width="64" height="2" fill="#2C3E50"/>
-      <rect x="0"  y="2" width="2"  height="2" fill="#2C3E50"/>
-      <rect x="4"  y="2" width="2"  height="2" fill="#2C3E50"/>
-      <rect x="8"  y="2" width="2"  height="2" fill="#2C3E50"/>
-      <rect x="12" y="2" width="2"  height="2" fill="#2C3E50"/>
-      <rect x="16" y="2" width="2"  height="2" fill="#2C3E50"/>
-      <rect x="20" y="2" width="2"  height="2" fill="#2C3E50"/>
-      <rect x="24" y="2" width="2"  height="2" fill="#2C3E50"/>
-      <rect x="28" y="2" width="2"  height="2" fill="#2C3E50"/>
-      <rect x="32" y="2" width="2"  height="2" fill="#2C3E50"/>
-      <rect x="36" y="2" width="2"  height="2" fill="#2C3E50"/>
-      <rect x="40" y="2" width="2"  height="2" fill="#2C3E50"/>
-      <rect x="44" y="2" width="2"  height="2" fill="#2C3E50"/>
-      <rect x="48" y="2" width="2"  height="2" fill="#2C3E50"/>
-      <rect x="52" y="2" width="2"  height="2" fill="#2C3E50"/>
-      <rect x="56" y="2" width="2"  height="2" fill="#2C3E50"/>
-      <rect x="60" y="2" width="2"  height="2" fill="#2C3E50"/>
-    </svg>
-  </section>
-
-  {/* ===== WHAT IS ROLO? =================================================== */}
-  <section class="section section--what">
-    <div class="shell">
-      <header class="section__head">
-        <p class="eyebrow">&sect; 01 &mdash; about rolo</p>
-        <h2 class="section__title">a small creature.<br/><span class="t-sage">a quiet companion.</span></h2>
-        <p class="lede">
-          Rolo isn&rsquo;t a chatbot, a productivity tool, or a notification machine.
-          He&rsquo;s a tiny living thing made of 64 by 64 pixels, who shares your screen
-          and asks for nothing in return.
-        </p>
-      </header>
-
-      <div class="feature-grid">
-        {features.map((f, i) => (
-          <FeatureCard
-            icon={f.icon}
-            title={f.title}
-            body={f.body}
-            delay={i * 120}
-          />
+      <div class="carousel__dots" aria-hidden="true" data-dots>
+        {slides.map((_, i) => (
+          <span class:list={['carousel__dot', i === 0 && 'is-active']} data-dot={i}></span>
         ))}
       </div>
+
+      <div class="day__cta">
+        {/* PLACEHOLDER: downloadMac */}
+        <a class="btn btn--primary btn--lg" href={LINKS.downloadMac}>
+          Bring Rolo to life
+        </a>
+      </div>
     </div>
   </section>
 
-  {/* ===== HOW IT WORKS ==================================================== */}
+  {/* ===== SECTION 4 — HOW DOES ROLO FUNCTION? =========================== */}
   <section class="section section--how">
     <div class="shell">
-      <header class="section__head section__head--centered">
-        <p class="eyebrow">&sect; 02 &mdash; how it works</p>
-        <h2 class="section__title">install. say hi.<br/><span class="t-sage">that&rsquo;s about it.</span></h2>
-        <p class="lede">
-          Drag the download to your Applications folder (or equivalent), open Rolo once,
-          and he&rsquo;ll find a comfortable corner of your screen. He doesn&rsquo;t need
-          permissions, accounts, or setup steps.
+      <header class="how__head">
+        <p class="eyebrow fade-up">behind the curtain &nbsp;//&nbsp; ch.03</p>
+        <h2 class="pixel-h pixel-h--lg how__title fade-up d1">
+          How does Rolo function?
+        </h2>
+        <p class="lede how__lede fade-up d2">
+          Rolo lives locally on your machine and respects your privacy. He is powered by 3 pillars:
         </p>
       </header>
 
-      <div class="screens">
-        <ScreenshotFrame caption="rolo wanders your desktop, minding his own little business." variant="desktop" delay={80} />
-        <ScreenshotFrame caption="closer look: 64×64 pixels, six colours, every edge hand-placed." variant="closeup" delay={200} />
-        <ScreenshotFrame caption="drag a file onto him — he eats it and looks pleased with himself." variant="desktop" delay={320} />
-      </div>
-    </div>
-  </section>
-
-  {/* ===== CLOSING CTA ====================================================== */}
-  <section class="section section--closing">
-    <div class="shell">
-      <div class="closing-card panel">
-        <div class="closing-card__copy">
-          <p class="eyebrow">ready when you are</p>
-          <h2 class="closing-card__title">bring him home.</h2>
-          <p class="lede" style="color:var(--text);">
-            Rolo is free, open source, and roughly the size of a postcard pinned to your
-            corner of the screen. He&rsquo;d love to meet you.
-          </p>
-          <div class="hero__cta" role="group" aria-label="Download Rolo">
-            <a class="btn btn--primary" href="#">
-              <span>download rolo<span class="btn-meta">free &middot; v0.1 soon</span></span>
-            </a>
-            <a class="btn btn--ghost" href="https://github.com/larawashington/Desktop-Pet" target="_blank" rel="noopener">
-              <span>view source &rarr;</span>
-            </a>
+      <ol class="pillars">
+        <li class="pillar fade-up d1">
+          <span class="pillar__num" aria-hidden="true">01</span>
+          <div class="pillar__body">
+            <h3 class="pillar__title"><span class="t-rolo">Rolo&rsquo;s voice</span></h3>
+            <p>
+              comes from a fine-tuned
+              <a href="https://deepmind.google/models/gemma/gemma-3/" target="_blank" rel="noopener">Gemma 3 4B</a>
+              model. A small open-source large-language model trained on hand-seeded examples of how Rolo speaks.
+            </p>
           </div>
-        </div>
-        <div class="closing-card__rolo" aria-hidden="true">
-          <RoloSprite size={140} />
-        </div>
-      </div>
+        </li>
+        <li class="pillar fade-up d2">
+          <span class="pillar__num" aria-hidden="true">02</span>
+          <div class="pillar__body">
+            <h3 class="pillar__title"><span class="t-rolo">Rolo&rsquo;s status</span></h3>
+            <p>
+              is hardcoded and his mood depends on his hunger, social, energy, and happiness levels.
+              This is combined with his perception of the activity on your screen to add flavor and relevance to his speech.
+            </p>
+          </div>
+        </li>
+        <li class="pillar fade-up d3">
+          <span class="pillar__num" aria-hidden="true">03</span>
+          <div class="pillar__body">
+            <h3 class="pillar__title"><span class="t-rolo">Rolo&rsquo;s memory</span></h3>
+            <p>
+              is built through ongoing interactions with you. He remembers key information you share
+              (names, events, preferences) and stores this into his memory while he sleeps and dreams.
+            </p>
+          </div>
+        </li>
+      </ol>
+
+      <figure class="diagram">
+        <img
+          class="diagram__img pixel"
+          src={`${base}rolo-how-it-works.png`}
+          alt="Diagram of how Rolo works: three boxes hanging off Rolo — his Voice (a fine-tuned Gemma 3 4B model), his Status (mood from hunger, social and energy levels plus on-screen activity), and his Memory (the Vault, compiled when he dreams)."
+          loading="lazy"
+        />
+        <figcaption>fig.00 &mdash; voice + status + memory = rolo</figcaption>
+      </figure>
+
+      <p class="how__more">
+        To learn more about the system architecture of Rolo&rsquo;s soul,
+        head to the <a href={LINKS.techProcess}>Tech + Process</a> page.
+      </p>
     </div>
   </section>
 
@@ -238,272 +342,469 @@ const features = [
 <style>
   /* ===== HERO ============================================================ */
   .hero {
-    position: relative;
-    padding-top: clamp(2rem, 6vw, 5rem);
-    padding-bottom: 0;
+    padding-top: clamp(2.5rem, 6vw, 5rem);
+    padding-bottom: clamp(2rem, 5vw, 4rem);
     overflow: hidden;
-  }
-
-  .hero__grid {
     position: relative;
+  }
+  .hero__shell {
     display: grid;
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-    gap: clamp(1rem, 4vw, 4rem);
-    align-items: end;
-    min-height: clamp(540px, 78vh, 760px);
+    gap: clamp(1.5rem, 5vw, 4rem);
+    align-items: center;
+    min-height: clamp(520px, 74vh, 720px);
   }
   @media (max-width: 900px) {
-    .hero__grid {
+    .hero__shell {
       grid-template-columns: 1fr;
-      gap: 1.5rem;
       align-items: stretch;
       min-height: unset;
+      gap: 2rem;
     }
   }
 
-  .hero__copy {
-    padding-top: clamp(1rem, 4vw, 3rem);
-    padding-bottom: clamp(2rem, 6vw, 4rem);
-    max-width: 38rem;
-    position: relative;
-    z-index: 3;
-  }
-  .hero__title {
-    font-family: 'Silkscreen', monospace;
-    font-weight: 700;
-    font-size: clamp(2.8rem, 6.5vw, 5.6rem);
-    line-height: 0.95;
-    letter-spacing: -0.01em;
-    margin-bottom: 1.5rem;
-    color: var(--navy);
-    display: flex;
-    flex-direction: column;
-    gap: 0.1em;
-  }
-  .hero__title-rolo {
-    color: var(--sage-deep);
+  .hero__copy { max-width: 34rem; position: relative; z-index: 3; }
+  .hero__title { margin: 1.25rem 0 1.5rem; }
+  .hero__title-accent {
+    color: var(--rolo);
     position: relative;
     display: inline-block;
-    width: fit-content;
   }
-  .hero__title-rolo::after {
+  .hero__title-accent::after {
     content: '';
     position: absolute;
     left: 0; right: 0; bottom: -10px;
-    height: 6px;
-    background-image: linear-gradient(
-      to right,
-      var(--rolo) 0 14px,
-      transparent 14px 24px
-    );
-    background-size: 24px 6px;
+    height: 4px;
+    background-image: linear-gradient(to right, var(--ink) 0 8px, transparent 8px 16px);
+    background-size: 16px 4px;
   }
+  .hero__lede { margin-bottom: 2.25rem; max-width: 34ch; }
 
   .hero__cta {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-top: 2rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .hero__fineprint {
-    display: flex;
-    flex-wrap: wrap;
+    gap: 0.85rem;
     align-items: center;
-    gap: 0.5rem;
-    font-family: 'VT323', monospace;
-    font-size: 1.15rem;
-    color: var(--navy-soft);
-    letter-spacing: 0.04em;
   }
-  .hero__pill {
-    display: inline-block;
-    padding: 0.15rem 0.55rem 0.2rem;
-    background: var(--sage);
-    color: var(--bg);
-    border: 2px solid var(--navy);
-    box-shadow: 2px 2px 0 var(--navy);
-    text-transform: lowercase;
+  .hero__cta-meta {
+    font-family: var(--display);
+    font-size: 0.6rem;
     letter-spacing: 0.08em;
+    opacity: 0.85;
+    margin-left: 0.35rem;
   }
-  .hero__sep { color: var(--surface-2); }
 
-  /* Creature cluster — sits in the right column on desktop, wrapped below on mobile */
-  .hero__creature {
+  /* Stage — Rolo on a ground line, breaking the grid */
+  .hero__stage {
     position: relative;
-    align-self: end;
-    justify-self: end;
-    padding-right: clamp(0rem, 2vw, 2rem);
-    min-height: 380px;
+    align-self: center;
+    justify-self: center;
     width: 100%;
     display: grid;
-    place-items: end;
+    place-items: end center;
+    padding-bottom: 2rem;
   }
-  @media (max-width: 900px) {
-    .hero__creature {
-      justify-self: center;
-      padding-right: 0;
-      min-height: 320px;
-    }
-  }
-
   .hero__rolo {
     position: relative;
     z-index: 2;
+    width: clamp(280px, 36vw, 520px);
+    height: auto;
+    /* hard pixel shadow + soft ambient — printmaking feel */
+    filter: drop-shadow(0 14px 0 rgba(42, 24, 16, 0.10))
+            drop-shadow(0 24px 28px rgba(232, 101, 74, 0.22));
     transform-origin: bottom center;
   }
-  .hero__rolo :global(.rolo-sprite) {
-    width: clamp(240px, 30vw, 380px);
+  .hero__ground {
+    width: min(86%, 460px);
+    height: 4px;
+    background-image: linear-gradient(to right, var(--ink) 0 8px, transparent 8px 14px);
+    background-size: 14px 4px;
+    margin-top: 0.5rem;
+  }
+  .hero__floor-caption {
+    margin-top: 0.65rem;
+    font-family: var(--display);
+    font-size: 0.55rem;
+    letter-spacing: 0.18em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+  }
+
+  /* ===== SECTION 2 — WHAT ================================================ */
+  .section--what {
+    background: var(--paper);
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+  }
+  .what__head { margin-bottom: clamp(2rem, 4vw, 3rem); max-width: 48rem; }
+  .what__title { margin-top: 1rem; }
+
+  .checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+    max-width: 62rem;
+  }
+  .check {
+    background: var(--bg);
+    border: 2px solid var(--ink);
+    box-shadow: var(--shadow-pixel-sm);
+    padding: 1.1rem 1.35rem;
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 1rem;
+    align-items: start;
+    transition: transform 200ms var(--ease-soft), box-shadow 200ms var(--ease-soft);
+  }
+  .check:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow-pixel); }
+  .check__mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px; height: 40px;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+  }
+  .check--ok .check__mark { color: var(--ok); }
+  .check--no .check__mark { color: var(--no); }
+  .check__text {
+    font-family: var(--body);
+    font-size: clamp(1rem, 0.5vw + 0.85rem, 1.1rem);
+    line-height: 1.6;
+    color: var(--ink);
+    margin: 0.25rem 0;
+  }
+
+  .what__cta {
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+
+  /* ===== SECTION 3 — CAROUSEL ============================================ */
+  .section--day {
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+  }
+  .day__head { margin-bottom: clamp(2rem, 4vw, 3rem); max-width: 48rem; }
+  .day__title { margin-top: 1rem; }
+
+  .carousel {
+    position: relative;
+    padding: 1rem 0 0.5rem;
+  }
+  .carousel:focus-visible { outline: 3px solid var(--rolo); outline-offset: 8px; }
+
+  .carousel__track {
+    display: flex;
+    gap: clamp(1rem, 3vw, 2rem);
+    align-items: stretch;
+    transition: transform 500ms var(--ease-soft);
+    will-change: transform;
+    padding: 1rem 0;
+  }
+
+  .carousel__slide {
+    flex: 0 0 60%;
+    max-width: 640px;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 1.5rem;
+  }
+  @media (max-width: 880px) {
+    .carousel__slide { flex-basis: 78%; }
+  }
+  @media (max-width: 560px) {
+    .carousel__slide { flex-basis: 86%; }
+  }
+
+  .slide-stage {
+    aspect-ratio: 5 / 4;
+    background: var(--bg);
+    border-bottom: 2px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(1rem, 4vw, 2.5rem);
+    background-image: radial-gradient(circle at 1px 1px, rgba(42, 24, 16, 0.08) 1px, transparent 0);
+    background-size: 6px 6px;
+  }
+  .slide-stage__img {
+    width: auto;
+    max-width: 70%;
+    max-height: 80%;
     height: auto;
   }
 
-  .hero__bubble {
-    position: absolute;
-    top: -10px;
-    right: clamp(160px, 22vw, 260px);
-    z-index: 3;
-  }
-  @media (max-width: 900px) {
-    .hero__bubble {
-      top: -20px;
-      right: 30%;
-    }
-  }
-
-  /* Decorative clouds and stars floating in the hero negative space */
-  .hero__decor {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-  }
-  .cloud, .star {
-    position: absolute;
-    opacity: 0.7;
-  }
-  .cloud--a {
-    top: 12%;
-    right: 8%;
-    animation: cloud-drift 22s linear infinite alternate;
-  }
-  .cloud--b {
-    top: 38%;
-    left: 42%;
-    opacity: 0.55;
-    animation: cloud-drift 28s linear infinite alternate-reverse;
-  }
-  .star--a {
-    top: 6%;
-    left: 8%;
-    animation: blink 5.4s ease-in-out infinite;
-  }
-  .star--b {
-    top: 22%;
-    left: 30%;
-    animation: blink 7.1s ease-in-out infinite;
-  }
-  @media (max-width: 900px) {
-    .cloud--b, .star--b { display: none; }
-  }
-
-  /* Hero ground line — the pixel rule Rolo "stands on" */
-  .hero__ground {
-    display: block;
-    width: 100%;
-    height: 10px;
-    margin-top: -1px;
-  }
-
-  /* ===== Generic section ================================================== */
-  .section {
-    padding: clamp(4rem, 8vw, 7rem) 0;
-    position: relative;
-  }
-  .section--what  { background: linear-gradient(180deg, var(--bg) 0%, var(--bg-tint) 100%); }
-  .section--how   { background: var(--bg); }
-  .section--closing { padding-bottom: clamp(3rem, 6vw, 5rem); }
-
-  .section__head {
-    max-width: 56rem;
-    margin-bottom: clamp(2.5rem, 5vw, 4rem);
-  }
-  .section__head--centered {
-    margin-inline: auto;
+  .slide-caption {
+    padding: 0 0.25rem;
     text-align: center;
   }
-  .section__head--centered .lede { margin-inline: auto; }
-
-  .section__title {
-    font-family: 'Silkscreen', monospace;
-    font-size: clamp(2rem, 4.4vw, 3.6rem);
-    line-height: 1.05;
-    color: var(--navy);
-    margin-bottom: 1.25rem;
-    letter-spacing: -0.005em;
+  .slide-caption__label {
+    font-family: var(--display);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    color: var(--rolo-deep);
+    margin-bottom: 0.6rem;
   }
-  .t-sage { color: var(--sage-deep); }
-
-  /* Feature grid */
-  .feature-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.5rem;
+  .slide-caption__copy {
+    font-family: var(--body);
+    font-size: clamp(0.95rem, 0.4vw + 0.85rem, 1.05rem);
+    line-height: 1.55;
+    color: var(--ink);
+    max-width: 48ch;
+    margin: 0 auto;
   }
 
-  /* Screenshot grid */
-  .screens {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    grid-template-rows: auto auto;
-    gap: 1.5rem;
-  }
-  .screens > :nth-child(1) { grid-column: 1; grid-row: 1 / 3; }
-  .screens > :nth-child(2) { grid-column: 2; grid-row: 1; }
-  .screens > :nth-child(3) { grid-column: 2; grid-row: 2; }
-  @media (max-width: 720px) {
-    .screens { grid-template-columns: 1fr; grid-template-rows: auto; }
-    .screens > * { grid-column: auto !important; grid-row: auto !important; }
-  }
-
-  /* Closing card — full-width panel with Rolo on the right */
-  .closing-card {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 2.5rem;
-    align-items: center;
-    padding: clamp(2rem, 4vw, 3.5rem);
-    background: var(--surface);
-    position: relative;
-    overflow: hidden;
-  }
-  .closing-card::before {
-    content: '';
+  /* Arrows — pixel-style chunky bordered buttons */
+  .carousel__arrow {
     position: absolute;
-    inset: 0;
-    background-image:
-      radial-gradient(circle at 80% 20%, rgba(201, 169, 97, 0.18), transparent 40%),
-      radial-gradient(circle at 10% 80%, rgba(107, 142, 111, 0.18), transparent 50%);
+    top: 38%;
+    transform: translateY(-50%);
+    width: 48px; height: 48px;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    box-shadow: var(--shadow-pixel-sm);
+    color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 5;
+    transition: transform 140ms var(--ease-soft),
+                box-shadow 140ms var(--ease-soft),
+                background 160ms var(--ease-soft);
+  }
+  .carousel__arrow:hover {
+    transform: translate(-2px, calc(-50% - 2px));
+    background: var(--rolo);
+    color: var(--paper);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+  .carousel__arrow:active {
+    transform: translate(2px, calc(-50% + 2px));
+    box-shadow: var(--shadow-pixel-press);
+  }
+  .carousel__arrow[disabled],
+  .carousel__arrow[hidden] {
+    opacity: 0;
     pointer-events: none;
   }
-  .closing-card > * { position: relative; }
+  .carousel__arrow--prev { left: -8px; }
+  .carousel__arrow--next { right: -8px; }
+  @media (min-width: 1024px) {
+    .carousel__arrow--prev { left: -28px; }
+    .carousel__arrow--next { right: -28px; }
+  }
 
-  .closing-card__title {
-    font-family: 'Silkscreen', monospace;
-    font-size: clamp(2.2rem, 4vw, 3.4rem);
-    color: var(--navy);
-    line-height: 1.05;
-    margin-bottom: 1rem;
+  /* Dots — progress indicator */
+  .carousel__dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 1.25rem 0 0;
   }
-  .closing-card__rolo {
-    align-self: end;
+  .carousel__dot {
+    width: 10px; height: 10px;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    transition: background 160ms var(--ease-soft), transform 160ms var(--ease-soft);
   }
-  .closing-card__rolo :global(.rolo-sprite) {
-    width: clamp(110px, 14vw, 160px);
+  .carousel__dot.is-active {
+    background: var(--rolo);
+    transform: scale(1.1);
+  }
+
+  .day__cta {
+    margin-top: clamp(2rem, 4vw, 3rem);
+    text-align: center;
+  }
+
+  /* ===== SECTION 4 — HOW ================================================= */
+  .section--how {
+    background: var(--paper);
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+  }
+  .how__head { margin-bottom: clamp(2rem, 4vw, 3rem); max-width: 56rem; }
+  .how__title { margin-top: 1rem; margin-bottom: 1.25rem; }
+  .how__lede { color: var(--ink); }
+
+  .pillars {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 clamp(2rem, 5vw, 3rem);
+    display: grid;
+    gap: 1rem;
+    counter-reset: pillar;
+  }
+  .pillar {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.25rem;
+    align-items: start;
+    padding: 1.25rem 1.5rem;
+    background: var(--bg);
+    border: 2px solid var(--ink);
+    box-shadow: var(--shadow-pixel-sm);
+    transition: transform 200ms var(--ease-soft), box-shadow 200ms var(--ease-soft);
+  }
+  .pillar:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-pixel);
+  }
+  .pillar__num {
+    font-family: var(--display);
+    font-size: 1rem;
+    color: var(--rolo);
+    padding: 0.25rem 0.5rem;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+    align-self: start;
+  }
+  .pillar__title {
+    font-family: var(--body);
+    font-weight: 700;
+    font-size: 1.15rem;
+    margin-bottom: 0.4rem;
+    color: var(--ink);
+  }
+  .t-rolo { color: var(--rolo-deep); }
+  .pillar p {
+    font-family: var(--body);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+  .pillar a { color: var(--rolo-deep); }
+
+  .diagram {
+    margin: clamp(2rem, 4vw, 3rem) 0 1.5rem;
+    padding: 12px;
+    background: var(--bg);
+    border: 2px solid var(--ink);
+    box-shadow: var(--shadow-pixel);
+    position: relative;
+  }
+  .diagram__img {
+    display: block;
+    width: 100%;
     height: auto;
   }
-  @media (max-width: 720px) {
-    .closing-card { grid-template-columns: 1fr; }
-    .closing-card__rolo { justify-self: center; }
+  .diagram figcaption {
+    font-family: var(--display);
+    font-size: 0.55rem;
+    letter-spacing: 0.18em;
+    color: var(--ink-soft);
+    margin-top: 14px;
+    text-align: center;
   }
+
+  .how__more {
+    font-family: var(--body);
+    font-size: 1.05rem;
+    color: var(--ink);
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px dashed var(--rule);
+  }
+  .how__more a { color: var(--rolo-deep); font-weight: 600; }
 </style>
+
+<script>
+  // ===== Carousel ========================================================
+  // Vanilla JS, no framework. Keyboard arrows + click. Respects reduced motion.
+  type CarouselEl = HTMLElement & { _state?: { i: number; n: number } };
+
+  function initCarousel(root: CarouselEl) {
+    const track = root.querySelector<HTMLElement>('[data-track]');
+    const slides = Array.from(root.querySelectorAll<HTMLElement>('[data-slide]'));
+    const prev = root.querySelector<HTMLButtonElement>('[data-prev]');
+    const next = root.querySelector<HTMLButtonElement>('[data-next]');
+    const dotsRoot = root.parentElement?.querySelector<HTMLElement>('[data-dots]') ??
+                     root.parentElement?.querySelector<HTMLElement>('.carousel__dots');
+    const dots = Array.from(root.parentElement?.querySelectorAll<HTMLElement>('[data-dot]') ?? []);
+    if (!track || slides.length === 0) return;
+
+    const n = slides.length;
+    let i = 0;
+
+    function applyState() {
+      // peek/active class for opacity styling
+      slides.forEach((s, idx) => {
+        s.classList.toggle('is-active', idx === i);
+        const win = s.querySelector<HTMLElement>('.window');
+        if (win) {
+          win.classList.toggle('window--peek', idx !== i);
+          win.classList.toggle('window--active', idx === i);
+        }
+      });
+
+      // translate the track so the active slide is centered
+      const slide = slides[i];
+      const containerRect = root.getBoundingClientRect();
+      const slideRect = slide.getBoundingClientRect();
+      const currentX = parseFloat(track!.dataset.x ?? '0');
+      const slideCenter = (slideRect.left - containerRect.left) + slideRect.width / 2;
+      const containerCenter = containerRect.width / 2;
+      const delta = slideCenter - containerCenter;
+      const newX = currentX - delta;
+      track!.dataset.x = String(newX);
+      track!.style.transform = `translateX(${newX}px)`;
+
+      // arrow visibility (hide on first/last per wireframe)
+      if (prev) prev.toggleAttribute('hidden', i === 0);
+      if (next) next.toggleAttribute('hidden', i === n - 1);
+
+      // dots
+      dots.forEach((d, idx) => d.classList.toggle('is-active', idx === i));
+
+      // a11y
+      slides.forEach((s, idx) => {
+        s.setAttribute('aria-hidden', idx === i ? 'false' : 'true');
+      });
+    }
+
+    function go(delta: number) {
+      i = Math.max(0, Math.min(n - 1, i + delta));
+      applyState();
+    }
+
+    prev?.addEventListener('click', () => go(-1));
+    next?.addEventListener('click', () => go(+1));
+
+    // keyboard support — only when the carousel region is focused
+    root.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); go(-1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(+1); }
+    });
+
+    // dot click to jump
+    dots.forEach((d, idx) => {
+      d.style.cursor = 'pointer';
+      d.setAttribute('role', 'button');
+      d.setAttribute('aria-label', `Go to slide ${idx + 1}`);
+      d.addEventListener('click', () => { i = idx; applyState(); });
+    });
+
+    // recompute on resize
+    let raf = 0;
+    window.addEventListener('resize', () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        // reset transform first so measurements are clean
+        track!.style.transition = 'none';
+        track!.dataset.x = '0';
+        track!.style.transform = 'translateX(0)';
+        requestAnimationFrame(() => {
+          track!.style.transition = '';
+          applyState();
+        });
+      });
+    });
+
+    // initial paint — wait a frame so layout is ready
+    requestAnimationFrame(() => applyState());
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach(el => initCarousel(el as CarouselEl));
+</script>

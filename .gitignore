@@ -8,3 +8,5 @@ dist/
 !.env.example
 .vscode/
 .idea/
+.obsidian/
+Pasted image *.png

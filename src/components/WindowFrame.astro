@@ -1,0 +1,93 @@
+---
+/**
+ * WindowFrame — pixel-art styled macOS-ish window.
+ * Chunky 2px ink border + offset shadow, three small button dots in the
+ * top-left corner (no real close/min/max icons per wireframe). Rounded
+ * corners use the printmaking trick: real radius on the outer container
+ * plus a subtle 4-corner "notch" pixel feel from the border treatment.
+ */
+interface Props {
+  title?: string;
+  /** subdued (peek) variant for adjacent slides in a carousel */
+  variant?: 'active' | 'peek';
+  class?: string;
+}
+const { title = '', variant = 'active', class: className = '' } = Astro.props;
+---
+<div class:list={['window', `window--${variant}`, className]}>
+  <div class="window__chrome">
+    <div class="window__dots" aria-hidden="true">
+      <span class="window__dot"></span>
+      <span class="window__dot"></span>
+      <span class="window__dot"></span>
+    </div>
+    {title && <span class="window__title">{title}</span>}
+  </div>
+
+  <div class="window__body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .window {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 10px;
+    box-shadow: var(--shadow-pixel);
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    position: relative;
+    transition: transform 240ms var(--ease-soft),
+                box-shadow 240ms var(--ease-soft),
+                opacity 240ms var(--ease-soft);
+  }
+  .window--peek {
+    opacity: 0.55;
+    transform: scale(0.92);
+    box-shadow: 4px 4px 0 var(--ink);
+    filter: saturate(0.85);
+  }
+
+  .window__chrome {
+    background: var(--bg);
+    border-bottom: 2px solid var(--ink);
+    padding: 0.5rem 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-height: 28px;
+  }
+  .window__dots {
+    display: inline-flex;
+    gap: 6px;
+  }
+  .window__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+  }
+  /* per-dot colour reads as macOS without the actual icons */
+  .window__dot:nth-child(1) { background: var(--rolo); }
+  .window__dot:nth-child(2) { background: var(--sun); }
+  .window__dot:nth-child(3) { background: var(--ok); }
+
+  .window__title {
+    font-family: var(--display);
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    margin: 0 auto;
+    padding-right: 36px; /* visually centers despite left dots */
+  }
+
+  .window__body {
+    background: var(--paper);
+    padding: 0;
+    min-height: 0;
+  }
+</style>

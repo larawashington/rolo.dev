@@ -6,8 +6,8 @@ interface Props {
 }
 
 const {
-  title = 'Rolo — your cosy desktop companion',
-  description = 'Rolo is a tiny pixel-art creature who lives on your desktop. He walks around, reacts to the mouse, and eats files you drag onto him.',
+  title = 'Project Rolo — a free, open-source desktop companion',
+  description = 'Project Rolo is a free, open-source desktop companion. A tiny pixel creature who lives on your screen and makes your day a little brighter.',
   pageId,
 } = Astro.props;
 
@@ -21,7 +21,7 @@ const base = import.meta.env.BASE_URL.endsWith('/')
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#F5EFE0" />
+    <meta name="theme-color" content="#f4e4c1" />
     <title>{title}</title>
     <meta name="description" content={description} />
 
@@ -29,17 +29,21 @@ const base = import.meta.env.BASE_URL.endsWith('/')
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:image" content={`${base}rolo-logo.png`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={`${base}rolo-logo.png`} />
 
-    {/* Fonts — Silkscreen (pixel display), VT323 (pixel terminal), Fraunces (serif body) */}
+    {/* Fonts — Press Start 2P (pixel display), Encode Sans (body) */}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=VT323&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Encode+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
-    {/* Favicon — tiny pixel Rolo silhouette */}
-    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    {/* Favicon */}
+    <link rel="icon" type="image/png" href={`${base}rolo-icon-noborder.png`} />
+    <link rel="apple-touch-icon" href={`${base}rolo-logo.png`} />
   </head>
   <body data-page={pageId}>
     <slot name="header" />
