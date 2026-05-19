@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+<Layout title="About the Founder — Project Rolo" pageId="about-the-founder">
+  <Header slot="header" />
+
+  <section class="section section--stub">
+    <div class="shell">
+      <h1 class="pixel-h pixel-h--xl stub__title">About the Founder</h1>
+
+      <div class="stub__panel panel">
+        <p class="stub__placeholder">TBC</p>
+        <p>This page is coming soon.</p>
+      </div>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Layout>
+
+<style>
+  .section--stub { padding-top: clamp(3rem, 6vw, 5rem); }
+  .stub__title { margin: 1.25rem 0 2rem; }
+  .stub__panel { max-width: 56rem; }
+  .stub__placeholder {
+    font-family: var(--display);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    color: var(--rolo-deep);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+</style>

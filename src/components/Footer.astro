@@ -6,11 +6,17 @@ const base = import.meta.env.BASE_URL.endsWith('/')
   ? import.meta.env.BASE_URL
   : import.meta.env.BASE_URL + '/';
 
-const primaryNav = [
-  { label: 'Home',           href: base },
-  { label: 'FAQ',            href: `${base}faq` },
-  { label: 'Tech + Process', href: `${base}tech+process` },
-  { label: 'Contact',        href: `${base}contact` },
+const leftNav = [
+  { label: 'Home',           href: base,                    external: false },
+  { label: 'FAQ',            href: `${base}faq`,            external: false },
+  { label: 'Tech + Process', href: `${base}tech+process`,   external: false },
+  { label: 'GitHub',         href: LINKS.github,            external: true  },
+];
+
+const rightNav = [
+  { label: 'About the Founder', href: `${base}about-the-founder`, external: false },
+  { label: 'Contact',           href: `${base}contact`,           external: false },
+  { label: 'LinkedIn',          href: LINKS.linkedin,             external: true  },
 ];
 ---
 <footer class="site-footer">
@@ -35,30 +41,33 @@ const primaryNav = [
 
     <nav class="site-footer__nav site-footer__nav--primary" aria-label="Site">
       <ul>
-        {primaryNav.map(item => (
+        {leftNav.map(item => (
           <li>
-            <a href={item.href}>{item.label}</a>
+            <a
+              href={item.href}
+              {...(item.external ? { target: '_blank', rel: 'noopener' } : {})}
+            >
+              {item.label}
+              {item.external && <span class="ext-arrow" aria-hidden="true">&nbsp;↗</span>}
+            </a>
           </li>
         ))}
       </ul>
     </nav>
 
-    <nav class="site-footer__nav site-footer__nav--social" aria-label="Find us elsewhere">
+    <nav class="site-footer__nav site-footer__nav--social" aria-label="More">
       <ul>
-        <li>
-          <a href={LINKS.github} target="_blank" rel="noopener">
-            GitHub<span class="ext-arrow" aria-hidden="true">&nbsp;↗</span>
-          </a>
-        </li>
-        <li>
-          <a href={LINKS.linkedin} target="_blank" rel="noopener">
-            LinkedIn<span class="ext-arrow" aria-hidden="true">&nbsp;↗</span>
-          </a>
-        </li>
-        <li>
-          {/* PLACEHOLDER: email — swap when real address is provided */}
-          <a href={LINKS.email}>Email</a>
-        </li>
+        {rightNav.map(item => (
+          <li>
+            <a
+              href={item.href}
+              {...(item.external ? { target: '_blank', rel: 'noopener' } : {})}
+            >
+              {item.label}
+              {item.external && <span class="ext-arrow" aria-hidden="true">&nbsp;↗</span>}
+            </a>
+          </li>
+        ))}
       </ul>
     </nav>
   </div>
@@ -132,8 +141,12 @@ const primaryNav = [
     font-size: 0.78rem;
     color: var(--ink-soft);
     line-height: 1.55;
-    max-width: 32ch;
     margin: 0;
+    white-space: nowrap;
+  }
+  /* Let it wrap again on very narrow viewports where nowrap would overflow */
+  @media (max-width: 380px) {
+    .footer-tag { white-space: normal; }
   }
 
   /* --- Footer nav lists ------------------------------------------------ */

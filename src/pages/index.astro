@@ -75,7 +75,7 @@ const checklist = [
 
       <div class="hero__copy">
         <h1 class="pixel-h pixel-h--xl hero__title fade-up d1">
-          Meet<br/><span class="hero__title-accent">Rolo.</span>
+          Meet<br/><span class="hero__title-accent">Rolo<span class="hero__title-period">.</span></span>
         </h1>
 
         <p class="lede hero__lede fade-up d2">
@@ -318,7 +318,7 @@ const checklist = [
 
       <div class="how__footer">
         <p class="how__more">
-          To learn more about the system architecture of Rolo&rsquo;s soul,
+          To learn more about the system architecture of Rolo&rsquo;s soul,<br/>
           head to the <a href={LINKS.techProcess}>Tech + Process</a> page.
         </p>
         <a class="btn btn--ghost" href={LINKS.techProcess}>
@@ -338,8 +338,9 @@ const checklist = [
       </header>
 
       <div class="finale__stage fade-up d2">
-        {/* Idle by default; swaps to happy on hover */}
-        <div class="finale__rolo-swap" aria-hidden="false">
+        {/* Idle by default; swaps to happy on hover. The whole sprite is a
+            download trigger — same destination as the CTA below. */}
+        <a class="finale__rolo-swap" href={LINKS.downloadMac} aria-label="Download Rolo">
           <img
             class="finale__rolo finale__rolo--idle pixel"
             src={`${base}rolo-idle.png`}
@@ -353,7 +354,7 @@ const checklist = [
             aria-hidden="true"
             loading="lazy"
           />
-        </div>
+        </a>
         <div class="finale__ground" aria-hidden="true"></div>
       </div>
 
@@ -404,6 +405,7 @@ const checklist = [
     position: relative;
     display: inline-block;
   }
+  .hero__title-period { color: var(--ink); }
   .hero__title-accent::after {
     content: '';
     position: absolute;
@@ -806,7 +808,7 @@ const checklist = [
     font-size: 1.05rem;
     color: var(--ink);
     margin: 0;
-    max-width: 56ch;
+    max-width: 64ch;
   }
   .how__more a { color: var(--rolo-deep); font-weight: 600; }
 
@@ -843,6 +845,7 @@ const checklist = [
     display: inline-block;
     line-height: 0;
     cursor: pointer;
+    text-decoration: none;
   }
   .finale__rolo {
     width: clamp(260px, 34vw, 460px);
