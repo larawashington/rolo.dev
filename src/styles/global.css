@@ -38,6 +38,22 @@
   --ui:      'Encode Sans', system-ui, sans-serif;
 
   --ease-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  /* Dashed pixel rule recipe — single source of truth for the page's
+     dashed-line vocabulary (hero underline, hero ground, pillar accents,
+     pixel <hr>, finale ground). Each variant is a complete `background`
+     shorthand: image + position + size + `round` repeat. The `round`
+     keyword rescales the tile to an integer count so the final dash
+     never clips at any width. Color follows `currentColor` — set the
+     element's `color` to recolour the dash.
+
+         background: var(--pixel-dash);        -> 16px tile (8 on / 8 off)
+         background: var(--pixel-dash-tight);  -> 14px tile (8 on / 6 off)
+
+     NEVER hand-roll the `linear-gradient(... )` recipe again — use
+     these custom properties so `round` is always paired with the tile. */
+  --pixel-dash:       linear-gradient(to right, currentColor 0 8px, transparent 8px 16px) 0 0 / 16px 4px round;
+  --pixel-dash-tight: linear-gradient(to right, currentColor 0 8px, transparent 8px 14px) 0 0 / 14px 4px round;
 }
 
 *,
@@ -230,11 +246,10 @@ h1, h2, h3, h4 {
 /* ------- Rules ------------------------------------------------------------ */
 .pixel-rule {
   height: 4px;
-  background-image: linear-gradient(to right, var(--ink) 0 8px, transparent 8px 16px);
-  background-size: 16px 4px;
-  background-repeat: round;
+  background: var(--pixel-dash);
   border: none;
   margin: 0;
+  color: var(--ink); /* dash color (currentColor in the recipe) */
 }
 .rule-dotted {
   height: 1px;

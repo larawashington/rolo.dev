@@ -409,10 +409,8 @@ const checklist = [
     position: absolute;
     left: 0; right: 0; bottom: -10px;
     height: 4px;
-    background-image: linear-gradient(to right, var(--ink) 0 8px, transparent 8px 16px);
-    background-size: 16px 4px;
-    /* `round` rescales the tile to fit an integer count — no clipped last dash */
-    background-repeat: round;
+    color: var(--ink); /* dash color (currentColor in the recipe) */
+    background: var(--pixel-dash);
   }
   .hero__lede { margin-bottom: 2.25rem; max-width: 34ch; }
 
@@ -453,8 +451,8 @@ const checklist = [
   .hero__ground {
     width: min(86%, 460px);
     height: 4px;
-    background-image: linear-gradient(to right, var(--ink) 0 8px, transparent 8px 14px);
-    background-size: 14px 4px;
+    color: var(--ink); /* dash color (currentColor in the recipe) */
+    background: var(--pixel-dash-tight);
     margin-top: 0.5rem;
   }
 
@@ -755,15 +753,15 @@ const checklist = [
     position: relative;
     padding-top: 0.85rem;
   }
-  /* 4px pixel-dashed accent rule above each title */
+  /* 4px pixel-dashed accent rule above each title — dash color follows the
+     pillar's `color`, set by .pillar--voice/--status/--memory below. */
   .pillar::before {
     content: '';
     display: block;
     width: 40px;
     height: 4px;
     margin-bottom: 0.85rem;
-    background-image: linear-gradient(to right, currentColor 0 8px, transparent 8px 16px);
-    background-size: 16px 4px;
+    background: var(--pixel-dash);
   }
   .pillar--voice  { color: var(--sun-deep); }
   .pillar--status { color: var(--leaf-deep); }
@@ -822,7 +820,8 @@ const checklist = [
      texture shows through). Left-aligned heading matching other sections;
      hero-sized Rolo sprite that swaps to happy on hover; orange CTA. */
   .section--finale {
-    border-bottom: 2px solid var(--ink);
+    /* Divider above the footer now lives on .site-footer's border-top
+       (set in Footer.astro) so every page gets it consistently. */
   }
   .finale__head {
     margin-bottom: clamp(2rem, 4vw, 3rem);
@@ -868,8 +867,8 @@ const checklist = [
   .finale__ground {
     width: min(72%, 380px);
     height: 4px;
-    background-image: linear-gradient(to right, var(--ink) 0 8px, transparent 8px 14px);
-    background-size: 14px 4px;
+    color: var(--ink); /* dash color (currentColor in the recipe) */
+    background: var(--pixel-dash-tight);
     margin-top: 0.75rem;
   }
 
