@@ -202,8 +202,8 @@ h1, h2, h3, h4 {
 }
 .btn--primary:hover,
 .btn--primary:focus-visible {
-  background: var(--rolo-deep);
-  color: var(--paper);
+  background: var(--paper);
+  color: var(--rolo);
 }
 
 .btn--ghost {
@@ -232,6 +232,7 @@ h1, h2, h3, h4 {
   height: 4px;
   background-image: linear-gradient(to right, var(--ink) 0 8px, transparent 8px 16px);
   background-size: 16px 4px;
+  background-repeat: round;
   border: none;
   margin: 0;
 }

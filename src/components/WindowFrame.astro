@@ -17,7 +17,7 @@ interface Props {
   /** subdued (peek) variant for adjacent slides in a carousel */
   variant?: 'active' | 'peek';
   /** chrome accent colour */
-  accent?: 'paper' | 'sun' | 'moon' | 'rolo';
+  accent?: 'paper' | 'sun' | 'moon' | 'rolo' | 'leaf';
   class?: string;
 }
 const {
@@ -79,6 +79,7 @@ const {
   .window--accent-sun  .window__chrome { background: var(--sun); }
   .window--accent-moon .window__chrome { background: var(--moon); }
   .window--accent-rolo .window__chrome { background: var(--rolo); }
+  .window--accent-leaf .window__chrome { background: var(--leaf); }
 
   .window__dots {
     display: inline-flex;
@@ -108,11 +109,13 @@ const {
     padding-right: 52px; /* visually centers despite left dots */
   }
 
-  /* Title contrast adapts to the chrome colour.
-     On rolo/moon chrome the deep-orange disappears — switch to paper. */
-  .window--accent-rolo .window__title,
-  .window--accent-moon .window__title { color: var(--paper); }
-  .window--accent-sun  .window__title { color: var(--ink); }
+  /* Slide titles all read paper-white for consistency across accents. */
+  .window__title,
+  .window--accent-paper .window__title,
+  .window--accent-sun   .window__title,
+  .window--accent-moon  .window__title,
+  .window--accent-rolo  .window__title,
+  .window--accent-leaf  .window__title { color: var(--paper); }
 
   .window__body {
     background: var(--paper);
