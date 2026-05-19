@@ -49,7 +49,7 @@ Logo + PROJECT ROLO
 
 **Nav links (label → destination):**
 - Home
-- FAQ
+- FAQs
 - Tech + Process
 - Contact
 
@@ -175,7 +175,7 @@ To learn more about the system architecture of Rolo's soul, head to the [Tech + 
 
 > List every subpage you want. For each one, duplicate the block below. Subpages can be as simple or as detailed as you like — if a subpage is just one block of copy, just put it in "Copy / content" and skip the rest.
 
-### Subpage: [FAQ]
+### Subpage: [FAQs]
 **URL slug (e.g. /about):** /faq
 
 **Purpose of this page:** frequently asked questions.
