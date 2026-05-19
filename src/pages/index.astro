@@ -9,7 +9,8 @@ const base = import.meta.env.BASE_URL.endsWith('/')
   ? import.meta.env.BASE_URL
   : import.meta.env.BASE_URL + '/';
 
-// Section 3 — carousel slides (exact copy from wireframe)
+// Section 3 — carousel slides (exact copy from wireframe).
+// `accent` colours the WindowFrame chrome per-slide.
 const slides = [
   {
     id: 'roaming',
@@ -17,6 +18,7 @@ const slides = [
     src: `${base}gifs/rolo_walk_right.gif`,
     copy: 'Rolo walks across your screen and sees what you see. He will occasionally comment on your work and cheer you on.',
     alt: 'Rolo walking to the right',
+    accent: 'paper' as const,
   },
   {
     id: 'eating',
@@ -24,6 +26,7 @@ const slides = [
     src: `${base}gifs/rolo_eat.gif`,
     copy: 'Rolo is happiest when you’re happy, and second happiest when he gets to eat! Drag and drop files onto Rolo to feed him (eaten files go to Trash).',
     alt: 'Rolo munching on something',
+    accent: 'sun' as const,
   },
   {
     id: 'chatting',
@@ -31,6 +34,7 @@ const slides = [
     src: `${base}gifs/rolo_waiting.gif`,
     copy: 'Rolo loves to chat. Take a break and chat with Rolo about anything you like. As he learns more about you, he will remember important details you share for the future. Ask him about the weather!',
     alt: 'Rolo waiting patiently, ready for a chat',
+    accent: 'rolo' as const,
   },
   {
     id: 'sleeping',
@@ -38,6 +42,7 @@ const slides = [
     src: `${base}gifs/Rolo_sleep.gif`,
     copy: 'Rolo takes naps and dreams. Like us humans, this is when he processes and transfers information into his memory.',
     alt: 'Rolo curled up, asleep',
+    accent: 'moon' as const,
   },
 ];
 
@@ -197,7 +202,6 @@ const checklist = [
             <g fill="currentColor" shape-rendering="crispEdges">
               <rect x="7" y="2" width="2" height="2"/>
               <rect x="5" y="4" width="2" height="2"/>
-              <rect x="3" y="6" width="2" height="2" style="display:none"/>
               <rect x="3" y="5" width="2" height="2"/>
               <rect x="5" y="6" width="2" height="2"/>
               <rect x="7" y="8" width="2" height="2"/>
@@ -213,7 +217,7 @@ const checklist = [
               data-index={i}
               aria-label={`Slide ${i + 1} of ${slides.length}: ${s.title}`}
             >
-              <WindowFrame title={s.title}>
+              <WindowFrame title={s.title} accent={s.accent} class="day__window">
                 <div class="slide-stage">
                   <img
                     class="slide-stage__img pixel"
@@ -222,11 +226,10 @@ const checklist = [
                     loading={i === 0 ? 'eager' : 'lazy'}
                   />
                 </div>
+                <div class="slide-body">
+                  <p class="slide-body__copy">{s.copy}</p>
+                </div>
               </WindowFrame>
-
-              <div class="slide-caption">
-                <p class="slide-caption__copy">{s.copy}</p>
-              </div>
             </article>
           ))}
         </div>
@@ -254,13 +257,6 @@ const checklist = [
           <span class:list={['carousel__dot', i === 0 && 'is-active']} data-dot={i}></span>
         ))}
       </div>
-
-      <div class="day__cta">
-        {/* PLACEHOLDER: downloadMac */}
-        <a class="btn btn--primary btn--lg" href={LINKS.downloadMac}>
-          BRING ROLO TO LIFE
-        </a>
-      </div>
     </div>
   </section>
 
@@ -276,41 +272,7 @@ const checklist = [
         </p>
       </header>
 
-      <ol class="pillars">
-        <li class="pillar fade-up d1">
-          <span class="pillar__num" aria-hidden="true">01</span>
-          <div class="pillar__body">
-            <h3 class="pillar__title"><span class="t-rolo">Rolo&rsquo;s voice</span></h3>
-            <p>
-              comes from a fine-tuned
-              <a href="https://deepmind.google/models/gemma/gemma-3/" target="_blank" rel="noopener">Gemma 3 4B</a>
-              model. A small open-source large-language model trained on hand-seeded examples of how Rolo speaks.
-            </p>
-          </div>
-        </li>
-        <li class="pillar fade-up d2">
-          <span class="pillar__num" aria-hidden="true">02</span>
-          <div class="pillar__body">
-            <h3 class="pillar__title"><span class="t-rolo">Rolo&rsquo;s status</span></h3>
-            <p>
-              is hardcoded and his mood depends on his hunger, social, energy, and happiness levels.
-              This is combined with his perception of the activity on your screen to add flavor and relevance to his speech.
-            </p>
-          </div>
-        </li>
-        <li class="pillar fade-up d3">
-          <span class="pillar__num" aria-hidden="true">03</span>
-          <div class="pillar__body">
-            <h3 class="pillar__title"><span class="t-rolo">Rolo&rsquo;s memory</span></h3>
-            <p>
-              is built through ongoing interactions with you. He remembers key information you share
-              (names, events, preferences) and stores this into his memory while he sleeps and dreams.
-            </p>
-          </div>
-        </li>
-      </ol>
-
-      <figure class="diagram">
+      <figure class="diagram fade-up d2">
         <img
           class="diagram__img pixel"
           src={`${base}rolo-how-it-works.png`}
@@ -319,10 +281,43 @@ const checklist = [
         />
       </figure>
 
-      <p class="how__more">
-        To learn more about the system architecture of Rolo&rsquo;s soul,
-        head to the <a href={LINKS.techProcess}>Tech + Process</a> page.
-      </p>
+      <ol class="pillars">
+        <li class="pillar pillar--voice fade-up d1">
+          <span class="pillar__chip" aria-hidden="true"></span>
+          <h3 class="pillar__title">Rolo&rsquo;s voice</h3>
+          <p class="pillar__body">
+            comes from a fine-tuned
+            <a href="https://deepmind.google/models/gemma/gemma-3/" target="_blank" rel="noopener">Gemma 3 4B</a>
+            model. A small open-source large-language model trained on hand-seeded examples of how Rolo speaks.
+          </p>
+        </li>
+        <li class="pillar pillar--status fade-up d2">
+          <span class="pillar__chip" aria-hidden="true"></span>
+          <h3 class="pillar__title">Rolo&rsquo;s status</h3>
+          <p class="pillar__body">
+            is hardcoded and his mood depends on his hunger, social, energy, and happiness levels.
+            This is combined with his perception of the activity on your screen to add flavor and relevance to his speech.
+          </p>
+        </li>
+        <li class="pillar pillar--memory fade-up d3">
+          <span class="pillar__chip" aria-hidden="true"></span>
+          <h3 class="pillar__title">Rolo&rsquo;s memory</h3>
+          <p class="pillar__body">
+            is built through ongoing interactions with you. He remembers key information you share
+            (names, events, preferences) and stores this into his memory while he sleeps and dreams.
+          </p>
+        </li>
+      </ol>
+
+      <div class="how__footer">
+        <p class="how__more">
+          To learn more about the system architecture of Rolo&rsquo;s soul,
+          head to the <a href={LINKS.techProcess}>Tech + Process</a> page.
+        </p>
+        <a class="btn btn--ghost" href={LINKS.techProcess}>
+          READ THE DEEP DIVE &rarr;
+        </a>
+      </div>
     </div>
   </section>
 
@@ -469,76 +464,122 @@ const checklist = [
   .section--day {
     padding-bottom: clamp(3rem, 6vw, 5rem);
   }
-  .day__head { margin-bottom: clamp(2rem, 4vw, 3rem); max-width: 48rem; }
-  .day__title { margin-top: 1.25rem; }
+  .day__head {
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+    max-width: 48rem;
+  }
+  .day__title {
+    margin-top: 1.25rem;
+  }
 
+  /* Carousel uses peek/active state machine: active slide centered at full
+     scale, prev/next peek slides tilted on either side at lower opacity.
+     Slides absolute-positioned in a fixed-height track. */
   .carousel {
     position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
     padding: 1rem 0 0.5rem;
   }
   .carousel:focus-visible { outline: 3px solid var(--rolo); outline-offset: 8px; }
 
   .carousel__track {
+    position: relative;
+    overflow: visible;
+    height: clamp(460px, 58vw, 600px);
     display: flex;
-    gap: clamp(1rem, 3vw, 2rem);
-    align-items: stretch;
-    transition: transform 500ms var(--ease-soft);
-    will-change: transform;
-    padding: 1rem 0;
+    align-items: center;
+    justify-content: center;
   }
 
   .carousel__slide {
-    flex: 0 0 60%;
-    max-width: 640px;
-    display: grid;
-    grid-template-rows: auto 1fr;
-    gap: 1.5rem;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: min(540px, 92%);
+    height: 100%;
+    transform: translateX(-50%) scale(0.86);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      transform 480ms var(--ease-soft),
+      opacity 380ms var(--ease-soft);
+    will-change: transform, opacity;
   }
-  @media (max-width: 880px) {
-    .carousel__slide { flex-basis: 78%; }
+  .carousel__slide.is-active {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+    pointer-events: auto;
+    z-index: 3;
   }
-  @media (max-width: 560px) {
-    .carousel__slide { flex-basis: 86%; }
+  .carousel__slide.is-prev {
+    opacity: 0.45;
+    transform: translateX(calc(-50% - 56%)) scale(0.78) rotate(-2deg);
+    z-index: 2;
+    cursor: pointer;
+  }
+  .carousel__slide.is-next {
+    opacity: 0.45;
+    transform: translateX(calc(-50% + 56%)) scale(0.78) rotate(2deg);
+    z-index: 2;
+    cursor: pointer;
   }
 
+  :global(.day__window) {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  :global(.day__window .window__body) {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Media stage inside the window — solid paper so the gif pops without
+     fighting the body's pixel-dot texture. Hard ink rule separates it
+     from the copy block below. */
   .slide-stage {
-    aspect-ratio: 5 / 4;
+    flex: 1;
     background: var(--bg);
+    background-image: none;
     border-bottom: 2px solid var(--ink);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: clamp(0.75rem, 2vw, 1.25rem);
-    background-image: radial-gradient(circle at 1px 1px, rgba(42, 24, 16, 0.08) 1px, transparent 0);
-    background-size: 6px 6px;
+    padding: clamp(1rem, 2.5vw, 1.75rem);
+    min-height: clamp(280px, 36vw, 380px);
   }
-  /* Gif fills the stage — pixel-art so scaling stays crisp via image-rendering */
+  /* Gif scales to fill the stage — pixel-art so up-scaling stays crisp. */
   .slide-stage__img {
     width: 100%;
     height: 100%;
+    max-height: 100%;
     object-fit: contain;
-    /* gentle drop shadow keeps Rolo from feeling pasted onto the grid */
-    filter: drop-shadow(0 6px 0 rgba(42, 24, 16, 0.08));
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    filter: drop-shadow(0 6px 0 rgba(42, 24, 16, 0.10));
   }
 
-  .slide-caption {
-    padding: 0 0.25rem;
-    text-align: center;
+  .slide-body {
+    background: var(--paper);
+    padding: 1.25rem 1.4rem 1.4rem;
   }
-  .slide-caption__copy {
+  .slide-body__copy {
     font-family: var(--body);
     font-size: clamp(0.95rem, 0.4vw + 0.85rem, 1.05rem);
     line-height: 1.55;
     color: var(--ink);
-    max-width: 48ch;
-    margin: 0 auto;
+    max-width: 52ch;
+    margin: 0;
   }
 
-  /* Arrows — pixel-style chunky bordered buttons */
+  /* Arrows — pixel-style chunky bordered buttons, v1 hover vocabulary */
   .carousel__arrow {
-    position: absolute;
-    top: 38%;
-    transform: translateY(-50%);
+    position: relative;
     width: 48px; height: 48px;
     background: var(--paper);
     border: 2px solid var(--ink);
@@ -551,28 +592,43 @@ const checklist = [
     z-index: 5;
     transition: transform 140ms var(--ease-soft),
                 box-shadow 140ms var(--ease-soft),
-                background 160ms var(--ease-soft);
+                background 160ms var(--ease-soft),
+                color 160ms var(--ease-soft),
+                opacity 160ms var(--ease-soft);
   }
   .carousel__arrow:hover {
-    transform: translate(-2px, calc(-50% - 2px));
+    transform: translate(-2px, -2px);
     background: var(--rolo);
     color: var(--paper);
     box-shadow: 6px 6px 0 var(--ink);
   }
   .carousel__arrow:active {
-    transform: translate(2px, calc(-50% + 2px));
+    transform: translate(2px, 2px);
     box-shadow: var(--shadow-pixel-press);
   }
-  .carousel__arrow[disabled],
-  .carousel__arrow[hidden] {
-    opacity: 0;
+  .carousel__arrow[disabled] {
+    opacity: 0.35;
     pointer-events: none;
   }
-  .carousel__arrow--prev { left: -8px; }
-  .carousel__arrow--next { right: -8px; }
-  @media (min-width: 1024px) {
-    .carousel__arrow--prev { left: -28px; }
-    .carousel__arrow--next { right: -28px; }
+
+  @media (max-width: 720px) {
+    .carousel { grid-template-columns: 1fr; }
+    .carousel__arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 6;
+    }
+    .carousel__arrow:hover {
+      transform: translate(-2px, calc(-50% - 2px));
+    }
+    .carousel__arrow:active {
+      transform: translate(2px, calc(-50% + 2px));
+    }
+    .carousel__arrow--prev { left: -4px; }
+    .carousel__arrow--next { right: -4px; }
+    .carousel__slide.is-prev,
+    .carousel__slide.is-next { opacity: 0; }
   }
 
   /* Dots — progress indicator */
@@ -586,16 +642,12 @@ const checklist = [
     width: 10px; height: 10px;
     background: var(--paper);
     border: 2px solid var(--ink);
+    cursor: pointer;
     transition: background 160ms var(--ease-soft), transform 160ms var(--ease-soft);
   }
   .carousel__dot.is-active {
     background: var(--rolo);
     transform: scale(1.1);
-  }
-
-  .day__cta {
-    margin-top: clamp(2rem, 4vw, 3rem);
-    text-align: center;
   }
 
   /* ===== SECTION 4 — HOW ================================================= */
@@ -604,62 +656,14 @@ const checklist = [
     border-top: 2px solid var(--ink);
     border-bottom: 2px solid var(--ink);
   }
-  .how__head { margin-bottom: clamp(2rem, 4vw, 3rem); max-width: 56rem; }
+  .how__head { margin-bottom: clamp(2rem, 4vw, 3rem); }
   .how__title { margin-top: 1.25rem; margin-bottom: 1.25rem; }
-  .how__lede { color: var(--ink); }
+  .how__lede { color: var(--ink); max-width: none; }
 
-  .pillars {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 clamp(2rem, 5vw, 3rem);
-    display: grid;
-    gap: 1rem;
-    counter-reset: pillar;
-  }
-  .pillar {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 1.25rem;
-    align-items: start;
-    padding: 1.25rem 1.5rem;
-    background: var(--bg);
-    border: 2px solid var(--ink);
-    box-shadow: var(--shadow-pixel-sm);
-    transition: transform 200ms var(--ease-soft), box-shadow 200ms var(--ease-soft);
-  }
-  .pillar:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: var(--shadow-pixel);
-  }
-  .pillar__num {
-    font-family: var(--display);
-    font-size: 1rem;
-    color: var(--rolo);
-    padding: 0.25rem 0.5rem;
-    border: 2px solid var(--ink);
-    background: var(--paper);
-    align-self: start;
-  }
-  .pillar__title {
-    font-family: var(--body);
-    font-weight: 700;
-    font-size: 0.82rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    margin-bottom: 0.55rem;
-    color: var(--rolo-deep);
-  }
-  .t-rolo { color: var(--rolo-deep); }
-  .pillar p {
-    font-family: var(--body);
-    font-size: 1rem;
-    line-height: 1.6;
-    color: var(--ink);
-  }
-  .pillar a { color: var(--rolo-deep); }
-
+  /* Diagram comes first now — sits in its own framed surface, then the
+     three pillars sit below it, lighter, no boxes. */
   .diagram {
-    margin: clamp(2rem, 4vw, 3rem) 0 1.5rem;
+    margin: 0 0 clamp(2.5rem, 5vw, 3.5rem);
     padding: 12px;
     background: var(--bg);
     border: 2px solid var(--ink);
@@ -672,112 +676,156 @@ const checklist = [
     height: auto;
   }
 
+  /* Pillars — no boxes, no numbers. Title in the matching diagram colour
+     acts as the call-out. A small colour chip and a 4px pixel-dashed rule
+     above echo the diagram's bullet-square language. */
+  .pillars {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 clamp(2rem, 5vw, 3rem);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(1.5rem, 4vw, 2.5rem);
+  }
+  @media (max-width: 900px) {
+    .pillars { grid-template-columns: 1fr; gap: 2rem; }
+  }
+  .pillar {
+    position: relative;
+    padding-top: 0.85rem;
+  }
+  /* 4px pixel-dashed accent rule above each title */
+  .pillar::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 4px;
+    margin-bottom: 0.85rem;
+    background-image: linear-gradient(to right, currentColor 0 8px, transparent 8px 16px);
+    background-size: 16px 4px;
+  }
+  .pillar--voice  { color: var(--sun-deep); }
+  .pillar--status { color: var(--leaf-deep); }
+  .pillar--memory { color: var(--moon-deep); }
+
+  .pillar__chip { display: none; } /* reserved hook — the ::before rule carries the accent */
+
+  .pillar__title {
+    font-family: var(--body);
+    font-weight: 700;
+    font-size: clamp(1.1rem, 1.4vw, 1.3rem);
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    color: currentColor;
+    margin: 0 0 0.65rem;
+  }
+  .pillar__body {
+    font-family: var(--body);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--ink);
+    margin: 0;
+  }
+  .pillar__body a {
+    color: var(--rolo-deep);
+    font-weight: 600;
+  }
+
+  /* Footer row — paragraph left, CTA right, wraps on mobile */
+  .how__footer {
+    margin-top: clamp(2rem, 4vw, 3rem);
+    padding-top: 1.5rem;
+    border-top: 1px dashed var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
   .how__more {
     font-family: var(--body);
     font-size: 1.05rem;
     color: var(--ink);
-    margin-top: 1.5rem;
-    padding-top: 1.25rem;
-    border-top: 1px dashed var(--rule);
+    margin: 0;
+    max-width: 56ch;
   }
   .how__more a { color: var(--rolo-deep); font-weight: 600; }
 </style>
 
 <script>
-  // ===== Carousel ========================================================
-  // Vanilla JS, no framework. Keyboard arrows + click. Respects reduced motion.
-  type CarouselEl = HTMLElement & { _state?: { i: number; n: number } };
+  // ===== Day-in-the-life carousel =======================================
+  // Peek/active state machine. Active slide centered; prev/next slides
+  // tilted on either side at lower opacity, click to navigate.
+  // Keyboard arrows + touch swipe + counter + dots + arrow buttons.
 
-  function initCarousel(root: CarouselEl) {
-    const track = root.querySelector<HTMLElement>('[data-track]');
+  function initCarousel(root: HTMLElement) {
     const slides = Array.from(root.querySelectorAll<HTMLElement>('[data-slide]'));
-    const prev = root.querySelector<HTMLButtonElement>('[data-prev]');
-    const next = root.querySelector<HTMLButtonElement>('[data-next]');
-    const dotsRoot = root.parentElement?.querySelector<HTMLElement>('[data-dots]') ??
-                     root.parentElement?.querySelector<HTMLElement>('.carousel__dots');
-    const dots = Array.from(root.parentElement?.querySelectorAll<HTMLElement>('[data-dot]') ?? []);
-    if (!track || slides.length === 0) return;
+    const prev   = root.querySelector<HTMLButtonElement>('[data-prev]');
+    const next   = root.querySelector<HTMLButtonElement>('[data-next]');
+    const parent = root.parentElement;
+    const dots   = Array.from(parent?.querySelectorAll<HTMLElement>('[data-dot]') ?? []);
+    if (slides.length === 0) return;
 
     const n = slides.length;
     let i = 0;
 
-    function applyState() {
-      // peek/active class for opacity styling
+    function render() {
       slides.forEach((s, idx) => {
-        s.classList.toggle('is-active', idx === i);
-        const win = s.querySelector<HTMLElement>('.window');
-        if (win) {
-          win.classList.toggle('window--peek', idx !== i);
-          win.classList.toggle('window--active', idx === i);
-        }
-      });
-
-      // translate the track so the active slide is centered
-      const slide = slides[i];
-      const containerRect = root.getBoundingClientRect();
-      const slideRect = slide.getBoundingClientRect();
-      const currentX = parseFloat(track!.dataset.x ?? '0');
-      const slideCenter = (slideRect.left - containerRect.left) + slideRect.width / 2;
-      const containerCenter = containerRect.width / 2;
-      const delta = slideCenter - containerCenter;
-      const newX = currentX - delta;
-      track!.dataset.x = String(newX);
-      track!.style.transform = `translateX(${newX}px)`;
-
-      // arrow visibility (hide on first/last per wireframe)
-      if (prev) prev.toggleAttribute('hidden', i === 0);
-      if (next) next.toggleAttribute('hidden', i === n - 1);
-
-      // dots
-      dots.forEach((d, idx) => d.classList.toggle('is-active', idx === i));
-
-      // a11y
-      slides.forEach((s, idx) => {
+        s.classList.remove('is-active', 'is-prev', 'is-next');
+        if (idx === i)            s.classList.add('is-active');
+        else if (idx === i - 1)   s.classList.add('is-prev');
+        else if (idx === i + 1)   s.classList.add('is-next');
         s.setAttribute('aria-hidden', idx === i ? 'false' : 'true');
       });
+
+      dots.forEach((d, idx) => d.classList.toggle('is-active', idx === i));
+
+      // disabled state on arrows at endpoints (v1 hover stays intact)
+      if (prev) prev.toggleAttribute('disabled', i === 0);
+      if (next) next.toggleAttribute('disabled', i === n - 1);
     }
 
-    function go(delta: number) {
-      i = Math.max(0, Math.min(n - 1, i + delta));
-      applyState();
+    function go(target: number) {
+      i = Math.max(0, Math.min(n - 1, target));
+      render();
     }
 
-    prev?.addEventListener('click', () => go(-1));
-    next?.addEventListener('click', () => go(+1));
+    prev?.addEventListener('click', () => go(i - 1));
+    next?.addEventListener('click', () => go(i + 1));
 
     // keyboard support — only when the carousel region is focused
     root.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft')  { e.preventDefault(); go(-1); }
-      if (e.key === 'ArrowRight') { e.preventDefault(); go(+1); }
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); go(i - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(i + 1); }
+    });
+
+    // click prev/next peek slides to navigate to them
+    slides.forEach((s, idx) => {
+      s.addEventListener('click', () => {
+        if (idx === i - 1 || idx === i + 1) go(idx);
+      });
     });
 
     // dot click to jump
     dots.forEach((d, idx) => {
-      d.style.cursor = 'pointer';
       d.setAttribute('role', 'button');
       d.setAttribute('aria-label', `Go to slide ${idx + 1}`);
-      d.addEventListener('click', () => { i = idx; applyState(); });
+      d.addEventListener('click', () => go(idx));
     });
 
-    // recompute on resize
-    let raf = 0;
-    window.addEventListener('resize', () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        // reset transform first so measurements are clean
-        track!.style.transition = 'none';
-        track!.dataset.x = '0';
-        track!.style.transform = 'translateX(0)';
-        requestAnimationFrame(() => {
-          track!.style.transition = '';
-          applyState();
-        });
-      });
+    // touch swipe on the track
+    const track = root.querySelector<HTMLElement>('[data-track]') ?? root;
+    let startX = 0;
+    track.addEventListener('touchstart', (e: TouchEvent) => {
+      startX = e.touches[0].clientX;
+    }, { passive: true });
+    track.addEventListener('touchend', (e: TouchEvent) => {
+      const dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 50) go(dx < 0 ? i + 1 : i - 1);
     });
 
-    // initial paint — wait a frame so layout is ready
-    requestAnimationFrame(() => applyState());
+    render();
   }
 
-  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach(el => initCarousel(el as CarouselEl));
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach(initCarousel);
 </script>

@@ -5,50 +5,69 @@ const year = new Date().getFullYear();
 const base = import.meta.env.BASE_URL.endsWith('/')
   ? import.meta.env.BASE_URL
   : import.meta.env.BASE_URL + '/';
+
+const primaryNav = [
+  { label: 'Home',           href: base },
+  { label: 'FAQ',            href: `${base}faq` },
+  { label: 'Tech + Process', href: `${base}tech+process` },
+  { label: 'Contact',        href: `${base}contact` },
+];
 ---
 <footer class="site-footer">
-  <div class="shell">
-    <hr class="pixel-rule footer__rule" />
-
-    <div class="site-footer__grid">
-      <div class="site-footer__brand">
-        <a class="footer-brand" href={base} aria-label="Project Rolo — home">
-          <img
-            class="footer-brand__mark pixel"
-            src={`${base}rolo-logo.png`}
-            alt=""
-            width="48"
-            height="48"
-          />
-          <span class="footer-brand__name">
-            <span>PROJECT</span>&nbsp;<span class="footer-brand__rolo">ROLO</span>
-          </span>
-        </a>
-        <p class="footer-tag">
-          A free, open-source desktop companion.
-        </p>
-      </div>
-
-      <nav class="site-footer__nav" aria-label="Find us elsewhere">
-        <p class="subhead footer-heading">Find us</p>
-        <ul>
-          <li>
-            <a href={LINKS.github} target="_blank" rel="noopener">GitHub</a>
-          </li>
-          <li>
-            <a href={LINKS.linkedin} target="_blank" rel="noopener">LinkedIn</a>
-          </li>
-          <li>
-            {/* PLACEHOLDER: email — swap when real address is provided */}
-            <a href={LINKS.email}>Email</a>
-          </li>
-        </ul>
-      </nav>
+  <div class="shell site-footer__inner">
+    <div class="site-footer__brand">
+      <a class="footer-brand__lockup" href={base} aria-label="Project Rolo — home">
+        <img
+          class="footer-brand__mark pixel"
+          src={`${base}rolo-logo.png`}
+          alt=""
+          width="52"
+          height="52"
+        />
+        <span class="footer-brand__name">
+          <span>PROJECT</span>&nbsp;<span class="footer-brand__rolo">ROLO</span>
+        </span>
+      </a>
+      <p class="footer-tag">
+        A free, open-source desktop companion.
+      </p>
     </div>
 
-    <div class="site-footer__bottom">
-      <small>&copy; {year} Project Rolo. Open source with love.</small>
-    </div>
+    <nav class="site-footer__nav site-footer__nav--primary" aria-label="Site">
+      <ul>
+        {primaryNav.map(item => (
+          <li>
+            <a href={item.href}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <nav class="site-footer__nav site-footer__nav--social" aria-label="Find us elsewhere">
+      <ul>
+        <li>
+          <a href={LINKS.github} target="_blank" rel="noopener">
+            GitHub<span class="ext-arrow" aria-hidden="true">&nbsp;↗</span>
+          </a>
+        </li>
+        <li>
+          <a href={LINKS.linkedin} target="_blank" rel="noopener">
+            LinkedIn<span class="ext-arrow" aria-hidden="true">&nbsp;↗</span>
+          </a>
+        </li>
+        <li>
+          {/* PLACEHOLDER: email — swap when real address is provided */}
+          <a href={LINKS.email}>Email</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="shell site-footer__legal">
+    <hr class="pixel-rule" />
+    <p class="site-footer__copy">
+      &copy; {year} Project Rolo. Open source with love.
+    </p>
   </div>
 </footer>
 
@@ -60,59 +79,62 @@ const base = import.meta.env.BASE_URL.endsWith('/')
     padding: 3rem 0 2rem;
     margin-top: 4rem;
   }
-  .footer__rule { opacity: 0.6; margin-bottom: 2.75rem; }
 
-  .site-footer__grid {
+  .site-footer__inner {
     display: grid;
-    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-    gap: clamp(2rem, 6vw, 4rem);
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 3.5rem);
     align-items: start;
   }
   @media (max-width: 720px) {
-    .site-footer__grid { grid-template-columns: 1fr; gap: 2.25rem; }
+    .site-footer__inner { grid-template-columns: 1fr; gap: 2.25rem; }
   }
 
-  /* --- Brand lockup ----------------------------------------------------- */
-  .footer-brand {
+  /* --- Brand lockup — logo + wordmark inline, tagline below, left-aligned -- */
+  .site-footer__brand {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .footer-brand__lockup {
     display: inline-flex;
     align-items: center;
-    gap: 0.85rem;
+    gap: 0.9rem;
     text-decoration: none;
     color: var(--ink);
-    font-family: var(--display);
     line-height: 1;
-    margin-bottom: 1rem;
     transition: transform 140ms var(--ease-soft);
+    width: max-content;
   }
-  .footer-brand:hover { transform: translate(-1px, -1px); }
+  .footer-brand__lockup:hover { transform: translate(-1px, -1px); }
   .footer-brand__mark {
-    width: 48px;
-    height: 48px;
+    width: 52px;
+    height: 52px;
     background: transparent;
     border: 0;
     box-shadow: none;
+    flex-shrink: 0;
   }
   .footer-brand__name {
-    font-size: 1.05rem;
+    font-family: var(--display);
+    font-size: 1.15rem;
     letter-spacing: 0.04em;
+    line-height: 1;
     padding-top: 2px;
     white-space: nowrap;
   }
   .footer-brand__rolo { color: var(--rolo); }
 
   .footer-tag {
-    font-family: var(--body);
+    font-family: ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
     color: var(--ink-soft);
     line-height: 1.55;
-    max-width: 38ch;
+    max-width: 32ch;
     margin: 0;
   }
 
-  /* --- Find us nav ------------------------------------------------------ */
-  .footer-heading {
-    /* uses global .subhead — uppercase tracked, rolo-deep */
-    margin: 0 0 0.85rem;
-  }
+  /* --- Footer nav lists ------------------------------------------------ */
   .site-footer__nav ul {
     list-style: none;
     padding: 0;
@@ -139,13 +161,20 @@ const base = import.meta.env.BASE_URL.endsWith('/')
     border-bottom-color: var(--rolo);
     transform: translateX(2px);
   }
+  .ext-arrow { color: var(--ink-soft); }
+  .site-footer__nav a:hover .ext-arrow { color: var(--rolo-deep); }
 
   /* --- Bottom row ------------------------------------------------------- */
-  .site-footer__bottom {
-    margin-top: 2.75rem;
-    padding-top: 1.25rem;
-    border-top: 1px dashed var(--rule);
+  .site-footer__legal {
+    margin-top: clamp(2.5rem, 5vw, 3.25rem);
+  }
+  .site-footer__legal .pixel-rule {
+    margin-bottom: 1.25rem;
+  }
+  .site-footer__copy {
+    font-family: ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
     color: var(--ink-soft);
-    font-size: 0.85rem;
+    margin: 0;
   }
 </style>

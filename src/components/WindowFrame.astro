@@ -5,16 +5,29 @@
  * top-left corner (no real close/min/max icons per wireframe). Rounded
  * corners use the printmaking trick: real radius on the outer container
  * plus a subtle 4-corner "notch" pixel feel from the border treatment.
+ *
+ * `accent` colours the chrome (title bar) to signal slide context.
+ *   paper — default warm bg
+ *   sun   — warm yellow
+ *   moon  — cool blue
+ *   rolo  — Rolo orange
  */
 interface Props {
   title?: string;
   /** subdued (peek) variant for adjacent slides in a carousel */
   variant?: 'active' | 'peek';
+  /** chrome accent colour */
+  accent?: 'paper' | 'sun' | 'moon' | 'rolo';
   class?: string;
 }
-const { title = '', variant = 'active', class: className = '' } = Astro.props;
+const {
+  title = '',
+  variant = 'active',
+  accent = 'paper',
+  class: className = '',
+} = Astro.props;
 ---
-<div class:list={['window', `window--${variant}`, className]}>
+<div class:list={['window', `window--${variant}`, `window--accent-${accent}`, className]}>
   <div class="window__chrome">
     <div class="window__dots" aria-hidden="true">
       <span class="window__dot"></span>
@@ -51,7 +64,7 @@ const { title = '', variant = 'active', class: className = '' } = Astro.props;
   }
 
   .window__chrome {
-    background: var(--bg);
+    background: var(--rule);
     border-bottom: 2px solid var(--ink);
     padding: 0.75rem 1rem;
     display: flex;
@@ -59,6 +72,14 @@ const { title = '', variant = 'active', class: className = '' } = Astro.props;
     gap: 0.85rem;
     min-height: 44px;
   }
+
+  /* Accent variants — fill the chrome with the slide's colour.
+     paper uses --rule, a neutral tan that pops against both
+     page bg and the lighter paper body. */
+  .window--accent-sun  .window__chrome { background: var(--sun); }
+  .window--accent-moon .window__chrome { background: var(--moon); }
+  .window--accent-rolo .window__chrome { background: var(--rolo); }
+
   .window__dots {
     display: inline-flex;
     gap: 7px;
@@ -86,6 +107,12 @@ const { title = '', variant = 'active', class: className = '' } = Astro.props;
     margin: 0 auto;
     padding-right: 52px; /* visually centers despite left dots */
   }
+
+  /* Title contrast adapts to the chrome colour.
+     On rolo/moon chrome the deep-orange disappears — switch to paper. */
+  .window--accent-rolo .window__title,
+  .window--accent-moon .window__title { color: var(--paper); }
+  .window--accent-sun  .window__title { color: var(--ink); }
 
   .window__body {
     background: var(--paper);

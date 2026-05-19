@@ -13,7 +13,11 @@
   --rolo:     #e8654a;   /* Rolo's orange — accent / CTA */
   --rolo-deep:#c84a30;   /* pressed-state orange */
   --sun:      #e8b04a;   /* warm yellow */
+  --sun-deep: #b8841f;   /* accessible variant for body type on paper */
   --moon:     #6b8fa8;   /* cool blue, sleep/night */
+  --moon-deep:#4a6e87;   /* deeper moon for text on paper */
+  --leaf:     #6b8e4e;   /* diagram-status green */
+  --leaf-deep:#4f7038;   /* deeper leaf for text on paper */
   --rule:     #d6c19a;   /* divider */
 
   /* Semantic checklist */
