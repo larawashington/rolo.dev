@@ -53,19 +53,19 @@ const { title = '', variant = 'active', class: className = '' } = Astro.props;
   .window__chrome {
     background: var(--bg);
     border-bottom: 2px solid var(--ink);
-    padding: 0.5rem 0.85rem;
+    padding: 0.75rem 1rem;
     display: flex;
     align-items: center;
     gap: 0.85rem;
-    min-height: 28px;
+    min-height: 44px;
   }
   .window__dots {
     display: inline-flex;
-    gap: 6px;
+    gap: 7px;
   }
   .window__dot {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     border: 1.5px solid var(--ink);
     background: var(--paper);
@@ -75,14 +75,16 @@ const { title = '', variant = 'active', class: className = '' } = Astro.props;
   .window__dot:nth-child(2) { background: var(--sun); }
   .window__dot:nth-child(3) { background: var(--ok); }
 
+  /* Title is the slide's headline — pixel font, larger and confident.
+     This is the H3 for the slide, hence prominent. */
   .window__title {
     font-family: var(--display);
-    font-size: 0.55rem;
-    letter-spacing: 0.12em;
-    color: var(--ink-soft);
-    text-transform: uppercase;
+    font-size: clamp(0.85rem, 1.1vw, 1rem);
+    line-height: 1;
+    letter-spacing: 0.04em;
+    color: var(--rolo-deep);
     margin: 0 auto;
-    padding-right: 36px; /* visually centers despite left dots */
+    padding-right: 52px; /* visually centers despite left dots */
   }
 
   .window__body {

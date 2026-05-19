@@ -13,40 +13,31 @@ const base = import.meta.env.BASE_URL.endsWith('/')
 const slides = [
   {
     id: 'roaming',
-    title: 'roaming.app',
-    label: 'Roaming',
+    title: 'Roaming',
     src: `${base}gifs/rolo_walk_right.gif`,
     copy: 'Rolo walks across your screen and sees what you see. He will occasionally comment on your work and cheer you on.',
-    alt: 'Rolo walking to the right across a small window',
-    kind: 'gif' as const,
+    alt: 'Rolo walking to the right',
   },
   {
     id: 'eating',
-    title: 'eating.app',
-    label: 'Eating',
+    title: 'Eating',
     src: `${base}gifs/rolo_eat.gif`,
     copy: 'Rolo is happiest when you’re happy, and second happiest when he gets to eat! Drag and drop files onto Rolo to feed him (eaten files go to Trash).',
     alt: 'Rolo munching on something',
-    kind: 'gif' as const,
   },
   {
     id: 'chatting',
-    title: 'chatting.app',
-    label: 'Chatting',
+    title: 'Chatting',
     src: `${base}gifs/rolo_waiting.gif`,
     copy: 'Rolo loves to chat. Take a break and chat with Rolo about anything you like. As he learns more about you, he will remember important details you share for the future. Ask him about the weather!',
     alt: 'Rolo waiting patiently, ready for a chat',
-    kind: 'gif' as const,
   },
   {
     id: 'sleeping',
-    title: 'sleeping.app',
-    label: 'Sleeping',
-    /* No rolo_sleep.gif available — using static sprite per handoff */
-    src: `${base}sprites/rolo-sleep.png`,
+    title: 'Sleeping',
+    src: `${base}gifs/Rolo_sleep.gif`,
     copy: 'Rolo takes naps and dreams. Like us humans, this is when he processes and transfers information into his memory.',
     alt: 'Rolo curled up, asleep',
-    kind: 'png' as const,
   },
 ];
 
@@ -78,8 +69,6 @@ const checklist = [
     <div class="shell hero__shell">
 
       <div class="hero__copy">
-        <p class="eyebrow fade-up">a small companion &nbsp;//&nbsp; ch.00</p>
-
         <h1 class="pixel-h pixel-h--xl hero__title fade-up d1">
           Meet<br/><span class="hero__title-accent">Rolo.</span>
         </h1>
@@ -92,12 +81,12 @@ const checklist = [
         <div class="hero__cta fade-up d3" role="group" aria-label="Get Rolo">
           {/* PLACEHOLDER: downloadMac — see src/lib/links.ts */}
           <a class="btn btn--primary btn--lg" href={LINKS.downloadMac}>
-            Download Rolo
-            <span class="hero__cta-meta">(mac)</span>
+            DOWNLOAD ROLO
+            <span class="hero__cta-meta">(MAC)</span>
           </a>
           {/* PLACEHOLDER: repo */}
           <a class="btn btn--ghost btn--lg" href={LINKS.repo} target="_blank" rel="noopener">
-            Explore the repo &rarr;
+            EXPLORE THE REPO &rarr;
           </a>
         </div>
       </div>
@@ -111,7 +100,6 @@ const checklist = [
           height="520"
         />
         <div class="hero__ground" aria-hidden="true"></div>
-        <p class="hero__floor-caption" aria-hidden="true">64 &times; 64 &middot; hand-drawn</p>
       </div>
 
     </div>
@@ -121,7 +109,6 @@ const checklist = [
   <section class="section section--what">
     <div class="shell">
       <header class="what__head">
-        <p class="eyebrow fade-up">what he does &nbsp;//&nbsp; ch.01</p>
         <h2 class="pixel-h pixel-h--lg what__title fade-up d1">
           What does Rolo do?
         </h2>
@@ -134,7 +121,7 @@ const checklist = [
               {item.kind === 'ok' ? (
                 /* Pixel-style check — built from absolutely-positioned blocks
                    so it reads as hand-pixelled, not as a vector tick. */
-                <svg viewBox="0 0 14 14" width="28" height="28" aria-hidden="true">
+                <svg viewBox="0 0 14 14" width="40" height="40" aria-hidden="true">
                   <g fill="currentColor" shape-rendering="crispEdges">
                     <rect x="1" y="6" width="2" height="2"/>
                     <rect x="3" y="8" width="2" height="2"/>
@@ -145,18 +132,25 @@ const checklist = [
                   </g>
                 </svg>
               ) : (
+                /* Symmetric pixel X: two diagonals on a 7x7 lattice
+                   (2x2 px blocks inside a 14x14 viewBox), crossing at centre. */
                 <svg viewBox="0 0 14 14" width="28" height="28" aria-hidden="true">
                   <g fill="currentColor" shape-rendering="crispEdges">
-                    <rect x="1" y="1" width="2" height="2"/>
-                    <rect x="3" y="3" width="2" height="2"/>
-                    <rect x="5" y="5" width="2" height="2"/>
-                    <rect x="7" y="3" width="2" height="2"/>
-                    <rect x="9" y="1" width="2" height="2"/>
-                    <rect x="7" y="7" width="2" height="2"/>
-                    <rect x="5" y="9" width="2" height="2"/>
-                    <rect x="3" y="11" width="2" height="2"/>
-                    <rect x="9" y="9" width="2" height="2"/>
-                    <rect x="11" y="11" width="2" height="2"/>
+                    {/* top-left → bottom-right diagonal */}
+                    <rect x="0"  y="0"  width="2" height="2"/>
+                    <rect x="2"  y="2"  width="2" height="2"/>
+                    <rect x="4"  y="4"  width="2" height="2"/>
+                    <rect x="6"  y="6"  width="2" height="2"/>
+                    <rect x="8"  y="8"  width="2" height="2"/>
+                    <rect x="10" y="10" width="2" height="2"/>
+                    <rect x="12" y="12" width="2" height="2"/>
+                    {/* top-right → bottom-left diagonal */}
+                    <rect x="12" y="0"  width="2" height="2"/>
+                    <rect x="10" y="2"  width="2" height="2"/>
+                    <rect x="8"  y="4"  width="2" height="2"/>
+                    <rect x="4"  y="8"  width="2" height="2"/>
+                    <rect x="2"  y="10" width="2" height="2"/>
+                    <rect x="0"  y="12" width="2" height="2"/>
                   </g>
                 </svg>
               )}
@@ -169,7 +163,7 @@ const checklist = [
       <div class="what__cta">
         {/* PLACEHOLDER: downloadMac */}
         <a class="btn btn--primary btn--lg" href={LINKS.downloadMac}>
-          Invite Rolo to your desktop
+          DOWNLOAD ROLO TO YOUR DESKTOP
         </a>
       </div>
     </div>
@@ -179,7 +173,6 @@ const checklist = [
   <section class="section section--day" id="day">
     <div class="shell">
       <header class="day__head">
-        <p class="eyebrow fade-up">a day in his life &nbsp;//&nbsp; ch.02</p>
         <h2 class="pixel-h pixel-h--lg day__title fade-up d1">
           A day in the life of Rolo
         </h2>
@@ -218,7 +211,7 @@ const checklist = [
               class="carousel__slide"
               data-slide
               data-index={i}
-              aria-label={`Slide ${i + 1} of ${slides.length}: ${s.label}`}
+              aria-label={`Slide ${i + 1} of ${slides.length}: ${s.title}`}
             >
               <WindowFrame title={s.title}>
                 <div class="slide-stage">
@@ -232,7 +225,6 @@ const checklist = [
               </WindowFrame>
 
               <div class="slide-caption">
-                <p class="slide-caption__label">{s.label}</p>
                 <p class="slide-caption__copy">{s.copy}</p>
               </div>
             </article>
@@ -266,7 +258,7 @@ const checklist = [
       <div class="day__cta">
         {/* PLACEHOLDER: downloadMac */}
         <a class="btn btn--primary btn--lg" href={LINKS.downloadMac}>
-          Bring Rolo to life
+          BRING ROLO TO LIFE
         </a>
       </div>
     </div>
@@ -276,7 +268,6 @@ const checklist = [
   <section class="section section--how">
     <div class="shell">
       <header class="how__head">
-        <p class="eyebrow fade-up">behind the curtain &nbsp;//&nbsp; ch.03</p>
         <h2 class="pixel-h pixel-h--lg how__title fade-up d1">
           How does Rolo function?
         </h2>
@@ -326,7 +317,6 @@ const checklist = [
           alt="Diagram of how Rolo works: three boxes hanging off Rolo — his Voice (a fine-tuned Gemma 3 4B model), his Status (mood from hunger, social and energy levels plus on-screen activity), and his Memory (the Vault, compiled when he dreams)."
           loading="lazy"
         />
-        <figcaption>fig.00 &mdash; voice + status + memory = rolo</figcaption>
       </figure>
 
       <p class="how__more">
@@ -421,14 +411,6 @@ const checklist = [
     background-size: 14px 4px;
     margin-top: 0.5rem;
   }
-  .hero__floor-caption {
-    margin-top: 0.65rem;
-    font-family: var(--display);
-    font-size: 0.55rem;
-    letter-spacing: 0.18em;
-    color: var(--ink-soft);
-    text-transform: uppercase;
-  }
 
   /* ===== SECTION 2 — WHAT ================================================ */
   .section--what {
@@ -437,48 +419,50 @@ const checklist = [
     border-bottom: 2px solid var(--ink);
   }
   .what__head { margin-bottom: clamp(2rem, 4vw, 3rem); max-width: 48rem; }
-  .what__title { margin-top: 1rem; }
+  .what__title { margin-top: 1.25rem; }
 
+  /* Editorial list — no cards, no borders, no shadows. Pixel marks sit
+     in the margin like printer's bullets; thin dashed rules give rhythm.
+     The CTA below becomes the only bordered surface in the section,
+     reading as the unmistakable climax. */
   .checklist {
     list-style: none;
     padding: 0;
     margin: 0;
-    display: grid;
-    gap: 1rem;
     max-width: 62rem;
   }
   .check {
-    background: var(--bg);
-    border: 2px solid var(--ink);
-    box-shadow: var(--shadow-pixel-sm);
-    padding: 1.1rem 1.35rem;
     display: grid;
-    grid-template-columns: 40px 1fr;
-    gap: 1rem;
+    grid-template-columns: 56px 1fr;
+    gap: 1.5rem;
     align-items: start;
-    transition: transform 200ms var(--ease-soft), box-shadow 200ms var(--ease-soft);
+    padding: 1.75rem 0;
+    border-bottom: 1px dashed var(--rule);
   }
-  .check:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow-pixel); }
+  .check:first-child { padding-top: 0.5rem; }
+  .check:last-child  { border-bottom: 0; }
   .check__mark {
     display: inline-flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    width: 40px; height: 40px;
-    border: 2px solid var(--ink);
-    background: var(--paper);
+    line-height: 0;
   }
   .check--ok .check__mark { color: var(--ok); }
   .check--no .check__mark { color: var(--no); }
   .check__text {
     font-family: var(--body);
-    font-size: clamp(1rem, 0.5vw + 0.85rem, 1.1rem);
-    line-height: 1.6;
+    font-size: clamp(1.05rem, 0.5vw + 0.9rem, 1.18rem);
+    line-height: 1.65;
     color: var(--ink);
-    margin: 0.25rem 0;
+    margin: 0;
+    max-width: 60ch;
   }
 
+  /* CTA sits in its own breathing room, centered for ceremony.
+     It's the only chunky-bordered object in the section — the climax. */
   .what__cta {
-    margin-top: clamp(2rem, 4vw, 3rem);
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+    text-align: center;
   }
 
   /* ===== SECTION 3 — CAROUSEL ============================================ */
@@ -486,7 +470,7 @@ const checklist = [
     padding-bottom: clamp(3rem, 6vw, 5rem);
   }
   .day__head { margin-bottom: clamp(2rem, 4vw, 3rem); max-width: 48rem; }
-  .day__title { margin-top: 1rem; }
+  .day__title { margin-top: 1.25rem; }
 
   .carousel {
     position: relative;
@@ -524,27 +508,22 @@ const checklist = [
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: clamp(1rem, 4vw, 2.5rem);
+    padding: clamp(0.75rem, 2vw, 1.25rem);
     background-image: radial-gradient(circle at 1px 1px, rgba(42, 24, 16, 0.08) 1px, transparent 0);
     background-size: 6px 6px;
   }
+  /* Gif fills the stage — pixel-art so scaling stays crisp via image-rendering */
   .slide-stage__img {
-    width: auto;
-    max-width: 70%;
-    max-height: 80%;
-    height: auto;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* gentle drop shadow keeps Rolo from feeling pasted onto the grid */
+    filter: drop-shadow(0 6px 0 rgba(42, 24, 16, 0.08));
   }
 
   .slide-caption {
     padding: 0 0.25rem;
     text-align: center;
-  }
-  .slide-caption__label {
-    font-family: var(--display);
-    font-size: 0.8rem;
-    letter-spacing: 0.06em;
-    color: var(--rolo-deep);
-    margin-bottom: 0.6rem;
   }
   .slide-caption__copy {
     font-family: var(--body);
@@ -626,7 +605,7 @@ const checklist = [
     border-bottom: 2px solid var(--ink);
   }
   .how__head { margin-bottom: clamp(2rem, 4vw, 3rem); max-width: 56rem; }
-  .how__title { margin-top: 1rem; margin-bottom: 1.25rem; }
+  .how__title { margin-top: 1.25rem; margin-bottom: 1.25rem; }
   .how__lede { color: var(--ink); }
 
   .pillars {
@@ -664,9 +643,11 @@ const checklist = [
   .pillar__title {
     font-family: var(--body);
     font-weight: 700;
-    font-size: 1.15rem;
-    margin-bottom: 0.4rem;
-    color: var(--ink);
+    font-size: 0.82rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 0.55rem;
+    color: var(--rolo-deep);
   }
   .t-rolo { color: var(--rolo-deep); }
   .pillar p {
@@ -689,14 +670,6 @@ const checklist = [
     display: block;
     width: 100%;
     height: auto;
-  }
-  .diagram figcaption {
-    font-family: var(--display);
-    font-size: 0.55rem;
-    letter-spacing: 0.18em;
-    color: var(--ink-soft);
-    margin-top: 14px;
-    text-align: center;
   }
 
   .how__more {
