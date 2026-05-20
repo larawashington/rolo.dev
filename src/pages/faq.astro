@@ -191,13 +191,16 @@ const sections: Section[] = [
             aria-labelledby={`${s.id}-title`}
           >
             <header class="faq-section__head">
-              <span class="faq-section__rule fade-up d1" aria-hidden="true" />
-              <h2
-                id={`${s.id}-title`}
-                class="pixel-h pixel-h--lg faq-section__title fade-up d1"
-              >
-                {s.title}
-              </h2>
+              <div class="faq-section__title-row fade-up d1">
+                <span class="faq-section__tile" aria-hidden="true" />
+                <h2
+                  id={`${s.id}-title`}
+                  class="pixel-h pixel-h--lg faq-section__title"
+                >
+                  {s.title}
+                </h2>
+              </div>
+              <span class="faq-section__rule fade-up d2" aria-hidden="true" />
             </header>
 
             <ul class="qa-list" role="list">
@@ -453,27 +456,47 @@ const sections: Section[] = [
     margin-bottom: clamp(1.25rem, 2.5vw, 1.85rem);
     max-width: 56rem;
   }
-  /* 4px pixel-dashed accent rule above each section title — longer + thinner
-     than v1 (was 56px). Color set by the section modifier. */
+  /* Title row — accent tile + section title side-by-side, centered on the
+     pixel-font cap-height. Mirrors the sticky-nav dot + label pattern at a
+     larger scale. */
+  .faq-section__title-row {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.65rem, 1vw, 0.9rem);
+  }
+  .faq-section__tile {
+    display: inline-block;
+    width: clamp(0.85rem, 1.4vw, 1.1rem);
+    height: clamp(0.85rem, 1.4vw, 1.1rem);
+    background: currentColor;
+    flex-shrink: 0;
+  }
+  /* 4px pixel-dashed accent rule beneath the title — runs the full width of
+     the accordion below (56rem cap inherited from .faq-section__head). */
   .faq-section__rule {
     display: block;
-    width: 88px;
+    width: 100%;
     height: 4px;
-    margin-bottom: 1.1rem;
+    margin-top: clamp(0.85rem, 1.75vw, 1.25rem);
     background: var(--pixel-dash);
   }
+  .faq-section--rolo .faq-section__tile,
   .faq-section--rolo .faq-section__rule {
     color: var(--rolo);
   }
+  .faq-section--sun .faq-section__tile,
   .faq-section--sun .faq-section__rule {
     color: var(--sun-deep);
   }
+  .faq-section--leaf .faq-section__tile,
   .faq-section--leaf .faq-section__rule {
     color: var(--leaf-deep);
   }
+  .faq-section--moon .faq-section__tile,
   .faq-section--moon .faq-section__rule {
     color: var(--moon-deep);
   }
+  .faq-section--rolo-deep .faq-section__tile,
   .faq-section--rolo-deep .faq-section__rule {
     color: var(--rolo-deep);
   }
