@@ -1,77 +1,737 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { LINKS } from '../lib/links';
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import WindowFrame from "../components/WindowFrame.astro";
+
+// ---------------------------------------------------------------------------
+// Web3Forms access key — free, no domain required.
+// 1. Go to https://web3forms.com/#start
+// 2. Enter the destination address: hello.project.rolo@gmail.com
+// 3. Confirm via the email Web3Forms sends to that inbox
+// 4. Paste the access key below. Submissions are forwarded to the configured
+//    Gmail. No backend, no SMTP, no monthly limit on the free tier.
+// ---------------------------------------------------------------------------
+const WEB3FORMS_ACCESS_KEY = "d77507cc-aa13-42c6-b39c-11b847a20336";
+
+const subjects = [
+  "General question",
+  "Bug report",
+  "Feature idea",
+  "Press / partnership",
+  "Other",
+];
 ---
-<Layout title="Contact — Project Rolo" pageId="contact">
+
+<Layout
+  title="Contact — Project Rolo"
+  description="Get in touch with Project Rolo — questions, bug reports, feature ideas, or press inquiries."
+  pageId="contact"
+>
   <Header slot="header" />
 
-  <section class="section section--stub">
+  {/* ===== HERO ROW ====================================================== */}
+  <section class="contact-hero">
     <div class="shell">
-      <h1 class="pixel-h pixel-h--xl stub__title">Contact</h1>
-
-      <div class="stub__panel panel">
-        <p class="stub__placeholder">A proper form is on the way.</p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In the
-          meantime, the easiest way to reach us is below.
-        </p>
-        <ul class="stub__list">
-          <li>
-            {/* PLACEHOLDER: email */}
-            <span class="stub__key">Email</span>
-            <a href={LINKS.email}>tbc</a>
-          </li>
-          <li>
-            <span class="stub__key">GitHub</span>
-            <a href={LINKS.github} target="_blank" rel="noopener">larawashington</a>
-          </li>
-          <li>
-            <span class="stub__key">LinkedIn</span>
-            <a href={LINKS.linkedin} target="_blank" rel="noopener">lara-washington</a>
-          </li>
-        </ul>
-      </div>
+      <h1 class="pixel-h pixel-h--xl contact-hero__title fade-up d1">
+        Get in touch<span class="contact-hero__period">.</span>
+      </h1>
     </div>
   </section>
+
+  {/* ===== MAIN ========================================================== */}
+  <main class="contact-main">
+    <div class="shell contact-main__shell">
+      {/* FORM — left column, wrapped in a Mac-style WindowFrame */}
+      <section class="contact-form-wrap fade-up d2" aria-labelledby="form-title">
+        <WindowFrame title="Send a message" accent="rolo" class="contact-window">
+          <div class="contact-form-body">
+            <h2 id="form-title" class="sr-only">Send a message</h2>
+
+            {/* ERROR PANEL — shown only on failed submit */}
+            <div
+              class="contact-status contact-status--error"
+              data-status-error
+              role="alert"
+              hidden
+            >
+              <strong>Something went wrong</strong>
+              <span data-status-error-msg
+                >Try again, or email hello.project.rolo@gmail.com directly.</span
+              >
+            </div>
+
+            <form class="contact-form" data-contact-form novalidate>
+              <input
+                type="hidden"
+                name="access_key"
+                value={WEB3FORMS_ACCESS_KEY}
+              />
+              <input
+                type="hidden"
+                name="from_name"
+                value="Project Rolo Contact Form"
+              />
+              <input
+                type="hidden"
+                name="subject"
+                data-hidden-subject
+                value=""
+              />
+              {/* honeypot — bots tick, humans don't see it */}
+              <input
+                type="checkbox"
+                name="botcheck"
+                class="contact-form__honeypot"
+                tabindex="-1"
+                autocomplete="off"
+                aria-hidden="true"
+              />
+
+              <div class="contact-form__row">
+                <div class="field">
+                  <label class="field__label" for="cf-name">
+                    Your name
+                    <span class="field__req" aria-hidden="true">*</span>
+                  </label>
+                  <input
+                    id="cf-name"
+                    name="name"
+                    type="text"
+                    class="field__input"
+                    autocomplete="name"
+                    required
+                    aria-describedby="cf-name-err"
+                  />
+                  <span class="field__err" id="cf-name-err" data-err></span>
+                </div>
+
+                <div class="field">
+                  <label class="field__label" for="cf-email">
+                    Email
+                    <span class="field__req" aria-hidden="true">*</span>
+                  </label>
+                  <input
+                    id="cf-email"
+                    name="email"
+                    type="email"
+                    class="field__input"
+                    autocomplete="email"
+                    required
+                    aria-describedby="cf-email-err"
+                  />
+                  <span class="field__err" id="cf-email-err" data-err></span>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="field__label" for="cf-company">
+                  Company <span class="field__opt">— optional</span>
+                </label>
+                <input
+                  id="cf-company"
+                  name="company"
+                  type="text"
+                  class="field__input"
+                  autocomplete="organization"
+                />
+              </div>
+
+              <div class="field field--select">
+                <label class="field__label" for="cf-subject">
+                  About <span class="field__req" aria-hidden="true">*</span>
+                </label>
+                <div class="field__select-wrap">
+                  <select
+                    id="cf-subject"
+                    name="subject_topic"
+                    class="field__input field__select"
+                    required
+                    aria-describedby="cf-subject-err"
+                  >
+                    <option value="" disabled selected>Select a topic…</option>
+                    {subjects.map((s) => <option value={s}>{s}</option>)}
+                  </select>
+                  <span class="field__chev" aria-hidden="true">
+                    <svg viewBox="0 0 14 14" width="18" height="18">
+                      <g fill="currentColor" shape-rendering="crispEdges">
+                        <rect x="3" y="2" width="2" height="2"></rect>
+                        <rect x="5" y="4" width="2" height="2"></rect>
+                        <rect x="7" y="6" width="2" height="2"></rect>
+                        <rect x="5" y="8" width="2" height="2"></rect>
+                        <rect x="3" y="10" width="2" height="2"></rect>
+                      </g>
+                    </svg>
+                  </span>
+                </div>
+                <span class="field__err" id="cf-subject-err" data-err></span>
+              </div>
+
+              <div class="field">
+                <label class="field__label" for="cf-message">
+                  Message <span class="field__req" aria-hidden="true">*</span>
+                </label>
+                <textarea
+                  id="cf-message"
+                  name="message"
+                  class="field__input field__textarea"
+                  rows="6"
+                  required
+                  aria-describedby="cf-message-err"></textarea>
+                <span class="field__err" id="cf-message-err" data-err></span>
+              </div>
+
+              {/* hCaptcha — Web3Forms' bundled client/script.js (loaded at
+                  the bottom of this file) sees data-captcha="true", injects
+                  the shared free-tier sitekey, and initializes the widget.
+                  The widget then injects a hidden "h-captcha-response"
+                  field that gets sent along with our JSON POST. */}
+              <div class="contact-form__captcha">
+                <div class="h-captcha" data-captcha="true"></div>
+                <span class="field__err" id="cf-captcha-err" data-captcha-err
+                ></span>
+              </div>
+
+              <div class="contact-form__actions">
+                <button
+                  type="submit"
+                  class="btn btn--primary btn--lg contact-form__submit"
+                  data-submit
+                >
+                  <span data-submit-label>SEND MESSAGE &rarr;</span>
+                  <span
+                    class="contact-form__dots"
+                    aria-hidden="true"
+                    data-submit-dots
+                  >
+                    <span></span><span></span><span></span>
+                  </span>
+                </button>
+              </div>
+            </form>
+
+            {/* SUCCESS — minimal inline confirmation, no graphics */}
+            <div
+              class="contact-success"
+              data-success
+              role="status"
+              aria-live="polite"
+              hidden
+            >
+              <h2 class="pixel-h pixel-h--lg contact-success__title">
+                Got it<span class="contact-success__period">.</span>
+              </h2>
+              <button
+                type="button"
+                class="contact-success__again"
+                data-reset
+              >
+                Send another &rarr;
+              </button>
+            </div>
+          </div>
+        </WindowFrame>
+      </section>
+    </div>
+  </main>
 
   <Footer slot="footer" />
 </Layout>
 
+{/* Web3Forms client script — required for hCaptcha integration. It
+    injects the shared sitekey into any .h-captcha[data-captcha="true"]
+    div and bootstraps the widget. Our form has no `action` attribute,
+    so this script won't intercept our manual fetch() submission. */}
+<script src="https://web3forms.com/client/script.js" async defer is:inline
+></script>
+
 <style>
-  .section--stub { padding-top: clamp(3rem, 6vw, 5rem); }
-  .stub__title { margin: 1.25rem 0 2rem; }
-  .stub__panel { max-width: 56rem; }
-  .stub__placeholder {
-    font-family: var(--display);
-    font-size: 0.7rem;
-    letter-spacing: 0.14em;
-    color: var(--rolo-deep);
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-  }
-  .stub__list {
-    list-style: none;
+  /* =====================================================================
+     CONTACT — single column. Just the form, wrapped in a Mac-style
+     WindowFrame, centered under a short pixel-h hero.
+     ===================================================================== */
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
     padding: 0;
-    margin: 1.5rem 0 0;
-    display: grid;
-    gap: 0.6rem;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
-  .stub__list li {
+
+  /* ===== HERO ========================================================== */
+  .contact-hero {
+    padding-top: clamp(2.75rem, 6vw, 4.75rem);
+    padding-bottom: clamp(0.5rem, 1vw, 0.75rem);
+  }
+  .contact-hero__title {
+    margin: 0;
+    font-size: clamp(2.4rem, 5.4vw, 4rem);
+    line-height: 0.95;
+  }
+  @media (max-width: 640px) {
+    .contact-hero__title {
+      font-size: clamp(1.5rem, 5.6vw, 2.4rem);
+    }
+  }
+  .contact-hero__period {
+    color: var(--rolo);
+  }
+
+  /* ===== MAIN ========================================================== */
+  .contact-main {
+    padding: clamp(1.25rem, 2.5vw, 1.75rem) 0 clamp(3rem, 6vw, 5rem);
+  }
+  .contact-main__shell {
+    display: block;
+  }
+
+  /* ===== FORM WRAP ===================================================== */
+  /* Centered, capped at a comfortable letter-width. */
+  .contact-form-wrap {
+    min-width: 0;
+    max-width: 44rem;
+    margin: 0 auto;
+  }
+  /* The WindowFrame body has padding:0, so we provide our own. */
+  .contact-form-body {
+    padding: clamp(1.75rem, 3.5vw, 2.5rem);
+    background: var(--paper);
+  }
+
+  /* ===== STATUS PANEL (error) ========================================== */
+  .contact-status {
+    padding: 1rem 1.1rem;
+    margin: 0 0 1.5rem;
+    border: 1px solid var(--ink);
+    background: var(--bg);
+    font-family: var(--body);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .contact-status--error {
+    border-color: var(--rolo-deep);
+    background: color-mix(in srgb, var(--rolo) 12%, var(--paper));
+  }
+  .contact-status strong {
+    display: block;
+    font-family: var(--display);
+    font-size: 0.55rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--rolo-deep);
+    margin-bottom: 0.35rem;
+  }
+
+  /* ===== FORM ========================================================== */
+  .contact-form {
     display: grid;
-    grid-template-columns: 7rem 1fr;
+    gap: clamp(1.25rem, 2.5vw, 1.75rem);
+  }
+  /* The `hidden` HTML attribute would normally apply display:none from the
+     UA stylesheet, but author CSS like `.contact-form { display: grid }`
+     overrides it. Re-assert hidden with a more-specific selector. */
+  .contact-form[hidden],
+  .contact-success[hidden] {
+    display: none;
+  }
+  .contact-form__row {
+    display: grid;
+    gap: clamp(1.25rem, 2.5vw, 1.75rem);
+  }
+  @media (min-width: 560px) {
+    .contact-form__row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* Honeypot — fully hidden from humans + AT */
+  .contact-form__honeypot {
+    position: absolute !important;
+    left: -9999px !important;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* ===== FIELD ========================================================= */
+  .field {
+    display: grid;
+    gap: 0.4rem;
+    min-width: 0;
+  }
+  .field__label {
+    font-family: var(--display);
+    font-size: 0.55rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    line-height: 1.3;
+  }
+  .field__req {
+    color: var(--rolo);
+    margin-left: 0.15rem;
+  }
+  .field__opt {
+    color: var(--ink-soft);
+    opacity: 0.7;
+    margin-left: 0.4rem;
+    text-transform: none;
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
+  }
+
+  /* Line-only input — 1px ink underline on warm paper, no boxy field.
+     Focus thickens to 2px and shifts to rolo orange. */
+  .field__input {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--ink);
+    padding: 0.65rem 0 0.55rem;
+    font-family: var(--body);
+    font-size: 1.05rem;
+    line-height: 1.4;
+    color: var(--ink);
+    border-radius: 0;
+    width: 100%;
+    transition:
+      border-color 160ms var(--ease-soft),
+      padding-bottom 160ms var(--ease-soft);
+  }
+  .field__input:focus {
+    outline: none;
+    border-bottom: 2px solid var(--rolo);
+    padding-bottom: calc(0.55rem - 1px);
+  }
+  .field__input::placeholder {
+    color: var(--ink-soft);
+    opacity: 0.5;
+  }
+  .field__textarea {
+    resize: vertical;
+    min-height: 8.5rem;
+    line-height: 1.6;
+  }
+
+  /* Select — native a11y kept; custom pixel chevron on the right. */
+  .field__select-wrap {
+    position: relative;
+  }
+  .field__select {
+    padding-right: 2rem;
+    cursor: pointer;
+  }
+  .field__select option {
+    font-family: var(--body);
+    color: var(--ink);
+    background: var(--bg);
+  }
+  .field__chev {
+    position: absolute;
+    right: 0.25rem;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    pointer-events: none;
+    color: var(--ink-soft);
+    display: inline-flex;
+    transition: color 160ms var(--ease-soft);
+  }
+  .field__select-wrap:focus-within .field__chev {
+    color: var(--rolo);
+  }
+
+  /* Invalid state */
+  .field.is-invalid .field__input {
+    border-bottom-color: var(--rolo-deep);
+  }
+  .field.is-invalid .field__label {
+    color: var(--rolo-deep);
+  }
+  .field__err {
+    font-family: var(--body);
+    font-size: 0.85rem;
+    color: var(--rolo-deep);
+    line-height: 1.4;
+  }
+  .field__err:empty {
+    display: none;
+  }
+
+  /* ===== CAPTCHA ======================================================= */
+  /* hCaptcha widget — Web3Forms provides the sitekey via data-captcha.
+     Container just centers the widget and gives it breathing room.       */
+  .contact-form__captcha {
+    margin-top: 0.5rem;
+    display: grid;
+    gap: 0.4rem;
+    justify-items: start;
+  }
+
+  /* ===== ACTIONS ======================================================= */
+  .contact-form__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    margin-top: 0.75rem;
+  }
+  .contact-form__submit {
+    position: relative;
+    min-width: 14rem;
+  }
+  .contact-form__submit[aria-busy="true"] [data-submit-label] {
+    visibility: hidden;
+  }
+  .contact-form__dots {
+    display: none;
+    position: absolute;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+  }
+  .contact-form__submit[aria-busy="true"] .contact-form__dots {
+    display: inline-flex;
+  }
+  .contact-form__dots span {
+    width: 6px;
+    height: 6px;
+    background: currentColor;
+    display: inline-block;
+    animation: dot-blink 900ms infinite var(--ease-soft);
+  }
+  .contact-form__dots span:nth-child(2) {
+    animation-delay: 150ms;
+  }
+  .contact-form__dots span:nth-child(3) {
+    animation-delay: 300ms;
+  }
+  @keyframes dot-blink {
+    0%,
+    80%,
+    100% {
+      opacity: 0.25;
+      transform: translateY(0);
+    }
+    40% {
+      opacity: 1;
+      transform: translateY(-2px);
+    }
+  }
+
+  /* ===== SUCCESS ======================================================= */
+  /* Minimal — replaces the form with a single pixel-h line + reset link. */
+  .contact-success {
+    text-align: center;
+    padding: clamp(2rem, 4vw, 3rem) 0;
+    display: grid;
+    justify-items: center;
     gap: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px dashed var(--rule);
-    font-size: 1rem;
+    animation: success-in 320ms var(--ease-soft);
   }
-  .stub__key {
+  @keyframes success-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .contact-success__title {
+    margin: 0;
+  }
+  .contact-success__period {
+    color: var(--rolo);
+  }
+  .contact-success__again {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    padding: 0;
     font-family: var(--display);
     font-size: 0.6rem;
-    letter-spacing: 0.14em;
-    color: var(--ink-soft);
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    padding-top: 4px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    border-bottom: 1px solid currentColor;
+    line-height: 1.4;
+    transition: color 160ms var(--ease-soft);
+  }
+  .contact-success__again:hover,
+  .contact-success__again:focus-visible {
+    color: var(--rolo-deep);
+    outline: none;
+  }
+
+  /* ===== MOTION-SAFE OVERRIDES ========================================= */
+  @media (prefers-reduced-motion: reduce) {
+    .contact-form__dots span {
+      animation: none;
+      opacity: 0.6;
+    }
+    .contact-success {
+      animation: none;
+    }
   }
 </style>
+
+<script>
+  // =====================================================================
+  // Contact form — client-side validation + Web3Forms JSON submit.
+  // Validate on submit → POST → swap to success panel OR show inline error.
+  // =====================================================================
+  (function initContactForm() {
+    const form = document.querySelector<HTMLFormElement>("[data-contact-form]");
+    const successPanel = document.querySelector<HTMLElement>("[data-success]");
+    const errorPanel = document.querySelector<HTMLElement>(
+      "[data-status-error]",
+    );
+    const errorMsgEl = document.querySelector<HTMLElement>(
+      "[data-status-error-msg]",
+    );
+    const submitBtn =
+      document.querySelector<HTMLButtonElement>("[data-submit]");
+    const hiddenSubject = document.querySelector<HTMLInputElement>(
+      "[data-hidden-subject]",
+    );
+    const resetBtn = document.querySelector<HTMLButtonElement>("[data-reset]");
+    if (!form || !successPanel || !submitBtn || !hiddenSubject) return;
+
+    const ENDPOINT = "https://api.web3forms.com/submit";
+
+    type FieldKey = "name" | "email" | "subject_topic" | "message";
+    const rules: Record<FieldKey, (v: string) => string | null> = {
+      name: (v) => (v.trim().length < 2 ? "Please enter your name." : null),
+      email: (v) =>
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())
+          ? null
+          : "Please enter a valid email address.",
+      subject_topic: (v) =>
+        v ? null : "Pick a topic so we know how to route it.",
+      message: (v) =>
+        v.trim().length < 10
+          ? "Tell us a little more (10+ characters)."
+          : null,
+    };
+
+    function setFieldError(name: FieldKey, msg: string | null) {
+      const input = form!.querySelector<HTMLElement>(`[name="${name}"]`);
+      if (!input) return;
+      const field = input.closest<HTMLElement>(".field");
+      const err = field?.querySelector<HTMLElement>("[data-err]");
+      if (field) field.classList.toggle("is-invalid", !!msg);
+      if (err) err.textContent = msg ?? "";
+    }
+
+    function validate(): boolean {
+      const fd = new FormData(form!);
+      let valid = true;
+      (Object.keys(rules) as FieldKey[]).forEach((k) => {
+        const msg = rules[k](String(fd.get(k) ?? ""));
+        setFieldError(k, msg);
+        if (msg) valid = false;
+      });
+
+      // hCaptcha — the widget injects a hidden input/textarea with the
+      // token once the user solves the challenge. If it's missing or
+      // empty, fail validation.
+      const captchaToken = String(fd.get("h-captcha-response") ?? "");
+      const captchaErr = document.querySelector<HTMLElement>(
+        "[data-captcha-err]",
+      );
+      if (!captchaToken) {
+        if (captchaErr) captchaErr.textContent = "Please complete the captcha.";
+        valid = false;
+      } else if (captchaErr) {
+        captchaErr.textContent = "";
+      }
+
+      return valid;
+    }
+
+    // Live-clear errors as the user fixes a previously-flagged field
+    form.addEventListener("input", (e) => {
+      const t = e.target as HTMLInputElement;
+      const name = t.name as FieldKey;
+      if (!name || !(name in rules)) return;
+      const field = t.closest<HTMLElement>(".field");
+      if (field?.classList.contains("is-invalid")) {
+        setFieldError(name, rules[name](t.value));
+      }
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (errorPanel) errorPanel.hidden = true;
+
+      if (!validate()) {
+        const firstInvalid = form!.querySelector<HTMLElement>(
+          ".field.is-invalid .field__input",
+        );
+        firstInvalid?.focus();
+        return;
+      }
+
+      // Build the dynamic email subject from the topic + name
+      const fd = new FormData(form!);
+      const topic = String(fd.get("subject_topic") ?? "Contact");
+      const name = String(fd.get("name") ?? "Someone");
+      hiddenSubject!.value = `[Rolo] ${topic} — from ${name}`;
+
+      submitBtn!.setAttribute("aria-busy", "true");
+      submitBtn!.disabled = true;
+
+      try {
+        const payload = new FormData(form!);
+        const json: Record<string, FormDataEntryValue> = {};
+        payload.forEach((v, k) => {
+          json[k] = v;
+        });
+
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(json),
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok && data.success !== false) {
+          form!.hidden = true;
+          successPanel!.hidden = false;
+          successPanel!.scrollIntoView({ behavior: "smooth", block: "center" });
+        } else {
+          throw new Error(
+            (data && data.message) || `Submit failed (${res.status})`,
+          );
+        }
+      } catch (err) {
+        if (errorPanel) {
+          errorPanel.hidden = false;
+          if (errorMsgEl) {
+            errorMsgEl.textContent =
+              (err instanceof Error && err.message) ||
+              "Try again, or email hello.project.rolo@gmail.com directly.";
+          }
+          errorPanel.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      } finally {
+        submitBtn!.removeAttribute("aria-busy");
+        submitBtn!.disabled = false;
+      }
+    });
+
+    // "Send another" — hard page reload. Simplest way to get a clean
+    // form state, a fresh hCaptcha widget, and a hidden success panel.
+    resetBtn?.addEventListener("click", () => {
+      window.location.reload();
+    });
+  })();
+</script>
