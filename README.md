@@ -4,8 +4,6 @@
 
 Project Rolo's landing page. Rolo is a free, open source desktop companion.
 
-[![Visit rolo.dev](https://img.shields.io/badge/Live%20Site-rolo.dev-F06449?style=for-the-badge&logo=astro&logoColor=white)](https://larawashington.github.io/rolo.dev/)
-
 Built with [Astro](https://astro.build), deployed to GitHub Pages.
 
 ## Local development
