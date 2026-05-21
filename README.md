@@ -1,8 +1,8 @@
 # rolo.dev
 
-The marketing site for **Rolo**, the cosy little desktop pet who walks around your screen, reacts to the mouse, and eats files you drag onto him.
+Project Rolo's landing page. Rolo is a free, open source desktop companion.
 
-> Built with [Astro](https://astro.build), deployed to GitHub Pages, designed to feel like a hand-pressed letterpress poster from a quiet indie game studio.
+> Built with [Astro](https://astro.build), deployed to GitHub Pages.
 
 ## Local development
 
