@@ -11,7 +11,7 @@ export const LINKS = {
   contact: '/contact',
   github: 'https://github.com/larawashington',
   linkedin: 'https://www.linkedin.com/in/lara-washington/',
-  email: 'mailto:tbc@example.com',              // PLACEHOLDER: real contact email
+  email: 'mailto:hello.project.rolo@gmail.com',
 } as const;
 
 export type LinkKey = keyof typeof LINKS;
