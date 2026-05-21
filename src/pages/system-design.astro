@@ -254,6 +254,17 @@ const sections: Section[] = [
           ))
         }
       </ul>
+
+      <div class="sys-finale">
+        <a
+          class="btn btn--primary btn--lg"
+          href="https://github.com/larawashington/Project-Rolo"
+          target="_blank"
+          rel="noopener"
+        >
+          EXPLORE THE FULL REPO &rarr;
+        </a>
+      </div>
     </div>
   </main>
 
@@ -660,6 +671,15 @@ const sections: Section[] = [
     display: block;
     width: 100%;
     height: auto;
+  }
+
+  /* ===== FINALE CTA ====================================================
+     Centred orange CTA below the accordion — points at the public repo
+     so readers can dig past the diagrams into the actual source. */
+  .sys-finale {
+    display: flex;
+    justify-content: center;
+    margin-top: clamp(2.5rem, 5vw, 4rem);
   }
 
   /* ===== MOTION-SAFE OVERRIDES ========================================= */
