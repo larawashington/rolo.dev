@@ -1,0 +1,671 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+const base = import.meta.env.BASE_URL.endsWith("/")
+  ? import.meta.env.BASE_URL
+  : import.meta.env.BASE_URL + "/";
+
+// ---------------------------------------------------------------------------
+// Each section is an expandable accordion. Copy is taken verbatim from
+// Wireframes/SYSTEM DESIGN.md. Accents reuse the homepage pillar palette
+// (rolo / sun / leaf / moon) so nothing new is invented for this page.
+//
+// Each section's body is modelled as an ordered array of typed blocks. Prose
+// blocks carry their inline markup as HTML strings (rendered via set:html);
+// diagram blocks are real Astro components so we get the WindowFrame ceremony
+// + base-URL handling without parsing HTML on the page.
+// ---------------------------------------------------------------------------
+type Accent = "rolo" | "sun" | "leaf" | "moon";
+
+type Block =
+  | { kind: "html"; html: string }
+  | {
+      kind: "diagram";
+      src: string;
+      alt: string;
+      boxed?: boolean;
+      full?: boolean;
+    };
+
+type Section = {
+  id: string;
+  title: string;
+  accent: Accent;
+  blocks: Block[];
+};
+
+const sections: Section[] = [
+  {
+    id: "reinforcement-learning",
+    title: "Reinforcement Learning",
+    accent: "rolo",
+    blocks: [
+      {
+        kind: "html",
+        html: `<p>Rolo&rsquo;s system design was inspired by <a href="https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf" target="_blank" rel="noopener">Sutton-Barto&rsquo;s Dyna-Q</a> architecture to allow Rolo to learn and constantly update his <em>world model</em> (represented by his <em>memory vault</em>).</p>`,
+      },
+      {
+        kind: "diagram",
+        src: "architecture-map.png",
+        alt: "Dyna-Q architecture map — real-time loop, dreaming loop, and memory vault feedback cycle",
+        boxed: false,
+      },
+      {
+        kind: "html",
+        html: `<p>The real-time loop writes raw events. The dreaming loop reads them, compresses them into memories, and writes them back into the memory vault. The next real-time turn retrieves the compressed memory via the tool layer. This feedback cycle is how Rolo is able to learn and evolve as he gets to know you.</p>`,
+      },
+    ],
+  },
+  {
+    id: "voice",
+    title: "VOICE: Supervised fine-tune",
+    accent: "sun",
+    blocks: [
+      {
+        kind: "html",
+        html: `<p>Rolo&rsquo;s environment and memory vault tells him what to talk about. The fine-tune teaches him how to talk. The two merge during inference where Rolo&rsquo;s voice is carried by trained weights and everything else is the context.</p>
+        <p>Rolo&rsquo;s voice was trained on Gemma 3 4B using <strong>LoRA</strong> <em>(low-rank adaptation)</em>. This replaces a system prompt at inference as his character and personality is now in the model weights.</p>`,
+      },
+      {
+        kind: "diagram",
+        src: "sft-pipeline.png",
+        alt: "Supervised fine-tune pipeline — Gemma 3 4B trained on ~250 scenarios via LoRA",
+        boxed: false,
+        full: true,
+      },
+    ],
+  },
+  {
+    id: "sense",
+    title: "SENSE: Tools + Perception",
+    accent: "leaf",
+    blocks: [
+      {
+        kind: "html",
+        html: `<h3 class="sys__sub">Tools</h3>
+        <p>Using a small local model means a small context budget. The system prompt must be able to access everything within Rolo&rsquo;s environment (mood, state, perception) and memory vault without burning tokens. To solve this, I designed a <strong>tool layer</strong> to allow Rolo to fetch only what each turn actually needs.</p>
+        <dl class="sys__pair">
+          <dt>The challenge:</dt>
+          <dd>Gemma 3 4B has no native tool-calling and Ollama&rsquo;s <code>tools</code> parameter doesn&rsquo;t serve the model.</dd>
+          <dt>The workaround:</dt>
+          <dd>Grammar-constrained JSON envelopes via Ollama&rsquo;s <code>format</code> parameter, <strong>single-tool-per-turn</strong>, and a <strong>rule-based pre-router</strong> that handles common inputs without calling the full model.</dd>
+        </dl>`,
+      },
+      {
+        kind: "diagram",
+        src: "v1-tools.png",
+        alt: "v1 tool layer — JSON envelopes, single-tool-per-turn, rule-based pre-router",
+        boxed: false,
+      },
+      {
+        kind: "html",
+        html: `<p class="sys__aside"><em>Tools return natural language, not JSON, as a small model tends to mimic the input it receives in its output.</em></p>
+        <h3 class="sys__sub">Perception</h3>
+        <p>To compliment the tool layer, three background threads watch the desktop for:</p>
+        <ul class="sys__list">
+          <li><strong>Trash</strong> &mdash; notices new entries in <code>~/.Trash</code></li>
+          <li><strong>Downloads</strong> &mdash; notices new files in <code>~/Downloads</code></li>
+          <li><strong>Foreground</strong> &mdash; notices when you switch apps.</li>
+        </ul>
+        <p>Each event feeds the next idle-speech prompt so Rolo can comment on your real-time activity.</p>`,
+      },
+    ],
+  },
+  {
+    id: "memory",
+    title: "MEMORY: Vault + Search",
+    accent: "moon",
+    blocks: [
+      {
+        kind: "html",
+        html: `<p>Rolo&rsquo;s long-term memory is designed as a markdown wiki in natural language so everything is human-editable. If Rolo gets something confused, you can edit a single <code>.md</code> file and the indexes pick it up on next rebuild.</p>`,
+      },
+      {
+        kind: "diagram",
+        src: "vault-structure.png",
+        alt: "Memory vault structure — markdown wiki organized for hybrid retrieval",
+      },
+      {
+        kind: "html",
+        html: `<h3 class="sys__sub">Search</h3>
+        <p>When the tool layer calls <code>search_vault</code>, it runs a <code>HybridSearcher</code> that fuses two retrievers:</p>
+        <ul class="sys__list">
+          <li><strong>BM25</strong> &mdash; keyword search loaded on startup, instant lexical match.</li>
+          <li><strong>Embeddings</strong> &mdash; semantic search via Ollama&rsquo;s <code>nomic-embed-text</code> loaded from disk and rebuilt during the dreaming loop when stale.</li>
+        </ul>
+        <p>The two returned rankings are merged via <strong>Reciprocal Rank Fusion</strong> and the top 3 fused chunks become the tool result.</p>`,
+      },
+    ],
+  },
+];
+---
+
+<Layout
+  title="System Design — Project Rolo"
+  description="How Rolo actually works — Dyna-Q reinforcement learning, supervised fine-tune, tools and perception, memory vault and hybrid search."
+  pageId="system-design"
+>
+  <Header slot="header" />
+
+  {/* ===== HERO ROW ====================================================== */}
+  <section class="sys-hero">
+    <div class="shell sys-hero__shell">
+      <h1 class="pixel-h pixel-h--xl sys-hero__title fade-up d1">
+        <span class="sys-hero__rolo">Rolo</span>&rsquo;s<br />System
+        Architecture<span class="sys-hero__period">.</span>
+      </h1>
+      <hr class="pixel-rule sys-hero__rule fade-up d2" aria-hidden="true" />
+      <p class="lede sys-hero__lede fade-up d2">
+        Every feature works dynamically and interactively to allow Rolo to
+        perceive his environment in real-time and have memory and learn through
+        the dreaming loop.
+      </p>
+    </div>
+  </section>
+
+  {/* ===== AT-A-GLANCE DIAGRAM ========================================== */}
+  <section class="sys-glance">
+    <div class="shell">
+      <figure class="sys-glance__figure fade-up d2">
+        <img
+          class="sys-glance__img pixel"
+          src={`${base}architecture/architecture-at-a-glance.png`}
+          alt="A high-level map of Rolo's system architecture — voice, sense, memory, and the dreaming loop that ties them together."
+          loading="eager"
+        />
+      </figure>
+    </div>
+  </section>
+
+  {/* ===== EXPANDABLE SECTIONS =========================================== */}
+  <main class="sys-main">
+    <div class="shell">
+      <ul class="sys-list" role="list">
+        {
+          sections.map((s) => (
+            <li
+              class:list={["sys-item", `sys-item--${s.accent}`]}
+              id={s.id}
+              data-sys-item={s.id}
+            >
+              <details class="sys-details">
+                <summary class="sys-summary">
+                  <span class="sys-summary__tile" aria-hidden="true" />
+                  <span class="sys-summary__title">{s.title}</span>
+                  <span class="sys-summary__toggle" aria-hidden="true">
+                    {/* Pixel + / − built on the same 14x14 / 2px lattice
+                     as the rest of the site's pixel iconography. */}
+                    <svg
+                      class="sys-toggle sys-toggle--plus"
+                      viewBox="0 0 14 14"
+                      width="20"
+                      height="20"
+                      aria-hidden="true"
+                    >
+                      <g fill="currentColor" shape-rendering="crispEdges">
+                        <rect x="6" y="2" width="2" height="10" />
+                        <rect x="2" y="6" width="10" height="2" />
+                      </g>
+                    </svg>
+                    <svg
+                      class="sys-toggle sys-toggle--minus"
+                      viewBox="0 0 14 14"
+                      width="20"
+                      height="20"
+                      aria-hidden="true"
+                    >
+                      <g fill="currentColor" shape-rendering="crispEdges">
+                        <rect x="2" y="6" width="10" height="2" />
+                      </g>
+                    </svg>
+                  </span>
+                </summary>
+
+                <span class="sys-rule" aria-hidden="true" />
+
+                <div class="sys-body">
+                  {s.blocks.map((b) =>
+                    b.kind === "html" ? (
+                      <div class="sys-prose" set:html={b.html} />
+                    ) : (
+                      <figure
+                        class:list={[
+                          "sys-diagram",
+                          b.boxed === false
+                            ? "sys-diagram--naked"
+                            : "sys-diagram--boxed",
+                          b.full && "sys-diagram--full",
+                        ]}
+                      >
+                        <img
+                          class="sys-diagram__img pixel"
+                          src={`${base}architecture/${b.src}`}
+                          alt={b.alt}
+                          loading="lazy"
+                        />
+                      </figure>
+                    ),
+                  )}
+                </div>
+              </details>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </main>
+
+  <Footer slot="footer" />
+</Layout>
+
+<style>
+  /* =====================================================================
+     System Design — sibling of FAQs in vocabulary. Same paper, same ink,
+     same dashed rules. Per-section accents reuse the homepage pillar
+     palette (rolo/sun/leaf/moon) so nothing new lands on this page.
+     ===================================================================== */
+
+  /* ===== HERO ROW ====================================================== */
+  .sys-hero {
+    padding-top: clamp(2.75rem, 6vw, 4.75rem);
+    padding-bottom: clamp(1rem, 2.5vw, 1.75rem);
+  }
+  .sys-hero__shell {
+    display: block;
+  }
+  .sys-hero__title {
+    margin: 0 0 1.5rem;
+    font-size: clamp(1.9rem, 4.4vw, 3.2rem);
+    line-height: 1.15;
+    max-width: 22ch;
+  }
+  /* Wide pixel font — drop floor of the clamp on narrow viewports so the
+     longest word ("Architecture") doesn't overflow the shell. */
+  @media (max-width: 640px) {
+    .sys-hero__title {
+      font-size: clamp(1.2rem, 5.2vw, 2rem);
+    }
+  }
+  .sys-hero__rolo {
+    color: var(--rolo);
+  }
+  .sys-hero__period {
+    color: var(--rolo);
+  }
+  /* Dashed rule between title and lede — black, runs the full shell width
+     so it spans past "Architecture" and bookends the lede below it. */
+  .sys-hero__rule {
+    margin: 0 0 clamp(1rem, 2vw, 1.5rem);
+    color: var(--ink);
+  }
+  .sys-hero__lede {
+    max-width: none;
+  }
+
+  /* ===== AT-A-GLANCE DIAGRAM ==========================================
+     Same framed-surface treatment as the homepage's how-it-works diagram —
+     paper bg, 2px ink border, hard offset shadow. The image sits inside
+     so the diagram reads as a printed plate, not a free-floating asset. */
+  .sys-glance {
+    padding-top: clamp(1.5rem, 3vw, 2.25rem);
+    padding-bottom: clamp(2.5rem, 5vw, 3.75rem);
+  }
+  .sys-glance__figure {
+    margin: 0 auto;
+    max-width: 940px;
+    padding: 12px;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    box-shadow: var(--shadow-pixel);
+    position: relative;
+  }
+  .sys-glance__img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* ===== MAIN ==========================================================
+     Same warm-paper bg as the hero + at-a-glance above. No top/bottom rule —
+     the page reads as a single continuous chapter, not a banded layout. */
+  .sys-main {
+    background: transparent;
+    padding: clamp(1.5rem, 3vw, 2.5rem) 0 clamp(3.5rem, 7vw, 5.5rem);
+  }
+
+  .sys-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: clamp(1rem, 1.75vw, 1.4rem);
+  }
+
+  /* ===== ACCORDION ITEM ================================================
+     Stacked panel boxes — same vocabulary as the .btn and .panel surfaces:
+     paper bg, 2px ink border, hard offset shadow. Hover lifts and grows
+     the shadow (mirrors the CTA hover state). Per-section colour lives
+     in `--sys-accent` and is reserved for the tile + open-state toggle —
+     no coloured rules on this page. */
+  .sys-item {
+    --sys-accent: var(--rolo);
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    box-shadow: var(--shadow-pixel-sm);
+    position: relative;
+    /* Sticky site-header height (~52px + ~1.25rem padding) plus a little
+       breathing room — anchor jumps to e.g. #voice land cleanly below it. */
+    scroll-margin-top: calc(2.5rem + 52px + 2px + 1rem);
+    transition:
+      transform 160ms var(--ease-soft),
+      box-shadow 160ms var(--ease-soft);
+  }
+  @media (max-width: 820px) {
+    .sys-item {
+      scroll-margin-top: calc(2.2rem + 44px + 2px + 1rem);
+    }
+  }
+  /* Hover lift — only when the chapter is closed; once it's expanded the
+     box should sit still so the content doesn't bounce as the cursor
+     crosses the summary row. */
+  .sys-item:has(.sys-details:not([open])):hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+  .sys-item--rolo {
+    --sys-accent: var(--rolo);
+  }
+  .sys-item--sun {
+    --sys-accent: var(--sun-deep);
+  }
+  .sys-item--leaf {
+    --sys-accent: var(--leaf-deep);
+  }
+  .sys-item--moon {
+    --sys-accent: var(--moon-deep);
+  }
+
+  .sys-details {
+    width: 100%;
+  }
+  .sys-details > .sys-summary {
+    list-style: none;
+  }
+  .sys-details > .sys-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* Summary — accent tile, pixel-font title, +/- toggle. Single row. */
+  .sys-summary {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: clamp(0.85rem, 1.6vw, 1.25rem);
+    padding: clamp(1rem, 1.75vw, 1.4rem) clamp(1.1rem, 2vw, 1.6rem);
+    cursor: pointer;
+    position: relative;
+    transition: color 180ms var(--ease-soft);
+  }
+  .sys-summary:hover .sys-summary__title {
+    color: var(--sys-accent);
+  }
+  /* Focus ring matches the FAQ accordion. */
+  .sys-summary:focus-visible {
+    outline: 3px solid var(--rolo);
+    outline-offset: 4px;
+  }
+  .sys-details[open] > .sys-summary .sys-summary__title {
+    color: var(--sys-accent);
+  }
+
+  /* Coloured dashed rule between title and body — only visible once the
+     section is expanded (because <details> hides everything after the
+     summary when closed). Spans the full box width in the section accent. */
+  .sys-rule {
+    display: block;
+    width: 100%;
+    height: 4px;
+    color: var(--sys-accent);
+    background: var(--pixel-dash);
+  }
+
+  .sys-summary__tile {
+    display: inline-block;
+    width: clamp(0.95rem, 1.5vw, 1.2rem);
+    height: clamp(0.95rem, 1.5vw, 1.2rem);
+    background: var(--sys-accent);
+    flex-shrink: 0;
+  }
+
+  .sys-summary__title {
+    font-family: var(--display);
+    font-size: clamp(0.85rem, 1.4vw, 1.1rem);
+    letter-spacing: 0.03em;
+    line-height: 1.25;
+    color: var(--ink);
+    transition: color 180ms var(--ease-soft);
+  }
+
+  /* +/- toggle — sits inside a 2px-bordered square, same vocabulary as
+     the .btn and carousel arrows. Accent fill on open, ink on closed —
+     so the chapter row reads as a hand-stamped checkbox. */
+  .sys-summary__toggle {
+    position: relative;
+    width: clamp(34px, 3.6vw, 40px);
+    height: clamp(34px, 3.6vw, 40px);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    border: 2px solid var(--ink);
+    color: var(--ink);
+    flex-shrink: 0;
+    transition:
+      background 180ms var(--ease-soft),
+      color 180ms var(--ease-soft);
+  }
+  .sys-details[open] > .sys-summary .sys-summary__toggle {
+    background: var(--sys-accent);
+    color: var(--paper);
+  }
+  .sys-toggle {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    transition: opacity 200ms var(--ease-soft);
+  }
+  .sys-toggle--minus {
+    opacity: 0;
+  }
+  .sys-details[open] > .sys-summary .sys-toggle--plus {
+    opacity: 0;
+  }
+  .sys-details[open] > .sys-summary .sys-toggle--minus {
+    opacity: 1;
+  }
+
+  /* Body — prose + diagrams. Reveal-anim echoes the FAQ accordion. */
+  .sys-body {
+    padding: clamp(1.5rem, 3vw, 2.25rem) clamp(1.1rem, 2vw, 1.6rem)
+      clamp(1.75rem, 3.5vw, 2.5rem);
+    /* Timing matches the FAQ accordion's qa-reveal so the two pages share
+       the same disclosure cadence. */
+    animation: sys-reveal 280ms var(--ease-soft);
+  }
+  @keyframes sys-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(-3px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Prose blocks — body type, generous line-height. Copy runs the full
+     box width — no narrow column. */
+  .sys-prose :global(p) {
+    font-family: var(--body);
+    font-size: clamp(1rem, 0.35vw + 0.9rem, 1.1rem);
+    line-height: 1.7;
+    color: var(--ink);
+    margin: 0 0 1rem;
+  }
+  .sys-prose :global(p:last-child) {
+    margin-bottom: 0;
+  }
+  .sys-prose :global(strong) {
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .sys-prose :global(em) {
+    font-style: italic;
+  }
+  .sys-prose :global(a) {
+    color: var(--rolo-deep);
+    font-weight: 600;
+  }
+  .sys-prose :global(code) {
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", monospace;
+    font-size: 0.95em;
+    background: transparent;
+    border: 1px solid var(--rule);
+    padding: 0.05em 0.4em;
+    border-radius: 2px;
+    color: var(--ink);
+  }
+
+  /* Bulleted lists — pixel-square markers in the section accent.
+     Built with ::marker via a custom pseudo so the square reads pixel-y. */
+  .sys-prose :global(ul.sys__list) {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.1rem;
+  }
+  .sys-prose :global(ul.sys__list li) {
+    position: relative;
+    padding-left: 1.5rem;
+    margin: 0 0 0.55rem;
+    font-family: var(--body);
+    font-size: clamp(1rem, 0.35vw + 0.9rem, 1.1rem);
+    line-height: 1.65;
+  }
+  .sys-prose :global(ul.sys__list li::before) {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 8px;
+    height: 8px;
+    background: var(--sys-accent);
+  }
+
+  /* Sub-headings inside a section — bold sans in the section accent.
+     Matches the homepage pillar-title style (e.g. "Rolo's status"). */
+  .sys-prose :global(.sys__sub) {
+    font-family: var(--body);
+    font-weight: 700;
+    font-size: clamp(1.1rem, 1.4vw, 1.3rem);
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    color: var(--sys-accent);
+    margin: 1.75rem 0 0.75rem;
+  }
+  .sys-prose :global(.sys__sub:first-child) {
+    margin-top: 0;
+  }
+
+  /* Aside / italicised caption under a diagram or under a stat ("~250 …") */
+  .sys-prose :global(.sys__aside) {
+    font-family: var(--body);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 0.25rem 0 1rem;
+  }
+
+  /* Challenge / workaround definition pairs. Term on its own line in
+     accent colour, definition indented. Pixel-poster vibe. */
+  .sys-prose :global(.sys__pair) {
+    margin: 0 0 1.1rem;
+    padding: 1rem 1.1rem;
+    background: var(--bg);
+    border-left: 4px solid var(--sys-accent);
+    display: grid;
+    gap: 0.4rem;
+  }
+  .sys-prose :global(.sys__pair dt) {
+    font-family: var(--body);
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sys-accent);
+  }
+  .sys-prose :global(.sys__pair dd) {
+    margin: 0 0 0.4rem;
+    font-family: var(--body);
+    font-size: clamp(1rem, 0.35vw + 0.9rem, 1.08rem);
+    line-height: 1.65;
+    color: var(--ink);
+  }
+  .sys-prose :global(.sys__pair dd:last-child) {
+    margin-bottom: 0;
+  }
+
+  /* Diagrams inside a section — two variants:
+       --boxed: the at-a-glance treatment (border + offset shadow + bg) —
+                fills the full box width so labels stay legible.
+       --naked: beige bg only, no border, no shadow, scaled down 30% and
+                centred — for diagrams that already carry their own
+                internal framing (e.g. the architecture map). */
+  .sys-diagram {
+    margin: 1.5rem 0;
+  }
+  .sys-diagram--boxed {
+    padding: 12px;
+    background: var(--bg);
+    border: 2px solid var(--ink);
+    box-shadow: var(--shadow-pixel);
+    position: relative;
+  }
+  .sys-diagram--naked {
+    max-width: 70%;
+    margin-inline: auto;
+  }
+  /* v1-tools fills the body width — its inner boxes need every pixel to
+     stay legible. */
+  .sys-diagram--naked:has(img[src*="v1-tools"]) {
+    max-width: 100%;
+  }
+  /* vault-structure sits ~15% smaller than the other boxed diagrams —
+     centred so the framed window doesn't dominate the box. */
+  .sys-diagram--boxed:has(img[src*="vault-structure"]) {
+    max-width: 85%;
+    margin-inline: auto;
+  }
+  /* `--full` breaks the diagram out of the body's horizontal padding so
+     it reaches the panel's inner edge — needed when the diagram has
+     small embedded labels that would otherwise be illegible. Overrides
+     any naked max-width. */
+  .sys-diagram--full {
+    max-width: none;
+    margin-left: calc(-1 * clamp(1.1rem, 2vw, 1.6rem));
+    margin-right: calc(-1 * clamp(1.1rem, 2vw, 1.6rem));
+  }
+  .sys-diagram__img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* ===== MOTION-SAFE OVERRIDES ========================================= */
+  @media (prefers-reduced-motion: reduce) {
+    .sys-body {
+      animation: none;
+    }
+  }
+</style>

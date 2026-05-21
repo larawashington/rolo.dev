@@ -25,35 +25,35 @@ const sections: Section[] = [
     items: [
       {
         q: "Is Rolo free?",
-        aHtml: `Yes — Project Rolo is completely free and open source. Explore the <a href="${LINKS.repo}" target="_blank" rel="noopener">GitHub Repo</a>.`,
+        aHtml: `<p>Yes — Project Rolo is completely free and open source. Explore the <a href="${LINKS.repo}" target="_blank" rel="noopener">GitHub Repo</a>.</p>`,
       },
       {
         q: "What operating systems does Rolo support?",
-        aHtml: `Project Rolo currently only runs on Mac. The <a href="${LINKS.repo}" target="_blank" rel="noopener">GitHub Repo</a> is open source if you'd like to help expand to Windows and Linux!`,
+        aHtml: `<p>Project Rolo currently only runs on Mac. The <a href="${LINKS.repo}" target="_blank" rel="noopener">GitHub Repo</a> is open source if you'd like to help expand to Windows and Linux!</p>`,
       },
       {
         q: "Does Rolo send my data anywhere?",
-        aHtml: `Nope. All files from chat, memory, and dreams are stored locally on your machine. The one exception is weather — Rolo does a one-time lookup of your approximate location from your IP address, then fetches weather from <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> using the coordinates. You can set your location manually or turn weather off entirely in <strong>Rolo's Command Center</strong>.`,
+        aHtml: `<p>Nope. All files from chat, memory, and dreams are stored locally on your machine. The one exception is weather — Rolo does a one-time lookup of your approximate location from your IP address, then fetches weather from <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> using the coordinates. You can set your location manually or turn weather off entirely in <strong>Rolo's Command Center</strong>.</p>`,
       },
       {
         q: "What files can Rolo eat?",
-        aHtml: `Anything and everything. All eaten files go to Trash and are recoverable.`,
+        aHtml: `<p>Anything and everything. All eaten files go to Trash and are recoverable.</p>`,
       },
       {
         q: "Does Rolo speak other languages?",
-        aHtml: `Rolo currently only responds in English. If you'd like Rolo to learn new languages, you can add <a href="https://blog.google/innovation-and-ai/technology/developers-tools/translategemma/" target="_blank" rel="noopener">TranslateGemma</a> to your repo.`,
+        aHtml: `<p>Rolo currently only responds in English. If you'd like Rolo to learn new languages, you can add <a href="https://blog.google/innovation-and-ai/technology/developers-tools/translategemma/" target="_blank" rel="noopener">TranslateGemma</a> to your repo.</p>`,
       },
       {
         q: "Does running Rolo affect my battery life?",
-        aHtml: `A little — similar to other always-on apps. The bigger variable is Rolo's brain: when he speaks, thinks, or dreams, <a href="https://ollama.com/" target="_blank" rel="noopener">Ollama</a> runs the language model locally and briefly pegs CPU/GPU until the response finishes. If you're low on battery, hold off chatting until you're plugged in.`,
+        aHtml: `<p>A little — similar to other always-on apps. The bigger variable is Rolo's brain: when he speaks, thinks, or dreams, <a href="https://ollama.com/" target="_blank" rel="noopener">Ollama</a> runs the language model locally and briefly pegs CPU/GPU until the response finishes. If you're low on battery, hold off chatting until you're plugged in.</p>`,
       },
       {
         q: "Can Rolo launch automatically?",
-        aHtml: `Not built in yet — you have to open Rolo manually each time. To start him with your Mac in the meantime, add him as a login item: <strong>System Settings</strong> &rarr; <strong>General</strong> &rarr; <strong>Login Items &amp; Extensions</strong> &rarr; <strong>Open at Login</strong> &rarr; <strong>+</strong>, and pick Rolo.app.`,
+        aHtml: `<p>Not built in yet — you have to open Rolo manually each time. To start him with your Mac in the meantime, add him as a login item: <strong>System Settings</strong> &rarr; <strong>General</strong> &rarr; <strong>Login Items &amp; Extensions</strong> &rarr; <strong>Open at Login</strong> &rarr; <strong>+</strong>, and pick Rolo.app.</p>`,
       },
       {
         q: "I have multiple monitors — where does Rolo live?",
-        aHtml: `Rolo spawns in the bottom-right corner of your <strong>primary monitor</strong> when he first opens. From there he's a normal floating window — drag him onto any monitor or screen you like.`,
+        aHtml: `<p>Rolo spawns in the bottom-right corner of your <strong>primary monitor</strong> when he first opens. From there he's a normal floating window — drag him onto any monitor or screen you like.</p>`,
       },
     ],
   },
@@ -65,15 +65,21 @@ const sections: Section[] = [
     items: [
       {
         q: 'What is a "brain" and why does Rolo need one?',
-        aHtml: `Rolo's brain is powered by a language model, which lets him understand your context and respond. The recommended default is the fine-tuned <a href="https://deepmind.google/models/gemma/gemma-3/" target="_blank" rel="noopener">Gemma 3 4B</a> model, hosted via <a href="https://ollama.com/" target="_blank" rel="noopener">Ollama</a> with the trained weights pulled from <a href="https://huggingface.co/" target="_blank" rel="noopener">HuggingFace</a>. The file is ~2&ndash;4&nbsp;GB and only downloads once.`,
+        aHtml: `<p>Rolo's brain is powered by a language model, which lets him understand your context and respond. The recommended default is the <a href="https://huggingface.co/larawashington/rolo-brain" target="_blank" rel="noopener">fine-tuned Gemma 3 4B</a> model, pulled via <a href="https://ollama.com/" target="_blank" rel="noopener">Ollama</a> (ollama pull hf.co/larawashington/rolo-brain). The file is ~3&nbsp;GB and only downloads once.</p>`,
       },
       {
         q: "How do I install Rolo's brain? (non-developer walkthrough)",
-        aHtml: `A guided flow is coming soon — install <a href="https://ollama.com/" target="_blank" rel="noopener">Ollama</a>, open Rolo, watch the progress bar, done. No terminal required. Final copy and screenshots are TBC.`,
+        aHtml: `<p>No terminal required.</p>
+<ol>
+  <li><strong>Install Ollama.</strong> Download from <a href="https://ollama.com/" target="_blank" rel="noopener">ollama.com</a>, open the <code>.dmg</code>, drag Ollama into Applications, and launch it once. A llama icon appears in your menu bar — that means it's running. You can close the window.</li>
+  <li><strong>Open Rolo.</strong> On first launch, Rolo detects his brain is missing and prompts: <em>"Rolo needs to download his brain (~3&nbsp;GB)."</em> Click <strong>Download</strong>.</li>
+  <li><strong>Wait for the progress bar.</strong> Download takes 5–15 minutes on home wifi. Keep Rolo and Ollama open while it runs.</li>
+  <li><strong>Done.</strong> The window closes when the download finishes. To confirm: right-click Rolo &rarr; <strong>Open Command Center</strong> &rarr; <strong>Perception</strong> tab. The Ollama row should be green.</li>
+</ol>`,
       },
       {
         q: "Can I use Rolo offline?",
-        aHtml: `Yes — once his brain is downloaded, everything runs locally on your machine and doesn't require WiFi.`,
+        aHtml: `<p>Yes — once his brain is downloaded, everything runs locally on your machine and doesn't require WiFi.</p>`,
       },
     ],
   },
@@ -85,15 +91,15 @@ const sections: Section[] = [
     items: [
       {
         q: "Can I use a different model?",
-        aHtml: `Yes. Right-click Rolo &rarr; open <strong>Rolo's Command Center</strong> &rarr; <strong>Brain</strong> tab. Pick a provider (<a href="https://ollama.com/" target="_blank" rel="noopener">Ollama</a>, <a href="https://platform.openai.com/docs/api-reference" target="_blank" rel="noopener">OpenAI-compatible</a>, <a href="https://www.anthropic.com/" target="_blank" rel="noopener">Anthropic</a>, <a href="https://ai.google.dev/gemini-api" target="_blank" rel="noopener">Gemini</a>, <a href="https://huggingface.co/" target="_blank" rel="noopener">Hugging Face</a>, <a href="https://deepinfra.com/" target="_blank" rel="noopener">DeepInfra</a>), paste an API key if needed, hit <strong>Test Connection</strong>, then <strong>Save</strong>.`,
+        aHtml: `<p>Yes. Right-click Rolo &rarr; open <strong>Rolo's Command Center</strong> &rarr; <strong>Brain</strong> tab. Pick a provider (<a href="https://ollama.com/" target="_blank" rel="noopener">Ollama</a>, <a href="https://platform.openai.com/docs/api-reference" target="_blank" rel="noopener">OpenAI-compatible</a>, <a href="https://www.anthropic.com/" target="_blank" rel="noopener">Anthropic</a>, <a href="https://ai.google.dev/gemini-api" target="_blank" rel="noopener">Gemini</a>, <a href="https://huggingface.co/" target="_blank" rel="noopener">Hugging Face</a>, <a href="https://deepinfra.com/" target="_blank" rel="noopener">DeepInfra</a>), paste an API key if needed, hit <strong>Test Connection</strong>, then <strong>Save</strong>.</p>`,
       },
       {
         q: "Are my API keys safe?",
-        aHtml: `Yes. Keys are stored locally on your machine and only ever sent to the provider you chose. Rolo doesn't log them anywhere.`,
+        aHtml: `<p>Yes. Keys are stored locally on your machine and only ever sent to the provider you chose. Rolo doesn't log them anywhere.</p>`,
       },
       {
         q: "Will all features work with a different brain?",
-        aHtml: `Most do — but <strong>tool use</strong> (weather, files, time) and <strong>idle speech bubbles</strong> currently only work with <a href="https://ollama.com/" target="_blank" rel="noopener">Ollama</a>. You'll have to do a bit of tinkering in Rolo's codebase after switching brains.`,
+        aHtml: `<p>Most do — but <strong>tool use</strong> (weather, files, time) and <strong>idle speech bubbles</strong> currently only work with <a href="https://ollama.com/" target="_blank" rel="noopener">Ollama</a>. You'll have to do a bit of tinkering in Rolo's codebase after switching brains.</p>`,
       },
     ],
   },
@@ -105,11 +111,11 @@ const sections: Section[] = [
     items: [
       {
         q: "How does Rolo remember things about me?",
-        aHtml: `Rolo remembers in two ways. <strong>First</strong>, anything you directly enter in the <strong>Memory</strong> tab of <strong>Rolo's Command Center</strong> — hit <strong>Save</strong> and Rolo takes a quick nap, dreams, and transfers it into his long-term memory. <strong>Second</strong>, through chat: Rolo stores important details you share (names, events, preferences) and compiles them into memory while he sleeps.`,
+        aHtml: `<p>Rolo remembers in two ways. <strong>First</strong>, anything you directly enter in the <strong>Memory</strong> tab of <strong>Rolo's Command Center</strong> — hit <strong>Save</strong> and Rolo takes a quick nap, dreams, and transfers it into his long-term memory. <strong>Second</strong>, through chat: Rolo stores important details you share (names, events, preferences) and compiles them into memory while he sleeps.</p>`,
       },
       {
         q: "Can I delete what Rolo remembers?",
-        aHtml: `Yes. Open <strong>Rolo's Command Center</strong> &rarr; <strong>Memory</strong> tab &rarr; <strong>Clear User Profile</strong> to completely wipe Rolo's memory of you. (He'll be sad about it.)`,
+        aHtml: `<p>Yes. Open <strong>Rolo's Command Center</strong> &rarr; <strong>Memory</strong> tab &rarr; <strong>Clear User Profile</strong> to completely wipe Rolo's memory of you. (He'll be sad about it.)</p>`,
       },
     ],
   },
@@ -121,11 +127,11 @@ const sections: Section[] = [
     items: [
       {
         q: "Why is the Ollama row red?",
-        aHtml: `Rolo can't reach his brain. Open the <a href="https://ollama.com/" target="_blank" rel="noopener">Ollama</a> app from Applications (you should see the llama icon in your menu bar), then click <strong>Refresh all</strong> in Rolo's <strong>Perception</strong> tab. If it stays red, your firewall may be blocking it — or switch to a cloud brain in the <strong>Brain</strong> tab.`,
+        aHtml: `<p>Rolo can't reach his brain. Open the <a href="https://ollama.com/" target="_blank" rel="noopener">Ollama</a> app from Applications (you should see the llama icon in your menu bar), then click <strong>Refresh all</strong> in Rolo's <strong>Perception</strong> tab. If it stays red, your firewall may be blocking it — or switch to a cloud brain in the <strong>Brain</strong> tab.</p>`,
       },
       {
         q: "Why is my weather wrong, or showing the wrong city?",
-        aHtml: `Open <strong>Rolo's Command Center</strong> &rarr; <strong>Weather</strong> tab &rarr; turn on <strong>Set my location manually</strong> and enter your coordinates. You can also switch weather providers there.`,
+        aHtml: `<p>Open <strong>Rolo's Command Center</strong> &rarr; <strong>Weather</strong> tab &rarr; turn on <strong>Set my location manually</strong> and enter your coordinates. You can also switch weather providers there.</p>`,
       },
     ],
   },
@@ -228,9 +234,7 @@ const sections: Section[] = [
                         </svg>
                       </span>
                     </summary>
-                    <div class="qa__answer">
-                      <p set:html={item.aHtml} />
-                    </div>
+                    <div class="qa__answer" set:html={item.aHtml} />
                   </details>
                 </li>
               ))}
@@ -653,20 +657,91 @@ const sections: Section[] = [
     }
   }
 
-  .qa__answer p {
+  .qa__answer :global(p) {
     font-family: var(--body);
     font-size: 1rem;
     line-height: 1.65;
     color: var(--ink);
     margin: 0;
   }
+  .qa__answer :global(p + p),
+  .qa__answer :global(p + ol),
+  .qa__answer :global(ol + p) {
+    margin-top: 0.75rem;
+  }
   .qa__answer :global(strong) {
     font-weight: 700;
+    color: var(--ink);
+  }
+  .qa__answer :global(em) {
+    font-style: italic;
     color: var(--ink);
   }
   .qa__answer :global(a) {
     color: var(--rolo-deep);
     font-weight: 600;
+  }
+
+  /* Ordered list — used in step-by-step walkthroughs. Pixel-font numerals
+     in the section accent color hang in a fixed-width gutter so the body
+     text of each step shares a clean left edge. */
+  .qa__answer :global(ol) {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: qa-step;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+  .qa__answer :global(ol > li) {
+    counter-increment: qa-step;
+    position: relative;
+    padding-left: 2.25rem;
+    font-family: var(--body);
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+  .qa__answer :global(ol > li)::before {
+    content: counter(qa-step);
+    position: absolute;
+    left: 0;
+    top: 0.05em;
+    font-family: var(--display);
+    font-size: 0.7rem;
+    line-height: 1;
+    color: var(--rolo-deep);
+    width: 1.5rem;
+    text-align: right;
+    padding-top: 0.35em;
+  }
+  /* Step numerals pick up the section accent */
+  .faq-section--rolo .qa__answer :global(ol > li)::before {
+    color: var(--rolo);
+  }
+  .faq-section--sun .qa__answer :global(ol > li)::before {
+    color: var(--sun-deep);
+  }
+  .faq-section--leaf .qa__answer :global(ol > li)::before {
+    color: var(--leaf-deep);
+  }
+  .faq-section--moon .qa__answer :global(ol > li)::before {
+    color: var(--moon-deep);
+  }
+  .faq-section--rolo-deep .qa__answer :global(ol > li)::before {
+    color: var(--rolo-deep);
+  }
+
+  /* Inline code chips — used for filenames and short literals */
+  .qa__answer :global(code) {
+    font-family:
+      ui-monospace, SFMono-Regular, Menlo, Monaco, "Cascadia Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.05em 0.35em;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
   }
 
   /* ===== CLOSING CTA =================================================== */

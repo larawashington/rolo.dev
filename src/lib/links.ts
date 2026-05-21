@@ -6,7 +6,7 @@
 export const LINKS = {
   downloadMac: 'https://github.com/larawashington/Project-Rolo/releases/latest',
   repo: 'https://github.com/larawashington/Project-Rolo',
-  techProcess: '/tech+process',
+  systemDesign: '/system-design',
   faq: '/faq',
   contact: '/contact',
   github: 'https://github.com/larawashington',
