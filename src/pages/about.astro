@@ -1,0 +1,807 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import WindowFrame from "../components/WindowFrame.astro";
+
+const base = import.meta.env.BASE_URL.endsWith("/")
+  ? import.meta.env.BASE_URL
+  : import.meta.env.BASE_URL + "/";
+
+const contacts = [
+  {
+    id: "linkedin",
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/lara-washington/",
+    accent: "moon" as const,
+  },
+  {
+    id: "github",
+    label: "GitHub",
+    href: "https://github.com/larawashington",
+    accent: "leaf" as const,
+  },
+  {
+    id: "email",
+    label: "Email",
+    href: "mailto:hello.project.rolo@gmail.com",
+    accent: "rolo" as const,
+  },
+];
+---
+
+<Layout
+  title="About — Project Rolo"
+  description="Meet Lara, the marketing engineer behind Project Rolo. A note on how this little pixel companion came to be."
+  pageId="about"
+>
+  <Header slot="header" />
+
+  {
+    /* ===== HERO ROW =====================================================
+       Two-column editorial spread, mirroring the homepage hero rhythm:
+       photo on the left held in a WindowFrame titled LARA.PNG, copy
+       on the right. */
+  }
+  <section class="founder-hero">
+    <div class="shell founder-hero__shell">
+      <figure
+        class="founder-photo fade-up d1"
+        aria-label="Photo of Lara Washington"
+      >
+        <WindowFrame
+          title="LARA.PNG"
+          accent="rolo"
+          class="founder-photo__window"
+        >
+          <div class="founder-photo__stage">
+            <img
+              class="founder-photo__img"
+              src={`${base}lara.jpg`}
+              alt="Lara, the founder of Project Rolo, smiling in soft daylight."
+              width="640"
+              height="800"
+              loading="eager"
+            />
+          </div>
+        </WindowFrame>
+      </figure>
+
+      <div class="founder-intro">
+        <h1 class="pixel-h pixel-h--xl founder-intro__title fade-up d2">
+          Hello!<br />
+          <span class="founder-intro__line2"
+            >I&rsquo;m <span class="founder-intro__name">Lara</span><span
+              class="founder-intro__period">.</span
+            ></span
+          >
+        </h1>
+
+        <p class="lede founder-intro__lede fade-up d3">
+          I&rsquo;m a marketing engineer building AI tooling and integrations to
+          make workflows more efficient and intuitive.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {
+    /* ===== STORY — HOW PROJECT ROLO CAME TO BE ===========================
+       Editorial long-form section. Section heads are plain pixel-h
+       titles — no accent tile, no colored rule — so the typography
+       carries the break the way it does on the homepage. */
+  }
+  <section class="founder-section founder-section--story">
+    <div class="shell">
+      <header class="founder-section__head">
+        <h2 class="pixel-h pixel-h--lg founder-section__title fade-up d1">
+          How Project Rolo came to be.
+        </h2>
+      </header>
+
+      <div class="story">
+        <p class="story__para fade-up d2">
+          I created Project Rolo during my career break from advertising. I
+          moved from London to New York with no plan or idea about what I was
+          going to do. Confronting this uncertainty was one of the hardest
+          things I&rsquo;ve ever done, and I was constantly battling a thousand
+          anxious thoughts running through my mind.
+        </p>
+
+        {
+          /* Pull-quote — flanked by two graphic pixel quotation marks
+            drawn on the same 14x14 / 2px lattice as the rest of the
+            site's pixel iconography. The marks carry the emphasis; no
+            border, no rule. */
+        }
+        <blockquote
+          class="story__quote fade-up d3"
+          aria-label="A turning-point thought"
+        >
+          {
+            /* Pixel quotation marks — chunky classic "66 / 99" pixel-
+              comma pairs on a 9x9 lattice (each cell renders ~3-4px at
+              display size). OPEN is the "66" shape — solid bottom body
+              with a small foot at top and the eye opening on the left.
+              CLOSE is the 180-degree rotation — solid top head with a
+              small foot at bottom and the eye opening on the right. */
+          }
+          {
+            /* Pixel quotation marks — typographic convention per the
+              shutterstock open/close reference. OPEN is an inverted
+              comma: bulb at the BOTTOM of the glyph with a tapering
+              tail at the TOP (extending up-right). CLOSE is a regular
+              comma: bulb at the TOP of the glyph with a tapering tail
+              at the BOTTOM (extending down-left). Both on a 9x9
+              lattice, no eye notch — solid bulb keeps the marks
+              reading as quotes at small render sizes. */
+          }
+          <span
+            class="story__quote-mark story__quote-mark--open"
+            aria-hidden="true"
+          >
+            <svg viewBox="0 0 9 9" width="36" height="36" aria-hidden="true">
+              <g fill="currentColor" shape-rendering="crispEdges">
+                {/* Left glyph — inverted comma */}
+                <rect x="2" y="0" width="2" height="1"></rect>
+                <rect x="1" y="1" width="3" height="1"></rect>
+                <rect x="0" y="2" width="4" height="5"></rect>
+                {/* Right glyph — offset 5 cols */}
+                <rect x="7" y="0" width="2" height="1"></rect>
+                <rect x="6" y="1" width="3" height="1"></rect>
+                <rect x="5" y="2" width="4" height="5"></rect>
+              </g>
+            </svg>
+          </span>
+          <p class="story__quote-body">
+            Then I thought to myself&hellip; <em
+              >why have all these negative voices in my head, when I could have
+              a positive one?</em
+            > And thus Rolo was born.&nbsp;<span
+              class="story__quote-mark story__quote-mark--close"
+              aria-hidden="true"
+              ><svg viewBox="0 0 9 9" width="36" height="36" aria-hidden="true"
+                ><g fill="currentColor" shape-rendering="crispEdges"
+                  ><rect x="0" y="0" width="4" height="5"></rect><rect
+                    x="0"
+                    y="5"
+                    width="3"
+                    height="1"></rect><rect x="0" y="6" width="2" height="1"
+                  ></rect><rect x="5" y="0" width="4" height="5"></rect><rect
+                    x="5"
+                    y="5"
+                    width="3"
+                    height="1"></rect><rect x="5" y="6" width="2" height="1"
+                  ></rect></g
+                ></svg
+              ></span
+            >
+          </p>
+        </blockquote>
+
+        <p class="story__para fade-up d3">
+          Project Rolo is grounded in the fact that by helping others, you can
+          help yourself. This is Rolo&rsquo;s intrinsic nature as he encourages
+          you to be the best version of yourself&nbsp;&mdash;&nbsp;because when
+          you&rsquo;re happy, he&rsquo;s happy. (And maybe more likely to feed
+          him.)
+        </p>
+
+        <p class="story__para fade-up d4">
+          If Rolo is able to provide a semblance of the joy and comfort he has
+          brought me for others, then this project will have fulfilled its
+          purpose.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {
+    /* ===== ABOUT — A LITTLE ABOUT ME =====================================
+       Map (where-ive-lived.png) on the left; bio paragraph + contact
+       prompt on the right. */
+  }
+  <section class="founder-section founder-section--about">
+    <div class="shell">
+      <header class="founder-section__head">
+        <h2 class="pixel-h pixel-h--lg founder-section__title fade-up d1">
+          A little about me.
+        </h2>
+      </header>
+
+      <div class="about-stack">
+        <figure class="about-map fade-up d2" aria-label="Where I've lived">
+          <img
+            class="about-map__img pixel"
+            src={`${base}where-ive-lived.png`}
+            alt="A pixel-art chart of where I've lived: Qingdao, Vancouver, Los Angeles, London, New York."
+            loading="lazy"
+          />
+        </figure>
+
+        <div class="about-copy">
+          <p class="about-copy__para fade-up d3">
+            I was born in <strong>Qingdao, China</strong> and grew up in
+            <strong>Vancouver, Canada</strong>. From playing every sport
+            possible, translating for my parents, studying Communications at <strong
+              >UCLA</strong
+            >, and coordinating between clients and agencies, I&rsquo;ve
+            fine-tuned my ability to decipher what is needed, when.
+          </p>
+
+          <p class="about-copy__para fade-up d4">
+            I'm currently focused on growing early-stage startups by building
+            and automating systems that scale with the business. My ambition is
+            to work with people and teams that challenge and inspire me.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    {
+      /* ===== CONTACT TRIPTYCH ==============================================
+       Three pixel-icon cards — LinkedIn, GitHub, Email. Each is a full
+       link target with its own accent. Matches the carousel WindowFrame
+       vocabulary but stripped to a single, tactile gesture per card. */
+    }
+    <section class="founder-section founder-section--contact">
+      <div class="shell">
+        <p class="contact-intro fade-up d1">
+          If you&rsquo;d like to collaborate on a project, or just say hi,
+          please get in touch!
+        </p>
+
+        <ul class="connect" role="list">
+          {
+            contacts.map((c, i) => (
+              <li
+                class="connect__item fade-up"
+                style={`animation-delay:${(i + 1) * 110}ms`}
+              >
+                <a
+                  class:list={["connect__card", `connect__card--${c.accent}`]}
+                  href={c.href}
+                  {...(c.id !== "email"
+                    ? { target: "_blank", rel: "noopener" }
+                    : {})}
+                >
+                  <span class="connect__icon" aria-hidden="true">
+                    {c.id === "linkedin" && (
+                      /* LinkedIn — official "in" lockup on a 16x16 lattice,
+                     2px blocks. Filled tile reads as the brand's blue
+                     square; the "in" itself is the icon container's
+                     foreground color (white on hover). */
+                      <svg
+                        viewBox="0 0 16 16"
+                        width="36"
+                        height="36"
+                        aria-hidden="true"
+                      >
+                        <g fill="currentColor" shape-rendering="crispEdges">
+                          {/* i — dot */}
+                          <rect x="2" y="2" width="2" height="2" />
+                          {/* i — stem */}
+                          <rect x="2" y="6" width="2" height="8" />
+                          {/* n — left vertical */}
+                          <rect x="6" y="6" width="2" height="8" />
+                          {/* n — top crossbar */}
+                          <rect x="8" y="6" width="4" height="2" />
+                          {/* n — right vertical */}
+                          <rect x="12" y="8" width="2" height="6" />
+                        </g>
+                      </svg>
+                    )}
+                    {c.id === "github" && (
+                      /* GitHub — Octocat-inspired silhouette on a 16x16
+                     lattice: round head, two ears, eyes, and a hint of
+                     a body, so it reads as the brand mark rather than
+                     a letterform abstraction. */
+                      <svg
+                        viewBox="0 0 16 16"
+                        width="36"
+                        height="36"
+                        aria-hidden="true"
+                      >
+                        <g fill="currentColor" shape-rendering="crispEdges">
+                          {/* ears */}
+                          <rect x="2" y="2" width="2" height="2" />
+                          <rect x="12" y="2" width="2" height="2" />
+                          {/* head — rounded square */}
+                          <rect x="4" y="2" width="8" height="2" />
+                          <rect x="2" y="4" width="12" height="6" />
+                          <rect x="4" y="10" width="8" height="2" />
+                          {/* eyes */}
+                          <rect x="4" y="6" width="2" height="2" />
+                          <rect x="10" y="6" width="2" height="2" />
+                          {/* mouth / muzzle */}
+                          <rect x="6" y="8" width="4" height="2" />
+                          {/* feet */}
+                          <rect x="4" y="12" width="2" height="2" />
+                          <rect x="10" y="12" width="2" height="2" />
+                        </g>
+                      </svg>
+                    )}
+                    {c.id === "email" && (
+                      /* Email — envelope on a 16x16 lattice. Outline +
+                     V-flap meeting in the middle. */
+                      <svg
+                        viewBox="0 0 16 16"
+                        width="36"
+                        height="36"
+                        aria-hidden="true"
+                      >
+                        <g fill="currentColor" shape-rendering="crispEdges">
+                          {/* top + bottom */}
+                          <rect x="2" y="4" width="12" height="2" />
+                          <rect x="2" y="12" width="12" height="2" />
+                          {/* sides */}
+                          <rect x="2" y="6" width="2" height="6" />
+                          <rect x="12" y="6" width="2" height="6" />
+                          {/* V-flap diagonals — staircases meeting at center */}
+                          <rect x="4" y="6" width="2" height="2" />
+                          <rect x="6" y="8" width="2" height="2" />
+                          <rect x="8" y="8" width="2" height="2" />
+                          <rect x="10" y="6" width="2" height="2" />
+                        </g>
+                      </svg>
+                    )}
+                  </span>
+
+                  <span class="connect__text">
+                    <span class="connect__label">{c.label}</span>
+                  </span>
+
+                  <span class="connect__arrow" aria-hidden="true">
+                    {/* Chunky right-arrow — wide 4-tall shaft + 3-step
+                    pyramid head. Sized 24px to match the visual weight
+                    of the brand icon in its tile. */}
+                    <svg
+                      viewBox="0 0 16 16"
+                      width="24"
+                      height="24"
+                      aria-hidden="true"
+                    >
+                      <g fill="currentColor" shape-rendering="crispEdges">
+                        <rect x="2" y="6" width="8" height="4" />
+                        <rect x="9" y="4" width="2" height="8" />
+                        <rect x="11" y="5" width="2" height="6" />
+                        <rect x="13" y="6" width="2" height="4" />
+                      </g>
+                    </svg>
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <Footer slot="footer" />
+  </section>
+
+  <style>
+    /* =====================================================================
+     ABOUT THE FOUNDER — risograph zine spread. Hero portrait + intro,
+     long-form story with a pull-quote, a "little about me" two-column,
+     and a three-card contact triptych. Borrows the FAQ page's section-
+     header vocabulary (accent tile + dashed rule) to keep the family.
+     ===================================================================== */
+
+    /* ===== HERO ==========================================================
+     Borrows the homepage hero rhythm: copy on the left, image on the
+     right, both sharing a tall stage with a min-height so the eye lands
+     on a calm, generous spread instead of a cramped photo. */
+    .founder-hero {
+      padding-top: clamp(2.5rem, 6vw, 5rem);
+      padding-bottom: clamp(3rem, 6vw, 5rem);
+    }
+    .founder-hero__shell {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: clamp(2.25rem, 5vw, 4rem);
+      align-items: center;
+    }
+    @media (max-width: 900px) {
+      .founder-hero__shell {
+        grid-template-columns: 1fr;
+        align-items: stretch;
+        gap: 2rem;
+      }
+    }
+
+    /* ----- INTRO COPY ----- */
+    .founder-intro {
+      display: grid;
+      gap: clamp(1.25rem, 2vw, 1.85rem);
+      max-width: 42rem;
+    }
+    .founder-intro__title {
+      margin: 0;
+      line-height: 1.1;
+      /* Same scale ramp as the homepage hero title — anchors the family. */
+      font-size: clamp(2.2rem, 5.6vw, 4.2rem);
+    }
+    .founder-intro__name {
+      color: var(--rolo);
+      display: inline-block;
+    }
+    .founder-intro__period {
+      color: var(--ink);
+    }
+    /* Dashed pixel rule under the whole second line ("I'm Lara.") — denser
+     tile + ink color so the dash reads at desktop scale. Wrapping the
+     line in its own span lets the rule span both the brown "I'm" and
+     the orange "Lara." instead of just the name. */
+    .founder-intro__line2 {
+      position: relative;
+      display: inline-block;
+    }
+    .founder-intro__line2::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -0.18em;
+      height: 4px;
+      color: var(--ink);
+      background: var(--pixel-dash-tight);
+    }
+    .founder-intro__lede {
+      margin: 0;
+      max-width: 40rem;
+    }
+
+    /* ----- PHOTO WINDOW -----
+     Committed "pinned-up" tilt — larger angle, real shadow offset under
+     the rotation so the photo feels intentionally tacked to the page,
+     not crooked by accident. Flattens on hover for a tiny moment of
+     "settle." */
+    .founder-photo {
+      position: relative;
+      margin: 0;
+      max-width: 22rem;
+      width: 100%;
+      justify-self: start;
+    }
+    @media (max-width: 900px) {
+      .founder-photo {
+        justify-self: start;
+        max-width: 20rem;
+      }
+    }
+    .founder-photo__window {
+      transform: rotate(-2deg);
+      transition: transform 360ms var(--ease-soft);
+    }
+    @media (max-width: 900px) {
+      .founder-photo__window {
+        transform: rotate(-1deg);
+      }
+    }
+    .founder-photo:hover .founder-photo__window {
+      transform: rotate(0deg) translateY(-3px);
+    }
+    .founder-photo__stage {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      background: var(--ink);
+    }
+    .founder-photo__img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 32%;
+      display: block;
+      /* Warm-paper integration: gentle saturation pull-back + a kiss of
+       sepia so the photo sits inside the palette instead of fighting it. */
+      filter: saturate(0.9) contrast(1.02) sepia(0.14);
+    }
+
+    /* ===== SECTION RHYTHM ================================================
+     Borrowed from the homepage: hard ink rule between sections, no
+     decorative tile or colored dashed rules on the headlines. Title is
+     the title — typography carries the break. The dashed rule sits at
+     the top of every non-hero section as a single, ink-colored break
+     (using the global `--pixel-dash` recipe). */
+    .founder-section {
+      padding-top: clamp(3rem, 5.5vw, 4.5rem);
+      padding-bottom: clamp(2.5rem, 5vw, 4rem);
+      position: relative;
+    }
+    /* Pixel-dashed section break — lives above each non-hero section.
+     The middle section uses the rolo orange for a single chromatic
+     pulse mid-page so the three breaks don't feel mechanical. */
+    .founder-section::before {
+      content: "";
+      display: block;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 4px;
+      color: var(--ink);
+      background: var(--pixel-dash);
+    }
+    /* The contact block is a continuation of "A little about me." — no
+     dashed rule between them, and tighter top padding so the bio
+     paragraph flows directly into the "get in touch" lead-in. */
+    .founder-section--contact::before {
+      display: none;
+    }
+    .founder-section--contact {
+      padding-top: 0;
+    }
+
+    .founder-section__head {
+      margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+      max-width: 56rem;
+    }
+    .founder-section__title {
+      margin: 0;
+      color: var(--ink);
+      overflow-wrap: break-word;
+      word-break: normal;
+    }
+    /* Press Start 2P doesn't wrap mid-word — at narrow viewports the
+     longest title ("How Project Rolo came to be.") overflows. Drop the
+     floor so the headline fits inside the shell on phones. */
+    @media (max-width: 640px) {
+      .founder-section__title {
+        font-size: clamp(0.68rem, 3.4vw, 0.95rem);
+        line-height: 1.35;
+      }
+      .founder-intro__title {
+        font-size: clamp(1.65rem, 6.2vw, 2.4rem);
+      }
+    }
+
+    /* ===== STORY (long-form) ============================================ */
+    .story {
+      max-width: 56rem;
+      display: grid;
+      gap: clamp(1.25rem, 2.25vw, 1.65rem);
+    }
+    .story__para {
+      font-family: var(--body);
+      font-size: clamp(1.02rem, 0.4vw + 0.9rem, 1.15rem);
+      line-height: 1.7;
+      color: var(--ink);
+      margin: 0;
+    }
+
+    /* Pull-quote — flanked by two pixel quotation marks. No rules, no
+     border, no card. The open mark sits flush at the top-left, the
+     close mark sits flush at the bottom-right, both hanging the body
+     text in a clearly-marked frame. */
+    /* Open mark sits in its own grid column; close mark is inline inside
+     the paragraph so it hugs the end of the text instead of floating
+     out to the right edge. */
+    .story__quote {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: start;
+      column-gap: clamp(0.75rem, 1.5vw, 1.25rem);
+      margin: clamp(1.5rem, 2.5vw, 2.25rem) 0;
+      padding: 0;
+    }
+    .story__quote-mark {
+      color: var(--rolo);
+      line-height: 0;
+    }
+    .story__quote-mark--open {
+      align-self: start;
+      /* Hang the open mark so the comma heads sit roughly on the cap-line
+       of the first line of body text. */
+      padding-top: 0.15em;
+    }
+    .story__quote-mark--close {
+      display: inline-block;
+      vertical-align: baseline;
+      /* Match the column-gap between the open mark and the text on the
+       left, so the pull-quote breathes symmetrically on both sides. */
+      margin-left: clamp(0.45em, 1vw, 0.9em);
+      /* Drop the close mark so its comma heads sit near the x-height of
+       the last line — mirrors the optical position of typeset quotes. */
+      transform: translateY(0.35em);
+    }
+    .story__quote-mark svg {
+      width: clamp(28px, 2.8vw, 36px);
+      height: clamp(28px, 2.8vw, 36px);
+      image-rendering: pixelated;
+      display: inline-block;
+    }
+    .story__quote-body {
+      font-family: var(--body);
+      font-size: clamp(1.02rem, 0.4vw + 0.9rem, 1.15rem);
+      line-height: 1.45;
+      color: var(--ink);
+      margin: 0;
+    }
+    .story__quote-body em {
+      font-style: italic;
+      color: var(--rolo-deep);
+      font-weight: 500;
+    }
+
+    /* ===== ABOUT (map + bio) ============================================
+     Stack vertically — the map is the visual centerpiece (wide, full
+     shell width), and the bio runs beneath at the same column width so
+     the prose carries further across the page. */
+    .about-stack {
+      display: grid;
+      gap: clamp(1.5rem, 3vw, 2.5rem);
+      align-items: start;
+    }
+
+    .about-map {
+      margin: 0;
+      width: 100%;
+      max-width: 48rem;
+      justify-self: start;
+    }
+    .about-map__img {
+      display: block;
+      width: 100%;
+      height: auto;
+      image-rendering: pixelated;
+      /* Image carries its own outline + paper background; sit it
+       directly on the page with no extra border or shadow. */
+    }
+
+    .about-copy {
+      display: grid;
+      gap: clamp(1rem, 2vw, 1.4rem);
+      max-width: 52rem;
+    }
+    .about-copy__para {
+      font-family: var(--body);
+      font-size: clamp(1.02rem, 0.4vw + 0.9rem, 1.15rem);
+      line-height: 1.7;
+      color: var(--ink);
+      margin: 0;
+    }
+    .about-copy__para strong {
+      font-weight: 700;
+      color: var(--rolo-deep);
+    }
+
+    /* ===== CONTACT TRIPTYCH ============================================== */
+    /* Lead line above the three icon cards — sits in the same body-copy
+     voice as the bio so the section reads as a continuation, not a
+     separate callout. */
+    .contact-intro {
+      font-family: var(--body);
+      font-size: clamp(1.02rem, 0.4vw + 0.9rem, 1.15rem);
+      line-height: 1.7;
+      color: var(--ink);
+      margin: clamp(1.25rem, 2.5vw, 2rem) 0 clamp(1.5rem, 3vw, 2.25rem);
+      max-width: 52rem;
+    }
+
+    .connect {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(1rem, 2vw, 1.5rem);
+      max-width: 64rem;
+    }
+    @media (max-width: 820px) {
+      .connect {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .connect__card {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: clamp(0.85rem, 1.5vw, 1.15rem);
+      padding: clamp(1.1rem, 2vw, 1.4rem) clamp(1.1rem, 2vw, 1.4rem);
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      box-shadow: var(--shadow-pixel-sm);
+      text-decoration: none;
+      color: var(--ink);
+      line-height: 1.2;
+      transition:
+        transform 140ms var(--ease-soft),
+        box-shadow 140ms var(--ease-soft),
+        background 200ms var(--ease-soft);
+    }
+    .connect__card:hover,
+    .connect__card:focus-visible {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--ink);
+      outline: none;
+    }
+    .connect__card:active {
+      transform: translate(2px, 2px);
+      box-shadow: var(--shadow-pixel-press);
+    }
+
+    /* Icon — sits in a small chromed tile that fills with the card's
+     accent on hover. Pixel-art icons stay crisp via shape-rendering. */
+    .connect__icon {
+      width: clamp(44px, 5vw, 56px);
+      height: clamp(44px, 5vw, 56px);
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--ink);
+      background: var(--bg);
+      color: var(--ink);
+      transition:
+        background 140ms var(--ease-soft),
+        color 140ms var(--ease-soft);
+    }
+    .connect__card--moon .connect__icon {
+      background: color-mix(in srgb, var(--moon) 35%, var(--paper));
+    }
+    .connect__card--leaf .connect__icon {
+      background: color-mix(in srgb, var(--leaf) 30%, var(--paper));
+    }
+    .connect__card--rolo .connect__icon {
+      background: color-mix(in srgb, var(--rolo) 30%, var(--paper));
+    }
+    .connect__card--moon:hover .connect__icon {
+      background: var(--moon-deep);
+      color: var(--paper);
+    }
+    .connect__card--leaf:hover .connect__icon {
+      background: var(--leaf-deep);
+      color: var(--paper);
+    }
+    .connect__card--rolo:hover .connect__icon {
+      background: var(--rolo);
+      color: var(--paper);
+    }
+
+    .connect__text {
+      display: grid;
+      min-width: 0;
+    }
+    .connect__label {
+      font-family: var(--display);
+      font-size: clamp(0.78rem, 0.9vw, 0.86rem);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+    .connect__card--moon:hover .connect__label {
+      color: var(--moon-deep);
+    }
+    .connect__card--leaf:hover .connect__label {
+      color: var(--leaf-deep);
+    }
+    .connect__card--rolo:hover .connect__label {
+      color: var(--rolo-deep);
+    }
+
+    .connect__arrow {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+      transition:
+        color 200ms var(--ease-soft),
+        transform 220ms var(--ease-soft);
+    }
+    .connect__card:hover .connect__arrow {
+      color: var(--ink);
+      transform: translateX(3px);
+    }
+
+    /* ===== MOTION-SAFE OVERRIDES ========================================= */
+    @media (prefers-reduced-motion: reduce) {
+      .founder-photo__window,
+      .founder-photo:hover .founder-photo__window {
+        transform: none;
+      }
+    }
+  </style>
+</Layout>

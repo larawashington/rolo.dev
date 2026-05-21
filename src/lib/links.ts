@@ -4,8 +4,8 @@
  * Update one entry here and every CTA across the site follows.
  */
 export const LINKS = {
-  downloadMac: 'https://FPOdownloadrolo.com',   // PLACEHOLDER: real .dmg / installer URL
-  repo: 'https://FPOdownloadrolo.com',          // PLACEHOLDER: public github repo URL
+  downloadMac: 'https://github.com/larawashington/Project-Rolo/releases/latest',
+  repo: 'https://github.com/larawashington/Project-Rolo',
   techProcess: '/tech+process',
   faq: '/faq',
   contact: '/contact',
