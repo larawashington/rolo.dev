@@ -51,6 +51,15 @@ const base = import.meta.env.BASE_URL.endsWith('/')
       <slot />
     </main>
     <slot name="footer" />
+    <script is:inline>
+      // When shown inside the portfolio's site viewer, tell it which page is open,
+      // so its address bar and page list follow navigation inside the frame.
+      if (window.parent !== window) {
+        const report = () => window.parent.postMessage({ type: 'site-viewer:location', href: location.href }, '*');
+        report();
+        window.addEventListener('hashchange', report);
+      }
+    </script>
   </body>
 </html>
 
